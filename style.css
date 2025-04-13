@@ -94,3 +94,29 @@ body {
     transform: scale(1.02);
     box-shadow: 0 -16px 32px rgba(255, 244, 37, 0.704);
 }
+
+pre {
+    background-color: rgba(0, 0, 0, 0.83);
+    color: rgb(255, 255, 255);
+    padding: 10px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: white;
+    border-width: 1.5px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    overflow-x: auto;
+    text-align: left;
+}
+
+ul {
+    background: linear-gradient(to right, #00008b75, #8000807b);
+    list-style-type: none;
+    padding: 15px;
+    margin: auto;
+    border-radius: 1vw;
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}

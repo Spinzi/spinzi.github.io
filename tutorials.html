@@ -23,16 +23,32 @@
         <section class="content">
             <h1><u>Welcome to the tutorials content!</u></h1>
         </section>
-        <section class="content" onclick="tutorial1()">
+        <section class="content" onclick="goToTutorial(1)">
             <h2>Tutorial number 1</h2>
             <p>Basic introduction to variables:</p>
             <p>C++ variables: Your data holder.</p>
             <p>Discover how variables allow your C++ programs to remember and work with data. This tutorial will guide you through the essentials.</p>
         </section>
+        <section class="content" onclick="goToTutorial(2)">
+            <h2>Tutorial number 2</h2>
+            <p>Basic introduction to user input:</p>
+            <p>C++ user input: Your program's voice.</p>
+            <p>Learn how to make your C++ programs interactive by accepting user input. This tutorial will show you how to engage with your users.</p>
+        </section>
+        
+        <script>
+            function goToTutorial(number) {
+                window.location.href = `tutorials/tutorial_${number}.html`;
+            }
+        </script>
+
+
+
+        <div class="footer">
+            <p>Site made by Spinzarul de Romania</p>
+            <p>Special thanks to the Spinzarul community for their support and feedback.</p>
+            <p>For any questions or suggestions, feel free to reach out!</p>
+        </div>
     </body>
-    <script>
-        function tutorial1() {
-            window.location.href = "tutorials\\tutorial_1.html";
-        }
-    </script>
+    
 </html>

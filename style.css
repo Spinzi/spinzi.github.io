@@ -7,12 +7,48 @@ body {
     background-size: cover;
     image-rendering: optimizeQuality;
 }
-.navbar{
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 10px;
+.navbar {
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    z-index: 1;
+    overflow: hidden;
+    padding: 20px;
     text-align: center;
-    font-family: 'Arial', sans-serif;
+    color: white;
 }
+
+.navbar::before,
+.navbar::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    transition: opacity 5s ease;
+}
+
+/* Initial background */
+.navbar::before {
+    background: linear-gradient(to top right, midnightblue, darkred);
+    opacity: 1;
+}
+
+/* Hover background (starts hidden) */
+.navbar::after {
+    background: linear-gradient(to top right, darkred, gold);
+    opacity: 0;
+}
+
+/* On hover, fade in the ::after background */
+.navbar:hover::after {
+    opacity: 1;
+}
+
+/* Optional: fade out ::before on hover for cleaner effect */
+.navbar:hover::before {
+    opacity: 0;
+}
+
+
 .navbar div{
     display: flex;
     flex-direction: row;
@@ -82,7 +118,7 @@ body {
     color: rgb(255, 255, 255);
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
-.content img {
+.special-img {
     max-width: 80%;
     height: auto;
     margin: auto;
@@ -90,15 +126,15 @@ body {
     box-shadow: 0 8px 16px rgba(255, 252, 92, 0.593);
     transition: transform 0.3s, box-shadow 0.3s;
 }
-.content img:hover {
+.special-img:hover {
     transform: scale(1.02);
     box-shadow: 0 -16px 32px rgba(255, 244, 37, 0.704);
 }
 
-pre {
-    background-color: rgba(0, 0, 0, 0.83);
+.code-block {
+    background-color: rgba(0, 0, 0, 0.803);
     color: rgb(255, 255, 255);
-    padding: 10px;
+    padding: 0px;
     border-radius: 5px;
     border-style: solid;
     border-color: white;
@@ -108,6 +144,7 @@ pre {
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     overflow-x: auto;
     text-align: left;
+    position: relative;
 }
 
 ul {
@@ -119,4 +156,99 @@ ul {
     font-size: 18px;
     color: rgb(255, 255, 255);
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.copy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: cornsilk;
+    list-style-type: none;
+    padding: 10px;
+    margin: auto;
+    margin-right: 0.5vw;
+    margin-top: 0.5vw;
+    border-radius: 0.5vw;
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    transition-duration: 0.5s;
+    align-self: right;
+}
+.copy:hover{
+    background: rgb(242, 1, 255);
+    color: rgb(0, 0, 0);
+    border-radius: 1vw;
+    transition: 0.5s;
+}
+
+.copy img{
+    width: 25px;
+    height: 25px;
+}
+
+.copy span{
+    margin: auto;
+    color: black;
+}
+
+.button_next {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.button_next::before,
+.button_next::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 5px;
+    transition: opacity 0.9s ease;
+    z-index: -1;
+}
+
+/* Initial gradient */
+.button_next::before {
+    background: linear-gradient(to top right, #4caf50, #191970);
+    opacity: 1;
+}
+
+/* Hover gradient */
+.button_next::after {
+    background: linear-gradient(to top right, #191970, darkred);
+    opacity: 0;
+}
+
+.button_next:hover::after {
+    opacity: 1; 
+}
+
+.button_next:hover::before {
+    opacity: 0;
+}
+
+.footer{
+    line-height: 0.6;
+    margin-top: 5vw;
+    background: linear-gradient(to top, black, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    z-index: 1;
 }

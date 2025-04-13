@@ -27,48 +27,86 @@
             <h2>🧠 What is a Variable?</h2>
             <p>A <strong>variable</strong> is like a container where you can store a value, such as a number or text. Each variable has:</p>
             <ul>
-                <li>A <strong>name</strong> (so you can identify it)</li>
-                <li>A <strong>type</strong> (what kind of data it stores)</li>
-                <li>A <strong>value</strong> (the actual data)</li>
+                <li>A <strong style="color: #ff6347;">name</strong> (so you can identify it)</li>
+                <li>A <strong style="color: #ff6347;">type</strong> (what kind of data it stores)</li>
+                <li>A <strong style="color: #ff6347;">value</strong> (the actual data)</li>
             </ul>
 
             <section class="content">
             <h2>🛠️ Declaring Variables</h2>
             <p>Here’s how to declare variables in C++:</p>
-            <pre><code class="language-cpp">
-                int age = 17;
-                float height = 1.75;
-                char grade = 'A';
-                string name = "Alex";
-            </code></pre>
+            
+            <div class="code-block">
+                <pre><code class="cd_index_0">    int age = 17;
+    float height = 1.75;
+    char grade = 'A';
+    string name = "Alex";</code></pre>
+                <button type="button" class="copy" data-copy=".cd_index_0" id="copy_0">
+                    <img src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/svg/copy-outline.svg" alt="Copy Icon" class="copy-icon">
+                    <span class="copy-button">Copy</span>
+                </button>
+                <script>
+                    const button = document.getElementById('copy_0');
+                    button.addEventListener('click', () => {
+                        const codeBlock = button.previousElementSibling.querySelector('code');
+                        const textToCopy = codeBlock.textContent;
+                        
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                            button.querySelector('.copy-button').textContent = 'Copied!';
+                            setTimeout(() => {
+                                button.querySelector('.copy-button').textContent = 'Copy';
+                            }, 2000);
+                        });
+                    });
+                </script>
+            </div>
             <p>Let’s break them down:</p>
             <ul>
-                <li><code>int</code>: Stores whole numbers (e.g. 1, 42, -5)</li>
-                <li><code>float</code>: Stores decimal numbers (e.g. 1.5, 3.14)</li>
-                <li><code>char</code>: Stores a single character (e.g. 'A', 'z')</li>
-                <li><code>string</code>: Stores text (e.g. "Hello") – make sure to <code>#include &lt;string&gt;</code> at the top</li>
+                <li><code style="color: #ff6347;">int</code>: Stores whole numbers (e.g. 1, 42, -5)</li>
+                <li><code style="color: #ff6347;">float</code>: Stores decimal numbers (e.g. 1.5, 3.14)</li>
+                <li><code style="color: #ff6347;">char</code>: Stores a single character (e.g. 'A', 'z')</li>
+                <li><code style="color: #ff6347;">string</code>: Stores text (e.g. "Hello") – make sure to <code style="color: #68f41d;">#include &lt;string&gt;</code> at the top</li>
             </ul>
             </section>
 
             <section class="content">
             <h2>✅ Example Program</h2>
             <p>Here’s a full example that uses variables:</p>
-            <pre><code class="language-cpp">#include &lt;iostream&gt;
-        #include &lt;string&gt;
-        using namespace std;
+            <div class="code-block">
+            <pre><code id="index_23">    #include &lt;iostream&gt;
+    #include &lt;string&gt;
+    using namespace std;
+    
+    int main() {
+        int age = 17;
+        string name = "Alex";
+        float height = 1.75;
         
-        int main() {
-            int age = 17;
-            string name = "Alex";
-            float height = 1.75;
-            
-            cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "!" &lt;&lt; endl;
-            cout &lt;&lt; "You are " &lt;&lt; age &lt;&lt; " years old." &lt;&lt; endl;
-            cout &lt;&lt; "Your height is " &lt;&lt; height &lt;&lt; " meters." &lt;&lt; endl;
-        
-            return 0;
-        }</code></pre>
+        cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "!" &lt;&lt; endl;
+        cout &lt;&lt; "You are " &lt;&lt; age &lt;&lt; " years old." &lt;&lt; endl;
+        cout &lt;&lt; "Your height is " &lt;&lt; height &lt;&lt; " meters." &lt;&lt; endl;
+    
+        return 0;
+    }</code></pre>
+        <button type="button" class="copy" id="copy_1">
+            <img src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/svg/copy-outline.svg" alt="Copy Icon" class="copy-icon">
+            <span class="copy-button" id="index_42">Copy</span>
+        </button>
+        <script>
+            const button1 = document.getElementById('copy_1');
+            button1.addEventListener('click', () => {
+                const codeBlock = document.querySelector('#index_23');
+                const textToCopy = codeBlock.textContent;
 
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    button1.querySelector('#index_42').textContent = 'Copied!';
+                    setTimeout(() => {
+                        button1.querySelector('#index_42').textContent = 'Copy';
+                    }, 2000);
+                });
+            });
+        </script>
+        </div>
             </section>
         
             <h2>💡 Tips</h2>
@@ -83,6 +121,19 @@
         
             <p>➡️ When you're done, head to the next lesson to learn about <strong>input from the user</strong>!</p>
         </section>
+        
+        <section class="content">
+            <h2>🔗 Next Lesson</h2>
+            <p>Ready to learn about user input? Click the button below!</p>
+            <button onclick="window.location.href='tutorial_2.html'" class="button_next">Go to Lesson 2</button>
+             
+        </section>
+
+        <div class="footer">
+            <p>Site made by Spinzarul de Romania</p>
+            <p>Special thanks to the Spinzarul community for their support and feedback.</p>
+            <p>For any questions or suggestions, feel free to reach out!</p>
+        </div>
         
     </body>
 </html>

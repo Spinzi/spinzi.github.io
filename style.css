@@ -1,0 +1,96 @@
+body {
+    background: linear-gradient(to bottom right, rgba(0, 0, 255, 0.4), rgba(255, 255, 0, 0.4));
+    margin: 0;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    image-rendering: optimizeQuality;
+}
+.navbar{
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+.navbar div{
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+}
+.navbar h2 {
+    background: linear-gradient(to right, white, rgb(67, 139, 210));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 24px;
+    margin: 0;
+    display: inline-block;
+    margin: auto;
+    margin-left: 0px;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 14px 20px;
+    display: inline-block;
+    font-size: 15px;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.navbar a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgb(58, 56, 190);
+    border-radius: 5px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(to top right, rgba(148, 219, 255, 0.3), rgba(25, 25, 112, 0.3));
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    text-align: center;
+    width: fit-content;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    max-width: 800px;
+}
+.content:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+.content h1 {
+    font-size: 36px;
+    margin: 0;
+    color: rgb(255, 255, 255);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+.content h2 {
+    font-size: 32px;
+    margin: 0;
+    color: rgb(255, 255, 255);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+.content p {
+    font-size: 18px;
+    margin: 10px 0;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+.content img {
+    max-width: 80%;
+    height: auto;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(255, 252, 92, 0.593);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.content img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 -16px 32px rgba(255, 244, 37, 0.704);
+}

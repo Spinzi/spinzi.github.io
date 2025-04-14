@@ -197,7 +197,7 @@ body {
     color: rgb(255, 255, 255);
     text-align: center;
     font-size: 20px;
-    text-shadow: 0 0 20px rgb(235, 239, 25, 0.3);
+    text-shadow: 0 0 20px rgb(235, 239, 25, 0.35);
 }
 
 .daily_verse sup{

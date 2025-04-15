@@ -14,6 +14,7 @@ function loadPartial(id, file, isTutorial = false) {
 
                 // ✅ Adjust all relative links inside the loaded content
                 const links = el.querySelectorAll('a[href]');
+                const special = el.querySelectorAll('h2[onlink]');
                 links.forEach(link => {
                     const href = link.getAttribute('href');
                     if (
@@ -23,6 +24,16 @@ function loadPartial(id, file, isTutorial = false) {
                         !href.startsWith('../')
                     ) {
                         link.setAttribute('href', `../${href}`);
+                    }
+                });
+                special.forEach(link => {
+                    const href = link.getAttribute('onlink');
+                    if (href &&
+                        !href.startsWith('http') &&
+                        !href.startsWith('/') &&
+                        !href.startsWith('../')
+                    ) {
+                        link.setAttribute('onlink', `../${href}`);
                     }
                 });
             }

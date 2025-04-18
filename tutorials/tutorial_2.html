@@ -1,20 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Tutorials by Spinzi</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="../style.css">
-        <meta name="description" content="Learn C++ programming with Spinzi.">
-        <meta name="author" content="Spinzarul de Romania">
-        <meta name="keywords" content="C++, programming, Spinzi, learn, tutorial">
-        <link rel="icon" href="https://i.pinimg.com/736x/60/8f/6b/608f6b1ff2584bdce6627b43744010e9.jpg" type="image/x-icon">
-        <script src="../include.js" defer></script>
-    </head>
-    <body>
-        <div id="header-placeholder-tut"></div>
-<h2>hi</h2>
-        <div id="footer-placeholder-tut"></div>
+<head>
+    <title>Lesson 1: Introduction to Variables</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../style.css">
+    <meta name="description" content="Learn C++ variables with Spinzi.">
+    <meta name="author" content="Spinzarul de Romania">
+    <meta name="keywords" content="C++, variables, tutorial, Spinzi">
+    <link rel="icon" href="https://i.pinimg.com/736x/60/8f/6b/608f6b1ff2584bdce6627b43744010e9.jpg" type="image/x-icon">
+    <script src="../include.js" defer></script>
+</head>
+<body>
+    <div id="header-placeholder-tut"></div>
+    
+    <section class="content">
+        <h1>Lesson 2: Getting Input from the User</h1>
+        <p>Now that you know how to use variables, it’s time to make your programs interactive! 🧑‍💻</p>
         
-    </body>
+        <h2>🔍 What is <code>cin</code>?</h2>
+        <p><code>cin</code> (short for "character input") allows you to receive data from the keyboard. It's like your program asking the user: "Hey, can you tell me something?" 👂</p>
+    
+        <h2>🛠️ Syntax</h2>
+        <p>This is how you use <code>cin</code>:</p>
+    
+        <div class="code-block">
+            <pre><code class="cd_index_1">    string name;
+        cout &lt;&lt; "What's your name? ";
+        cin &gt;&gt; name;</code></pre>
+        </div>
+    
+        <p>Let’s explain:</p>
+        <ul>
+            <li><code>cout</code>: Asks the question</li>
+            <li><code>cin</code>: Waits for the user to type something</li>
+            <li><code>&gt;&gt;</code>: Passes the input into the variable</li>
+        </ul>
+    
+        <h2>✅ Full Example</h2>
+        <p>This program asks for your name, age, and favorite color, then responds to you:</p>
+        
+        <div class="code-block">
+            <pre><code class="cd_index_2">    #include &lt;iostream&gt;
+        #include &lt;string&gt;
+        using namespace std;
+    
+        int main() {
+            string name, color;
+            int age;
+    
+            cout &lt;&lt; "What's your name? ";
+            cin &gt;&gt; name;
+    
+            cout &lt;&lt; "How old are you? ";
+            cin &gt;&gt; age;
+    
+            cout &lt;&lt; "What's your favorite color? ";
+            cin &gt;&gt; color;
+    
+            cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "! You are " &lt;&lt; age 
+                 &lt;&lt; " years old and love the color " &lt;&lt; color &lt;&lt; "." &lt;&lt; endl;
+    
+            return 0;
+        }</code></pre>
+        </div>
+    
+        <h2>⚠️ Tip</h2>
+        <p><code>cin</code> only reads one word at a time. So if your name is "Alex Popescu", it will only take "Alex". To read full lines (including spaces), you’ll learn about <code>getline()</code> later.</p>
+    
+        <h2>🎯 Challenge</h2>
+        <p>Create a program that asks for:</p>
+        <ul>
+            <li>Your favorite animal 🐶</li>
+            <li>Your lucky number 🍀</li>
+            <li>Your best friend's name 👯</li>
+        </ul>
+        <p>Then print them all in a nice sentence using <code>cout</code>!</p>
+    
+        <p>➡️ When you're done, continue to the next lesson where we explain the parts of a C++ program in detail.</p>
+    </section>
+
+    <section class="content">
+        <h2>🔗 Next Lesson</h2>
+        <p>Ready to learn about user input? Click the button below!</p>
+        <button onclick="window.location.href='tutorial_3.html'" class="button_next">Go to Lesson 3</button>
+    </section>
+
+    <div id="footer-placeholder-tut"></div>
+</body>
 </html>

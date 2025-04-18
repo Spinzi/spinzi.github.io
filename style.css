@@ -375,3 +375,7 @@ ul {
     font-size: 14px;
     z-index: 1;
 }
+
+.short_code{
+    background: rgba(31, 31, 31, 0.645);
+}

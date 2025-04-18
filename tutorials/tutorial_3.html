@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Lesson 1: Introduction to Variables</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../style.css">
+    <meta name="description" content="Learn C++ variables with Spinzi.">
+    <meta name="author" content="Spinzarul de Romania">
+    <meta name="keywords" content="C++, variables, tutorial, Spinzi">
+    <link rel="icon" href="https://i.pinimg.com/736x/60/8f/6b/608f6b1ff2584bdce6627b43744010e9.jpg" type="image/x-icon">
+    <script src="../include.js" defer></script>
+</head>
+<body>
+    <div id="header-placeholder-tut"></div>
+
+    <section class="content">
+        <h1>Lesson 3: Understanding the Structure of a C++ Program</h1>
+        <p>Let's take a closer look at what makes a C++ program work. Every part of the code has a purpose!</p>
+    
+        <h2>📦 The Core Components</h2>
+    
+        <ul>
+            <li><code>#include &lt;iostream&gt;</code> – Adds input/output functionality.</li>
+            <li><code>#include &lt;string&gt;</code> – (Optional) Adds support for strings.</li>
+            <li><code>using namespace std;</code> – Lets you avoid typing <code>std::</code> everywhere.</li>
+            <li><code>int main() { ... }</code> – The starting point of every C++ program.</li>
+            <li><code>return 0;</code> – Tells the system that the program ended successfully.</li>
+        </ul>
+    
+        <h2>📋 Full Program Structure Example</h2>
+        
+        <div class="code-block">
+            <pre><code class="cd_index_3">    #include &lt;iostream&gt;       // Required for cout and cin
+        #include &lt;string&gt;         // Required for using strings
+    
+        using namespace std;        // Avoids writing std:: before cout, cin, etc.
+    
+        int main() {                // Main function: entry point of the program
+            string name;            // Variable to store name
+            int age;                // Variable to store age
+    
+            cout &lt;&lt; "Enter your name: ";  // Output to user
+            cin &gt;&gt; name;                  // Input from user
+    
+            cout &lt;&lt; "Enter your age: ";
+            cin &gt;&gt; age;
+    
+            cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "! You are " &lt;&lt; age &lt;&lt; " years old." &lt;&lt; endl;
+    
+            return 0;               // End the program
+        }</code></pre>
+        </div>
+    
+        <h2>🔍 Breakdown of Keywords</h2>
+    
+        <ul>
+            <li><code>#include</code> – Think of it like "copy-pasting" code from a library into your program.</li>
+            <li><code>&lt;iostream&gt;</code> – It is a library; Contains input/output tools like <code>cin</code> and <code>cout</code>.</li>
+            <li><code>using namespace std;</code> – Means "I'm using the standard tools, so I won’t type <code>std::</code> every time."</li>
+            <li><code>int main()</code> – The function that runs first when you launch your app.</li>
+            <li><code>return 0;</code> – The signal for "everything ran successfully."</li>
+        </ul>
+    
+        <h2>📚 What Are Libraries?</h2>
+        <p>Libraries are prewritten code that give your program superpowers. You don't have to build everything from scratch! Want input/output? Use <code>&lt;iostream&gt;</code>. Want strings? Use <code>&lt;string&gt;</code>.</p>
+    
+        <h2>🎯 Challenge</h2>
+        <p>Create a program that asks for:</p>
+        <ul>
+            <li>Your city 🌆</li>
+            <li>Your favorite food 🍕</li>
+        </ul>
+        <p>Then output a fun sentence like: "You live in Paris and love pizza!"</p>
+    
+        <p>➡️ Now that you understand the foundation of C++ programs, you're ready to build real things!</p>
+    </section>
+
+    <section class="content">
+        <h2>🔗 Next Lesson</h2>
+        <p>Ready to learn about user input? Click the button below!</p>
+        <button onclick="window.location.href='tutorial_4.html'" class="button_next">Go to Lesson 4</button>
+    </section>
+
+    <div id="footer-placeholder-tut"></div>
+</body>
+</html>
+
+
+
+
+
+

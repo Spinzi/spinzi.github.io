@@ -379,3 +379,11 @@ ul {
 .short_code{
     background: rgba(31, 31, 31, 0.645);
 }
+
+.footer a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-size: 14px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    transition: color 0.3s;
+}

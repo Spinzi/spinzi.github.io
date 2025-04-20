@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Page</title>
+</head>
+<body>
+    <!-- Wrap page content in a container -->
+    <div id="protectedContent" style="display: none;">
+      <h1>My Protected Page</h1>
+      <p>You need to be logged in to see this.</p>
+    <p>Very important link</p>
+    <a href="https://youtu.be/dQw4w9WgXcQ?si=Lh5bCP-qOhxr7Sgs" target="_blank">Watch this video</a>
+    </div>
+  
+    <script type="module">
+      import './firebase.js';
+      import { enforceLogin } from './login-popup.js';
+  
+      // If already logged in from session, show page content
+      if (sessionStorage.getItem('loggedIn') === 'true') {
+        document.getElementById('protectedContent').style.display = 'block';
+      }
+  
+      enforceLogin();
+    </script>
+  </body>
+</html>

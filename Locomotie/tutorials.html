@@ -1,0 +1,89 @@
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="tutorial_script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Locomotie</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/14/14296.png">
+</head>
+<body>
+    <header>
+        <div id="header_placeholder"></div>
+    </header>
+
+    <div class="bg-image"></div>
+
+    <section class="section_locomotie" data-aos="fade-up">
+        <h2>Lectii</h2>
+        <p>O lista de lectii formata cu ajutorul <span style="cursor:pointer" onclick="window.location.href='editor/index.html'">uneltei de creare a tutorialelor.</span> <br>De notat este faptul ca unealta le salveaza ca si fisier, care trebuie adaptat si incarcat pe site de catre developer - eu.</p>
+    </section>
+
+    <section class="section_locomotie" data-aos="fade-up" data-aos-delay="300" id="lessons-tab">
+        <p>Aici trebuie sa apara lectiile, daca nu apar sa stiti ca ceva nu merge bine.</p>
+    </section>
+    
+    <section class="section_locomotie" data-aos="fade-up" data-aos-delay="300">
+        <p>Ne pare rau de inconvenient dar inca se lucreaza...</p>
+        <img src="https://whysosuso.com/images/Bob%20The%20Builder.gif" alt="Bob working" width="50%" style="margin: auto;">
+        <p>Pana atunci poti sa vezi cat de repede poti sa dai click</p>
+        <button id="clickButton">Click Me!</button>
+        <p id="clickCount">Clicks: 0</p>
+        <p id="clickSpeed"></p>
+
+        <script>
+        const button = document.getElementById('clickButton');
+        const countDisplay = document.getElementById('clickCount');
+        const speedDisplay = document.getElementById('clickSpeed');
+
+        let clickCount = 0;
+        let startTime = null;
+        let isCounting = false;
+        const duration = 5000; // 5 seconds
+
+        button.addEventListener('click', () => {
+            const now = Date.now();
+
+            if (!isCounting) {
+            isCounting = true;
+            startTime = now;
+            clickCount = 1;
+            countDisplay.textContent = `Clicks: ${clickCount}`;
+            speedDisplay.textContent = `Click cat de repede poti timp de 5 secunde!`;
+
+            setTimeout(() => {
+                const totalTime = (Date.now() - startTime) / 1000;
+                const cps = (clickCount / totalTime).toFixed(2);
+                speedDisplay.textContent = `Ai dat ${clickCount} clickuri in ${totalTime.toFixed(0)} secunde. (${cps} clickuri/secunda)`;
+                isCounting = false;
+                button.disabled = true;
+                setTimeout(() => {
+                        button.disabled = false;
+                }, 1000);
+            }, duration);
+            } else {
+            clickCount++;
+            countDisplay.textContent = `Clicks: ${clickCount}`;
+            }
+        });
+        </script>
+    </section>
+    <div id="lesson-viewer-modal" style="display: none;">
+        <div id="lesson-viewer" class="lesson-popup"></div>
+    </div>
+
+    <footer data-aos="fade-right" data-aos-delay="300">
+        <div id="footer_placeholder"></div>
+    </footer>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>

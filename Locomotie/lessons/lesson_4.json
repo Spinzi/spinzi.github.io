@@ -1,0 +1,42 @@
+{
+  "titlu": "Locomoția Aeriană",
+  "descriere": "Zborul este o formă complexă de locomoție, care implică generarea portanței, reducerea greutății și un control fin al mișcării aeriene. Păsările și insectele sunt exemple-cheie.",
+  "sections": [
+    {
+      "type": "Titlu",
+      "content": "Principii Fizice ale Zborului"
+    },
+    {
+      "type": "Text",
+      "content": "Zborul presupune generarea unei forțe de portanță care să învingă greutatea. Aceasta este posibilă datorită formei aripii și mișcării aerului."
+    },
+    {
+      "type": "Titlu",
+      "content": "Structura Aripilor"
+    },
+    {
+      "type": "Text",
+      "content": "Aripile păsărilor sunt formate din oase ușoare și pene adaptate. La insecte, aripile sunt extensii ale exoscheletului și funcționează prin contracția mușchilor toracici."
+    },
+    {
+      "type": "Titlu",
+      "content": "Tipuri de Zbor"
+    },
+    {
+      "type": "Text",
+      "content": "Zbor activ (prin bătaia aripilor), planare (folosirea curenților de aer), zbor suspendat (colibri). Fiecare tip are costuri energetice și eficiență diferite."
+    },
+    {
+      "type": "Titlu",
+      "content": "Eficiență și Adaptări Evolutive"
+    },
+    {
+      "type": "Text",
+      "content": "Păsările migratoare zboară în formații pentru reducerea rezistenței aerului. Insectele zboară cu frecvențe de sute de bătăi pe secundă, adaptate pentru manevrabilitate."
+    },
+    {
+      "type": "Imagine",
+      "content": "https://cdn.britannica.com/84/22684-050-3A2FC64D/airplane-bird-flight-lift.jpg"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Locomotie</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/14/14296.png">
+</head>
+<body onload="load_quiz()">
+    <header>
+        <div id="header_placeholder"></div>
+    </header>
+
+    <div class="bg-image"></div>
+
+    <section class="section_locomotie" data-aos="fade-up">
+        <h2>Ce este locomoția?</h2>
+        <p>Locomoția reprezintă capacitatea ființelor vii de a se deplasa dintr-un loc în altul, fie pentru a căuta hrană, fie pentru a evita pericolele sau a explora mediul.</p>
+    </section>
+
+    <section class="section_locomotie">
+        <h2 data-aos="fade-up">Tipuri de locomoție</h2>
+        <div class="card_container">
+
+            <div data-aos="zoom-in">
+                <div class="locomotie_card">
+                    <h3>Locomoția la om</h3>
+                    <p>Oamenii se deplasează prin mers, alergare, sărituri sau înot, folosind mușchii și scheletul.</p>
+                </div>
+            </div>
+            <div data-aos="zoom-in" data-aos-delay="250">
+                <div class="locomotie_card">
+                    <h3>Locomoția la păsări</h3>
+                    <p>Păsările zboară folosind aripile și mușchii puternici ai pieptului.</p>
+                </div>
+            </div>
+            <div data-aos="zoom-in" data-aos-delay="500">
+                <div class="locomotie_card">
+                    <h3>Locomoția la pești</h3>
+                    <p>Peștii înoată folosind coada și înotătoarele pentru a se propulsa în apă.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card_container">
+            <div class="locomotie_img" data-aos="fade-right">
+                <img src="https://images.unsplash.com/photo-1612359130170-5c4e58922b70?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Person walking">
+            </div>
+            <div class="locomotie_img" data-aos="fade-up" data-aos-delay="250">
+                <img src="https://images.unsplash.com/photo-1626444344029-5c680f7513c1?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Bird flying">
+            </div>
+            <div class="locomotie_img" data-aos="fade-left" data-aos-delay="500">
+                <img src="https://images.unsplash.com/photo-1524704654690-b56c05c78a00?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Fish swiming">
+            </div>
+        </div>
+    </section>
+
+    <section class="quiz_">
+        <div class="quiz_placeholder" id="quiz_placeholder" data-aos="fade-up">
+        </div>
+    </section>
+
+
+    <footer data-aos="fade-right" data-aos-delay="300">
+        <div id="footer_placeholder"></div>
+    </footer>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>

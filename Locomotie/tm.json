@@ -1,0 +1,34 @@
+{
+    "title": "Echipa",
+    "list": [
+        {
+            "heading": "Developer",
+            "paragraph": "Gisca Alin",
+            "lineBreak": ""
+        },
+        {
+            "heading": "Design",
+            "paragraph": "Gisca Alin",
+            "lineBreak": ""
+        },
+        {
+            "heading": "Sef de proiect",
+            "paragraph": "Gisca Alin",
+            "lineBreak": ""
+        },
+        {
+            "heading": "Testare",
+            "paragraph": "Gisca Alin",
+            "lineBreak": ""
+        },
+        {
+            "heading": "Documentatie",
+            "paragraph": "Gisca Alin & ChatGPT",
+            "lineBreak": ""
+        },
+        {
+            "heading": "Marketing",
+            "paragraph": "Gisca Alin"
+        }
+    ]
+}

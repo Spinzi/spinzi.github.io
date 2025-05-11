@@ -1,0 +1,42 @@
+{
+  "titlu": "Locomoția în Apă",
+  "descriere": "În mediul acvatic, locomoția implică adaptări pentru reducerea frecării și creșterea eficienței în deplasare. Animalele folosesc înotătoare, ondulații sau jeturi de apă.",
+  "sections": [
+    {
+      "type": "Titlu",
+      "content": "Adaptări pentru Înot"
+    },
+    {
+      "type": "Text",
+      "content": "Animalele acvatice au forme corpului fusiforme, piele netedă sau solzi și musculatură alungită pentru a reduce frecarea și a crește viteza."
+    },
+    {
+      "type": "Titlu",
+      "content": "Moduri de Deplasare Acvatică"
+    },
+    {
+      "type": "Text",
+      "content": "Peștii folosesc ondularea trunchiului, cetaceele bat cu coada, iar caracatițele se propulsează prin jeturi de apă. Fiecare metodă este adaptată unui stil de viață specific."
+    },
+    {
+      "type": "Titlu",
+      "content": "Structura Înotătoarelor"
+    },
+    {
+      "type": "Text",
+      "content": "Înotătoarele pot fi perechi (pectorale, pelviene) sau impare (codală, dorsală), fiecare având un rol distinct în stabilitate, direcție și propulsie."
+    },
+    {
+      "type": "Titlu",
+      "content": "Eficiență Energetică Sub Apă"
+    },
+    {
+      "type": "Text",
+      "content": "Delfinii și tonii folosesc mecanisme de recuperare elastică în musculatură. Acestea permit deplasarea pe distanțe mari cu consum minim de energie."
+    },
+    {
+      "type": "Imagine",
+      "content": "https://cdn.britannica.com/76/174376-050-3A0359B4/Dolphin-movement-water.jpg"
+    }
+  ]
+}

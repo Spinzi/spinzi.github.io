@@ -1,0 +1,42 @@
+{
+  "titlu": "Locomoția la Om și Roboți",
+  "descriere": "Oamenii se deplasează biped, folosind un sistem muscular, osos și nervos bine coordonat. Roboții moderni încearcă să imite această mișcare prin tehnologie.",
+  "sections": [
+    {
+      "type": "Titlu",
+      "content": "Biomecanica Mișcării Umane"
+    },
+    {
+      "type": "Text",
+      "content": "Mersul biped implică balansul corpului, control neuromuscular fin și adaptări scheletice precum bazinul lat și genunchii flexibili."
+    },
+    {
+      "type": "Titlu",
+      "content": "Evoluția Bipedismului"
+    },
+    {
+      "type": "Text",
+      "content": "Bipedismul este o trăsătură unică apărută la hominizi. A permis eliberarea mâinilor, o vedere mai bună și o eficiență crescută în deplasarea pe distanțe mari."
+    },
+    {
+      "type": "Titlu",
+      "content": "Roboții Bipedali"
+    },
+    {
+      "type": "Text",
+      "content": "Roboții bipedali moderni folosesc senzori, algoritmi de echilibru și servomotoare. Exemple includ roboți precum Atlas (Boston Dynamics)."
+    },
+    {
+      "type": "Titlu",
+      "content": "Provocări și Aplicații"
+    },
+    {
+      "type": "Text",
+      "content": "Menținerea echilibrului și adaptarea la terenuri variabile sunt provocări majore. Roboții sunt deja utilizați în explorare, salvare și asistență medicală."
+    },
+    {
+      "type": "Imagine",
+      "content": "https://cdn.britannica.com/36/242436-050-01E6876F/Atlas-robot-Boston-Dynamics.jpg"
+    }
+  ]
+}

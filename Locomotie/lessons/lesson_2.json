@@ -1,0 +1,42 @@
+{
+  "titlu": "Locomoția la Animalele Terestre",
+  "descriere": "Locomoția pe uscat presupune adaptări specifice ale membrelor și ale structurii corpului. Majoritatea animalelor terestre utilizează picioare pentru a se deplasa, dar tipologia acestora diferă semnificativ.",
+  "sections": [
+    {
+      "type": "Titlu",
+      "content": "Mecanisme de Mișcare pe Uscat"
+    },
+    {
+      "type": "Text",
+      "content": "Membrele articulate permit animalelor terestre să se deplaseze eficient. Diverse specii au dezvoltat moduri de mișcare specifice, cum ar fi alergatul, săritul sau târâtul."
+    },
+    {
+      "type": "Titlu",
+      "content": "Tipuri de Locomoție Terestră"
+    },
+    {
+      "type": "Text",
+      "content": "Locomoția pe uscat include mersul biped (la oameni, păsări), mersul cvadruped (la majoritatea mamiferelor), târârea (la reptile) și săritul (ex. canguri, broaște)."
+    },
+    {
+      "type": "Titlu",
+      "content": "Adaptări Anatomice"
+    },
+    {
+      "type": "Text",
+      "content": "Oasele lungi, articulațiile flexibile și musculatura dezvoltată permit mișcări rapide și precise. Postura, centrul de greutate și forma labelor variază în funcție de teren și stilul de deplasare."
+    },
+    {
+      "type": "Titlu",
+      "content": "Energia și Eficiența Mișcării"
+    },
+    {
+      "type": "Text",
+      "content": "Locomoția necesită energie, iar animalele au dezvoltat strategii pentru eficiență maximă. De exemplu, unele folosesc mersul pendular, altele conservă energia prin tendințe elastice în tendoane."
+    },
+    {
+      "type": "Imagine",
+      "content": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Skeleton_run_cycle_animated.gif"
+    }
+  ]
+}

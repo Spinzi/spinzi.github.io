@@ -1,0 +1,16 @@
+{
+    "title": "Contact",
+    "list": [
+        {
+            "heading": "Email",
+            "paragraph": "alinalin@nuemail.com"
+        },
+        {
+            "lineBreak":""
+        },
+        {
+            "heading": "Telefon",
+            "paragraph": "+40 123 456 789"
+        }
+    ]
+}

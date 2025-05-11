@@ -1,0 +1,34 @@
+{
+  "titlu": "Ce este Locomoția?",
+  "descriere": "Locomoția este capacitatea organismelor de a se deplasa dintr-un loc în altul, având roluri esențiale în căutarea hranei, evitarea prădătorilor și reproducere. Aceasta implică adaptări anatomice și fiziologice diverse, dar și interacțiuni complexe între mușchi, oase și sistemul nervos.",
+  "sections": [
+    {
+      "type": "Titlu",
+      "content": "Definiția Locomoției"
+    },
+    {
+      "type": "Text",
+      "content": "Locomoția reprezintă deplasarea unui organism de la un punct la altul. Aceasta poate fi realizată prin diferite mecanisme, de la mișcări simple, cum ar fi alunecatul, până la mișcări complexe, precum zborul sau înotul."
+    },
+    {
+      "type": "Titlu",
+      "content": "Tipuri de Locomoție"
+    },
+    {
+      "type": "Text",
+      "content": "Locomoția se poate clasifica în două mari tipuri: activă și pasivă. Locomoția activă presupune consumul de energie și implică un control direct al mișcării, în timp ce locomoția pasivă se bazează pe factori externi (ex. vânt sau curenți de apă)."
+    },
+    {
+      "type": "Titlu",
+      "content": "Rolul Locomoției în Supraviețuirea Speciilor"
+    },
+    {
+      "type": "Text",
+      "content": "Locomoția joacă un rol esențial în evoluția speciilor. Fiecare tip de locomoție a fost optimizat în funcție de mediul în care trăiesc speciile respective. Astfel, locomoția asigură accesul la resurse, ajută la evitare de pericole și la interacțiuni sociale."
+    },
+    {
+      "type": "Imagine",
+      "content": "https://thealevelbiologist.co.uk/wp-content/uploads/2020/05/locomotion.jpg"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Proiect - Locomoția",
+    "list": [
+        {
+            "heading": "Materie",
+            "paragraph": "Biologie",
+            "lineBreak" : ""
+        },
+        {
+            "heading": "Scop",
+            "paragraph": "Explicarea procesului de locomoție la organisme, în special la om."
+        },
+        {
+            "heading": "Descriere",
+            "paragraph": "Locomoția este un proces esențial prin care organismele se deplasează pentru a supraviețui, a se hrăni sau a evita pericole. La oameni, locomoția implică colaborarea dintre sistemul osos, muscular și nervos. În natură, tipurile de locomoție diferă în funcție de mediu: terestru, acvatic sau aerian."
+        },
+        {
+            "lineBreak":"",
+            "heading": "Developer",
+            "paragraph": "Alin"
+        }
+    ]
+}

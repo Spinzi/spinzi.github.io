@@ -1,0 +1,128 @@
+[
+    {
+        "question": "Ce este locomoția?",
+        "answers": {
+            "a": "O formă de comunicare",
+            "b": "Capacitatea de deplasare",
+            "c": "O metodă de respirație"
+        },
+        "correct": "b"
+    },
+    {
+        "question": "Cum se deplasează păsările?",
+        "answers": {
+            "a": "Cu picioarele",
+            "b": "Cu coada",
+            "c": "Prin zbor cu ajutorul aripilor"
+        },
+        "correct": "c"
+    },
+    {
+        "question": "Ce rol are sistemul muscular în locomoție?",
+        "answers": {
+            "a": "Creează hormoni",
+            "b": "Provoacă mișcări prin contracții",
+            "c": "Protejează organele"
+        },
+        "correct": "b"
+    },
+    {
+        "question": "Care este principala caracteristică a locomotivității la mamifere?",
+        "answers": {
+            "a": "Se deplasează prin înot",
+            "b": "Se deplasează pe picioare",
+            "c": "Se deplasează prin zbor"
+        },
+        "correct": "b"
+    },
+    {
+        "question": "Ce înseamnă termenul 'locomoție' în biologie?",
+        "answers": {
+            "a": "Modul în care un organism se mișcă",
+            "b": "Respirația unui organism",
+            "c": "Creșterea unui organism"
+        },
+        "correct": "a"
+    },
+    {
+        "question": "Ce fel de locomoție este specifică peștilor?",
+        "answers": {
+            "a": "Prin înot",
+            "b": "Prin zbor",
+            "c": "Prin târâre"
+        },
+        "correct": "a"
+    },
+    {
+        "question": "Cum se deplasează reptilele?",
+        "answers": {
+            "a": "Prin sărituri",
+            "b": "Prin zbor",
+            "c": "Prin târâre"
+        },
+        "correct": "c"
+    },
+    {
+        "question": "Ce funcție au aripile păsărilor?",
+        "answers": {
+            "a": "Ajută la mișcările de locomoție prin zbor",
+            "b": "Ajută la apărarea împotriva prădătorilor",
+            "c": "Protejează organele interne"
+        },
+        "correct": "a"
+    },
+    {
+        "question": "Ce organ ajută la locomoția oamenilor?",
+        "answers": {
+            "a": "Inima",
+            "b": "Plămânii",
+            "c": "Mușchii și oasele"
+        },
+        "correct": "c"
+    },
+    {
+        "question": "Cum se deplasează insectele?",
+        "answers": {
+            "a": "Prin zbor",
+            "b": "Prin târâre",
+            "c": "Prin înot"
+        },
+        "correct": "a"
+    },
+    {
+        "question": "Care este principala modalitate de locomoție la mamiferele acvatice?",
+        "answers": {
+            "a": "Prin înot",
+            "b": "Prin târâre",
+            "c": "Prin zbor"
+        },
+        "correct": "a"
+    },
+    {
+        "question": "Ce tip de locomoție este utilizat de târâtoare?",
+        "answers": {
+            "a": "Prin înot",
+            "b": "Prin târâre",
+            "c": "Prin zbor"
+        },
+        "correct": "b"
+    },
+    {
+        "question": "Cum ajută sistemul nervos la locomoție?",
+        "answers": {
+            "a": "Coordonează mișcările prin semnale electrice",
+            "b": "Ajută la producerea de energie musculară",
+            "c": "Oferă protecție împotriva accidentelor"
+        },
+        "correct": "a"
+    },
+    {
+        "question": "Ce diferențe sunt între locomoția pe sol și cea în apă?",
+        "answers": {
+            "a": "Locomoția în apă necesită mai multă energie",
+            "b": "Locomoția pe sol este mai rapidă decât în apă",
+            "c": "Locomoția în apă nu implică mușchii"
+        },
+        "correct": "a"
+    }
+]

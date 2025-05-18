@@ -104,3 +104,42 @@ document.addEventListener("DOMContentLoaded", () => {
     load_element(f.id, 'page-content/pg/footer.html')
     }
 });
+
+function contactPopUp() {
+  if (document.getElementById('popup-contact')) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'popup-contact';
+  overlay.className = 'popup-overlay';
+
+  const popup = document.createElement('div');
+  popup.className = 'popup-container';
+
+  const header = document.createElement('div');
+  header.className = 'popup-header';
+
+  const title = document.createElement('h2');
+  title.textContent = 'Contact';
+
+  const closeBtn = document.createElement('span');
+  closeBtn.innerHTML = '&times;';
+  closeBtn.className = 'popup-close';
+  closeBtn.onclick = () => overlay.remove();
+
+  header.appendChild(title);
+  header.appendChild(closeBtn);
+
+  const content = document.createElement('div');
+  content.className = 'popup-content';
+  content.innerHTML = `
+  <p><strong>Email:</strong> <a href="mailto:alinnicusorgisca@gmail.com">alinnicusorgisca@gmail.com</a></p>
+  <p><strong>GitHub:</strong> <a href="https://github.com/Spinzi" target="_blank" rel="noopener noreferrer">Spinzi</a></p>
+`;
+
+
+  popup.appendChild(header);
+  popup.appendChild(content);
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
+}
+

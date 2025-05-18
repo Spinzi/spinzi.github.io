@@ -423,3 +423,79 @@ FOOTER STYLE
     text-align: center;
 
 }
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-container {
+  background-color: #fff;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.25);
+  overflow: hidden;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  background-color: #007BFF;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.popup-close {
+  cursor: pointer;
+  font-size: 3rem;
+  font-weight: bold;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.popup-close:hover {
+  color: #ff4242;
+  transform: rotate(90deg);
+}
+
+.popup-content {
+  padding: 1rem 1.2rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.popup-content p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.popup-content a {
+  color: #007BFF;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: 600;
+}
+
+.popup-content a:hover,
+.popup-content a:focus {
+  color: #0056b3;
+  text-decoration: underline;
+  outline: none;
+}

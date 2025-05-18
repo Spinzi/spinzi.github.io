@@ -1,0 +1,425 @@
+body{
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    margin: 0;
+    background-color: rgb(214, 255, 255);
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
+
+#site-loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: url("https://i.pinimg.com/originals/64/92/c5/6492c545bd4fa426d18f3de822ff444d.gif");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+
+.loader-spinner {
+    border: 8px solid #ccc;
+    border-top: 8px solid #3498db; /* vibrant blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+.bigMenu {
+    background: linear-gradient(90deg, #0d3c61, #116298);
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border-radius: 0 0 10px 10px;
+}
+
+.bigMenu h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Default full menu (desktop) */
+.full-menu {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.full-menu li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.full-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile menu toggle button */
+.mobile-menu {
+    display: none;
+    position: relative;
+}
+
+#menu-toggle {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 6px;
+}
+
+#menu-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Dropdown menu for mobile */
+#mobile-menu-list {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #116298;
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 100;
+    min-width: 150px;
+}
+
+#mobile-menu-list li {
+    padding: 0.4rem 1rem;
+}
+
+#mobile-menu-list li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+#mobile-menu-list li a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Media Query: Hide full menu, show mobile menu toggle */
+@media (max-width: 768px) {
+    .full-menu {
+        display: none;
+    }
+    .mobile-menu {
+        display: block;
+    }
+}
+
+/* Toggling classes */
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+.defaultSection {
+    background-color: #116298b1;
+    padding: 0.3rem;
+    text-align: center;
+    margin: 0.5rem 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+}
+
+#why__{
+    background-image: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    z-index: 0;
+    color: white; /* Optional: for better contrast */
+}
+
+#why__::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    z-index: -1;
+}
+
+#intro__ {
+    background-image: url("https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    background-size: cover;
+    background-position: 0px 55%;
+    background-repeat: no-repeat;
+    position: relative;
+    z-index: 0;
+    color: white; /* Optional: for better contrast */
+}
+
+#intro__::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    z-index: -1;
+}
+
+#factHolder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; /* space between cards */
+    justify-content: center; /* optional, centers cards if they don’t fill the whole width */
+    padding: 1rem;
+}
+
+.fact-card {
+    background: rgb(173, 247, 255);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 1rem;
+    flex: 1 1 250px; /* flex-grow:1, flex-shrink:1, flex-basis:250px */
+    max-width: 300px; /* limit max width */
+    box-sizing: border-box;
+}
+
+/* Mobile (stacked cards) */
+@media (max-width: 600px) {
+    #factHolder {
+        flex-direction: column;
+        align-items: center; /* center cards vertically */
+    }
+    
+    .fact-card {
+        max-width: 100%;
+        flex-basis: auto; /* take full width */
+    }
+}
+
+/* === SWIPER 1 - Cu imagini === */
+.swiper1 {
+    width: 100%;
+    height: fit-content;
+    max-height: 300px;
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.12),
+        0 8px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    background-color: #f5f5f0;
+    overflow: hidden;
+}
+
+.swiper1-wrapper {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #f5f5f0;
+    display: flex;
+}
+
+.swiper1-slide {
+    width: 80vw;
+    max-width: 600px;
+    height: 40vw;
+    max-height: 300px;
+    background-color: #f5f5f0;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow:
+        inset 0 0 10px rgba(0, 0, 0, 0.05),
+        0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.swiper1-slide:hover {
+    transform: scale(1.03);
+    box-shadow:
+        inset 0 0 12px rgba(0, 0, 0, 0.1),
+        0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.swiper1-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+    background-color: transparent;
+    pointer-events: none;
+}
+
+/* === SWIPER 2 - secSwiper === */
+.secSwiper {
+    width: 90%;
+    margin: 40px auto; /* This provides outer spacing */
+    border-radius: 12px;
+    background: #112d5c; /* Background for the whole swiper area */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    /* REMOVE padding: 20px; from here. It interferes with centeredSlides. */
+    overflow: hidden; /* Essential to clip the non-visible parts of slides */
+    position: relative; /* Good practice for positioning nav/pagination absolutely if needed */
+}
+
+/* Swiper-slide styling for secSwiper */
+.secSwiper .swiper-slide {
+    position: relative; /* Crucial for absolute positioning of children like image-wrapper and overlays */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    
+    min-height: 350px; /* Increased height a bit, adjust as needed */
+    background: #224785; /* Fallback background for the slide card itself */
+    color: white;
+    border-radius: 8px;
+    padding: 20px; /* Inner padding for content within the slide */
+    box-sizing: border-box;
+
+    transform: scale(0.85);
+    opacity: 0.7; /* Slightly more visible non-active slides */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+
+    /* DO NOT set width or max-width here if slidesPerView is a number. Swiper handles it. */
+    /* overflow: hidden; /* Typically not needed here if image-wrapper handles its own image clipping */
+}
+
+.secSwiper .swiper-slide-active {
+  transform: scale(1);
+  opacity: 1;
+  z-index: 10; /* Bring active slide to the front */
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* Image Wrapper - This acts as the background image layer */
+.secSwiper .swiper-slide .image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px; /* Match slide's border-radius */
+  overflow: hidden;   /* Clip the image to the wrapper's bounds */
+  z-index: 1;         /* Behind content and main overlay */
+}
+
+.secSwiper .swiper-slide .image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  /* border-radius: 8px; /* Already on wrapper with overflow:hidden */
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth zoom for active */
+}
+
+/* Optional: Slight zoom on active slide's image */
+/*
+.secSwiper .swiper-slide-active .image-wrapper img {
+    transform: scale(1.05);
+}
+*/
+
+/* Overlay for slides (dimming non-active, clear on active) */
+.secSwiper .swiper-slide::after {
+    content: '';
+    position: absolute;
+    inset: 0; /* Covers the entire slide, on top of image-wrapper */
+    background: rgba(0, 0, 0, 0.55); /* Adjust darkness as needed */
+    border-radius: 8px; /* Match slide's border-radius */
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    opacity: 1; /* Default: overlay is visible */
+    z-index: 2; /* Above image-wrapper, below text */
+}
+
+.secSwiper .swiper-slide-active::after {
+    opacity: 0.5; /* Hide overlay on active slide, making image clearer */
+}
+
+/* Text Content Styling */
+.secSwiper .swiper-slide h3,
+.secSwiper .swiper-slide p {
+    position: relative; /* To ensure it's on top of the slide's ::after overlay */
+    z-index: 3;         /* Above the ::after overlay */
+    max-width: 95%;     /* Prevent text from touching slide edges */
+    color: white;       /* Ensure text is white */
+}
+
+.secSwiper .swiper-slide h3 {
+    font-size: 1.5rem; /* Adjust as needed */
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.secSwiper .swiper-slide p {
+    font-size: 0.9rem; /* Adjust as needed */
+    line-height: 1.6;
+}
+
+/* === Pagination and Navigation Buttons (Your existing styles are likely fine) === */
+.secSwiper .swiper-button-prev,
+.secSwiper .swiper-button-next {
+    color: #89b4f8;
+    /* You might want to adjust top position if min-height of slides changes drastically */
+    /* top: 50%; */
+}
+
+.secSwiper .swiper-pagination.secSwiper-pagination { /* Ensure specificity if needed */
+    bottom: 10px; /* Adjust position if needed */
+}
+
+.secSwiper .swiper-pagination-bullet {
+    background: #5588ff;
+    opacity: 0.7;
+}
+
+.secSwiper .swiper-pagination-bullet-active {
+    background: #89b4f8; /* Brighter active bullet */
+    opacity: 1;
+}
+
+/*
+FOOTER STYLE
+*/
+
+
+.footer_holder{
+    background-color: black;
+    color:white;
+    padding: 0.5rem;
+    text-align: center;
+
+}

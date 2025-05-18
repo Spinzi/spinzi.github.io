@@ -1,0 +1,106 @@
+const swiper = new Swiper('.swiper1', {
+  direction: 'horizontal',
+  loop: true,
+  slidesPerView: 'auto', // allows multiple slides visible at once
+  speed: 10000, // total time to move from one slide to next
+  spaceBetween: 20,
+  freeMode: true, // allows continuous scroll
+  autoplay: {
+    delay: 0,
+    disableOnInteraction: false,
+  },
+  freeModeMomentum: false, // disables easing momentum
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: false,
+  },
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+});
+
+const secSwiper = new Swiper('.secSwiper', {
+  loop: true,
+  slidesPerView: 1.5,                // shows 1 full + half of next
+  centeredSlides: true,             // active slide is centered
+  spaceBetween: -40,               // overlaps slides!
+  speed: 500,
+
+  navigation: {
+    nextEl: '.secSwiper-next',
+    prevEl: '.secSwiper-prev',
+  },
+
+  pagination: {
+    el: '.secSwiper-pagination',
+    clickable: true,
+  },
+
+  autoplay: {
+    delay: 4000,
+    disableOnInteraction: false,
+  },
+
+  effect: 'slide',
+});
+
+
+
+
+window.addEventListener('load', () => {
+  const loader = document.getElementById('site-loader');
+  if (loader) {
+    loader.style.transition = 'opacity 0.5s ease';
+    loader.style.opacity = '0';
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 500);
+  }
+});
+
+function load_element(el_id, fileLocation) {
+  return fetch(fileLocation)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(html => {
+      const element = document.getElementById(el_id);
+      if (element) {
+        element.innerHTML = html;
+      } else {
+        alert(`Element with ID "${el_id}" not found.`);
+      }
+    })
+    .catch(error => {
+      console.error("Failed to load HTML:", error);
+      alert("Nu am putut incarca o parte din site.");
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const h = document.getElementById('pg_header');
+    const f = document.getElementById('pg_footer');
+    if (h) {
+    load_element(h.id, 'page-content/pg/header.html').then(() => {
+        const toggleBtn = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu-list');
+
+        if (toggleBtn && mobileMenu) {
+        toggleBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('visible');
+            mobileMenu.classList.toggle('hidden');
+        });
+        } else {
+        console.warn('Mobile menu elements not found');
+        }
+    });
+    }
+
+    if(f){
+    load_element(f.id, 'page-content/pg/footer.html')
+    }
+});

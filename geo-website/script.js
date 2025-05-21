@@ -103,6 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if(f){
     load_element(f.id, 'page-content/pg/footer.html')
     }
+
+    create_centered('mySection', 'Ce urmeaza')
 });
 
 function contactPopUp() {
@@ -160,3 +162,33 @@ function showMoreFacts() {
       document.getElementById('showMoreTrigger').innerHTML = "Afiseaza mai multe";
     }
 }
+
+function create_centered(id, text_) {
+  const holder = document.getElementById(id);
+
+  // Create wrapper div
+  const wrapper = document.createElement('div');
+  wrapper.className = 'centerWrapper';
+
+  // Create left line
+  const leftLine = document.createElement('div');
+  leftLine.className = 'thinLine';
+
+  // Create centered text
+  const textElement = document.createElement('h3');
+  textElement.className = 'textInCenter';
+  textElement.innerText = text_;
+
+  // Create right line
+  const rightLine = document.createElement('div');
+  rightLine.className = 'thinLine';
+
+  // Append all to wrapper
+  wrapper.appendChild(leftLine);
+  wrapper.appendChild(textElement);
+  wrapper.appendChild(rightLine);
+
+  // Append wrapper to main holder
+  holder.appendChild(wrapper);
+}
+

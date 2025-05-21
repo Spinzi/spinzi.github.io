@@ -31,18 +31,31 @@
         </div>
 
         <section class="defaultSection" id="intro__">
-            <h1>Agricultura în zonele calde</h1>
-            <p>Explorăm plantele, animalele și practicile agricole din regiunile tropicale, ecuatoriale și musonice.</p>
+            <div class="hide_on_phone to_left_div">
+                <h1>Agricultura în zonele calde</h1>
+                <p>Explorăm plantele, animalele și practicile agricole din regiunile tropicale, ecuatoriale și musonice.</p>    
+            </div>
+            <div class="hide_on_pc">
+                <h1>Agricultura în zonele calde</h1>
+                <p>Explorăm plantele, animalele și practicile agricole din regiunile tropicale, ecuatoriale și musonice.</p>
+            </div>
         </section>
 
         <section class="defaultSection" id="why__">
-        <h2>De ce am creat acest site?</h2>
-        <p>Am vrut să învăț JavaScript și în același timp să creez un proiect util pentru școală. 
-        Îmi place să înțeleg cum funcționează lumea, iar agricultura în regiunile calde mi s-a părut o temă perfectă pentru a combina știința cu programarea.</p>
+            <div class="hide_on_phone to_left_div">
+                <h2>De ce am creat acest site?</h2>
+                <p>Am vrut să învăț JavaScript și în același timp să creez un proiect util pentru școală. 
+                Îmi place să înțeleg cum funcționează lumea, iar agricultura în regiunile calde mi s-a părut o temă perfectă pentru a combina știința cu programarea.</p>
+            </div>
+            <div class="hide_on_pc">
+                <h2>De ce am creat acest site?</h2>
+                <p>Am vrut să învăț JavaScript și în același timp să creez un proiect util pentru școală. 
+                Îmi place să înțeleg cum funcționează lumea, iar agricultura în regiunile calde mi s-a părut o temă perfectă pentru a combina știința cu programarea.</p>
+            </div>
         </section>
 
 
-        <div class="swiper swiper1">
+        <!-- <div class="swiper swiper1">
             <div class="swiper-wrapper swiper1-wrapper">
                 <div class="swiper-slide swiper1-slide">
                     <img src="https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=2152&auto=format&fit=crop" alt="">
@@ -58,11 +71,12 @@
                 </div>
             </div>
             <div class="swiper-pagination swiper1-pagination"></div>
-        </div>
+        </div> -->
 
         <section class="defaultSection">
             <h3>Date fascinante:</h3>
             <div id="factHolder">
+                <!-- Primele 3 carduri: vizibile mereu -->
                 <div class="fact-card">
                     <h3>🌧️ Precipitații</h3>
                     <p>Regiunile ecuatoriale pot primi peste 2500 mm de ploaie anual.</p>
@@ -75,8 +89,68 @@
                     <h3>🦜 Biodiversitate</h3>
                     <p>Pădurile ecuatoriale adăpostesc 50% din speciile lumii.</p>
                 </div>
+                
+                <!-- Restul cardurilor: ascunse pe telefon -->
+                <div class="fact-card extra-fact hide_on_phone">
+                    <h3>🌪️ Taifunuri</h3>
+                    <p>Zonele tropicale din Asia de Sud-Est sunt afectate frecvent de taifunuri puternice.</p>
+                </div>
+                <div class="fact-card extra-fact hide_on_phone">
+                    <h3>🌱 Soluri fertile</h3>
+                    <p>Inundațiile regulate ale fluviilor, precum Gangele, îmbogățesc solul cu sedimente fertile.</p>
+                </div>
+                <div class="fact-card extra-fact hide_on_phone">
+                    <h3>🔥 Temperatură constantă</h3>
+                    <p>În regiunile ecuatoriale, temperatura medie rămâne constantă pe tot parcursul anului.</p>
+                </div>
+                <div class="fact-card extra-fact hide_on_phone">
+                    <h3>🌫️ Umiditate ridicată</h3>
+                    <p>În zonele tropicale, umiditatea relativă poate depăși 80% aproape zilnic.</p>
+                </div>
+                <div class="fact-card extra-fact hide_on_phone">
+                    <h3>🌀 Musoni</h3>
+                    <p>Musonii influențează drastic agricultura și viața oamenilor în Asia de Sud.</p>
+                </div>
+                <div class="fact-card extra-fact hide_on_phone">
+                    <h3>🏞️ Râuri majore</h3>
+                    <p>Fluvii precum Amazonul și Mekongul sunt esențiale pentru ecosistemele tropicale.</p>
+                </div>
+                
+                <!-- Card cu "..." -->
+                <div class="fact-card hide_on_pc" id="showMoreTrigger" onclick="showMoreFacts()" style="cursor: pointer;">
+                    <p>Afișează mai multe</p>
+                </div>
             </div>
         </section>
+
+        <section>
+            <div class="quiz_big_holder">
+                <div class="quiz_previewer">
+                    <p>Ne cerem scuze de inconvenient dar inca se lucreaza aici</p>
+                    <img src="https://i.pinimg.com/originals/64/92/c5/6492c545bd4fa426d18f3de822ff444d.gif" alt="">
+                </div>
+                <div class="quiz_name">
+                    <h2>Testează-ți cunoștințele!</h2>
+                    <p>Crezi că știi destule despre geografie? Hai să vedem! Răspunde la câteva întrebări rapide și descoperă cât de pregătit ești.</p>
+                    <a href="pagina-test.html" class="cta-button">Încearcă testul</a>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="quiz_big_holder"> <!-- asta merge si la asta ca mi lene sa il fac de la 0-->
+                <div class="nature_img">
+                    <h3>Explora Geografia Naturii</h3>
+                </div>
+                <div class="lectie_txt">
+                    <h2>Descoperă secretele naturii!</h2>
+                    <p>Explorează lecții interactive despre munți, câmpii și ecosisteme fascinante. Învață cum funcționează lumea naturală cu explicații clare și imagini captivante.</p>
+                    <a href="lectii.html" class="cta-button">Începe acum lecțiile</a>
+                </div>
+            </div>
+        </section>
+
+
 
         <div class="swiper secSwiper">
             <div class="swiper-wrapper">

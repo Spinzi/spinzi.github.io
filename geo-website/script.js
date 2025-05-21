@@ -142,4 +142,21 @@ function contactPopUp() {
   overlay.appendChild(popup);
   document.body.appendChild(overlay);
 }
-
+let fact = 0;
+function showMoreFacts() {
+    if(fact === 0){
+      fact=1;
+      document.querySelectorAll('.extra-fact').forEach(card => {
+          card.classList.remove('hide_on_phone');
+      });
+  
+      // Ascunde butonul "..."
+      document.getElementById('showMoreTrigger').innerHTML = 'Ascunde';
+    }else{
+      fact=0;
+      document.querySelectorAll('.extra-fact').forEach(card => {
+        card.classList.add('hide_on_phone');
+      });
+      document.getElementById('showMoreTrigger').innerHTML = "Afiseaza mai multe";
+    }
+}

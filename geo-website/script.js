@@ -192,3 +192,74 @@ function create_centered(id, text_) {
   holder.appendChild(wrapper);
 }
 
+function showPopup() {
+  document.getElementById('unfinished-popup').classList.add('show');
+}
+
+function closePopup() {
+  document.getElementById('unfinished-popup').classList.remove('show');
+}
+
+function createSpinziPopup() {
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "rgba(0, 0, 0, 0.6)";
+    overlay.style.display = "flex";
+    overlay.style.justifyContent = "center";
+    overlay.style.alignItems = "center";
+    overlay.style.zIndex = "9999";
+
+    const box = document.createElement("div");
+    box.style.background = "#fff";
+    box.style.padding = "24px 32px";
+    box.style.borderRadius = "12px";
+    box.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
+    box.style.maxWidth = "400px";
+    box.style.textAlign = "center";
+    box.style.fontFamily = "sans-serif";
+    box.style.animation = "fadeIn 0.3s ease";
+
+    const title = document.createElement("h2");
+    title.textContent = "Cine e Spinzi?";
+    title.style.color = "#222";
+
+    const message = document.createElement("p");
+    message.innerHTML = "Spinzi este doar un acronim.<br>Numele meu real este <strong>Gisca Alin Nicusor</strong>.";
+    message.style.color = "#444";
+    message.style.marginTop = "12px";
+    message.style.marginBottom = "20px";
+
+    const button = document.createElement("button");
+    button.textContent = "Am înțeles";
+    button.style.padding = "10px 18px";
+    button.style.background = "#007777";
+    button.style.color = "#fff";
+    button.style.border = "none";
+    button.style.borderRadius = "6px";
+    button.style.fontWeight = "bold";
+    button.style.cursor = "pointer";
+    button.style.transition = "background-color 0.2s ease";
+
+    button.addEventListener("mouseover", () => {
+        button.style.background = "#00aaaa";
+    });
+
+    button.addEventListener("mouseout", () => {
+        button.style.background = "#007777";
+    });
+
+    button.addEventListener("click", () => {
+        document.body.removeChild(overlay);
+    });
+
+    // Asamblare
+    box.appendChild(title);
+    box.appendChild(message);
+    box.appendChild(button);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+}

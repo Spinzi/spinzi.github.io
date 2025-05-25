@@ -24,6 +24,80 @@ function load_el(id, file, callback){
     });
 }
 
+function createLoader() {
+  if (!document.getElementById('loader')) {
+    const loader = document.createElement('div');
+    loader.id = 'loader';
+
+    loader.innerHTML = `
+    <div class="loader-wrapper">
+      <div class="center-dot"></div>
+
+      <div class="orbit orbit1">
+        <div class="orbit-rotator">
+          <div class="star" style="--i: 0;"></div>
+          <div class="star" style="--i: 1;"></div>
+          <div class="star" style="--i: 2;"></div>
+          <div class="star" style="--i: 3;"></div>
+          <div class="star" style="--i: 4;"></div>
+          <div class="star" style="--i: 5;"></div>
+        </div>
+      </div>
+
+      <div class="orbit orbit2">
+        <div class="orbit-rotator">
+          <div class="star" style="--i: 0;"></div>
+          <div class="star" style="--i: 1;"></div>
+          <div class="star" style="--i: 2;"></div>
+          <div class="star" style="--i: 3;"></div>
+          <div class="star" style="--i: 4;"></div>
+          <div class="star" style="--i: 5;"></div>
+        </div>
+      </div>
+
+      <div class="orbit orbit3">
+        <div class="orbit-rotator">
+          <div class="star" style="--i: 0;"></div>
+          <div class="star" style="--i: 1;"></div>
+          <div class="star" style="--i: 2;"></div>
+          <div class="star" style="--i: 3;"></div>
+          <div class="star" style="--i: 4;"></div>
+          <div class="star" style="--i: 5;"></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+    document.body.appendChild(loader);
+  }
+}
+createLoader();
+
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  const minLoadTime = 3000; // minimum time loader shows (ms)
+  const startTime = Date.now();
+
+  // Lock scroll while loading
+  document.body.style.overflow = 'hidden';
+
+  const finishLoading = () => {
+    loader.classList.add('loading-finished');
+
+    setTimeout(() => {
+      loader.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }, 1500); // fade-out duration matching CSS transition
+  };
+
+  const elapsed = Date.now() - startTime;
+  const remaining = minLoadTime - elapsed;
+
+  // If page load took longer than minLoadTime, finish immediately, else wait remaining
+  setTimeout(finishLoading, Math.max(0, remaining));
+});
+
+
 //General loading part section
 document.addEventListener("DOMContentLoaded", ()=>{
     console.log("Script loading");

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+
+    <meta name="description" content="Proiect educațional despre istoria Uniunii Europene – de la Declarația Schuman la Tratatul de la Maastricht (1950–1992)">
+    <meta name="author" content="Echipa OnHisa – Indie game dev, elevi de liceu, pasionați de C++ și proiecte complexe">
+    <meta name="keywords" content="Uniunea Europeană, istorie, Schuman, Maastricht, proiect educațional, liceu, OnHisa">
+    <title>Istoria Uniunii Europene | OnHisa</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="OHheader" id="OHheader"></div>
+
+    <div class="OHholder">
+        <div class="genText">
+            <h3>De la o idee de pace la o uniune politică</h3>
+        </div>
+        <div class="genImg hide_on_phone">
+            <img src="https://images.unsplash.com/photo-1473163928189-364b2c4e1135?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+        </div>
+    </div>
+
+    <div class="OHholderTwo">
+        <div class="genText">
+            <h3>Contextul istoric (după Al Doilea Război Mondial)</h3>
+            <p>Europa anilor 1945 se afla într-o stare de distrugere profundă, atât materială, cât și morală. Războiul care tocmai se încheiase lăsase în urmă orașe ruinate, economii șubrede și milioane de oameni afectați. Pentru a preveni o nouă conflagrație de proporții, liderii europeni au înțeles că este nevoie de o cooperare strânsă între statele continentale.</p>
+            <p>În plus, amenințarea sovietică și Războiul Rece conturau noi frontiere politice, iar Statele Unite au lansat Planul Marshall — un pachet de ajutor economic menit să susțină reconstrucția Europei și să consolideze democrațiile liberale.</p>
+            <p>Această conjunctură istorică a generat premisele unei integrări economice și politice fără precedent, cu scopul clar de a garanta pacea și stabilitatea pe continent.</p>
+        </div>
+        <div class="genImg hide_on_phone">
+            <img src="https://images.unsplash.com/photo-1571840615922-50fb24649d4b?q=80&w=2115&auto=format&fit=crop&ixlib=rb-4.1.0" alt="">
+        </div>
+    </div>
+
+    <div class="OHholderThree">
+        <div class="genText">
+            <h3>Declarația Schuman (9 mai 1950)</h3>
+            <p>După anii devastatori ai celui de-Al Doilea Război Mondial, Europa avea nevoie urgentă de o soluție care să împiedice reapariția conflictelor armate între statele sale. În acest context, ministrul francez de externe Robert Schuman a făcut o propunere revoluționară pe 9 mai 1950, care avea să devină piatra de temelie a integrării europene.</p>
+            <p>Declarația Schuman propunea crearea unei Comunități Europene a Cărbunelui și Oțelului (CECO), prin care Franța și Germania — alături de alte state europene interesate — să gestioneze în comun producția acestor resurse esențiale pentru industria militară. Scopul era simplu, dar profund: prin interdependență economică și control comun, se urmărea eliminarea posibilității unui nou război între cele două țări, dar și între alte state europene.</p>
+            <p>Această inițiativă a fost nu doar o soluție economică, ci și un act politic curajos, care a demonstrat că pacea poate fi construită prin cooperare și instituții supranaționale. Declarația Schuman este astfel recunoscută ca momentul oficial de naștere al procesului de integrare europeană, care va evolua ulterior în Uniunea Europeană pe care o cunoaștem astăzi.</p>
+        </div>
+        <div class="genImg hide_on_phone">
+            <img src="https://www.consilium.europa.eu/en/schuman-declaration/assets/pNjgtDUpsW/p001321004h-2560x1684.jpeg" alt="">
+        </div>
+    </div>
+
+    <div class="mini-game">
+        <div id="cards">
+        <div draggable="true" class="card" data-tratat="Schuman">Declarația Schuman</div>
+        <div draggable="true" class="card" data-tratat="Roma">Tratatul de la Roma</div>
+        <div draggable="true" class="card" data-tratat="Maastricht">Tratatul de la Maastricht</div>
+        </div>
+
+        <div id="targets">
+        <div class="target" data-ani="1950">1950</div>
+        <div class="target" data-ani="1957">1957</div>
+        <div class="target" data-ani="1992">1992</div>
+        </div>
+
+        <button id="check">Verifică</button>
+        <div id="result"></div>
+    </div>
+
+    <div class="OHfooter" id="OHfooter"></div>
+</body>
+</html>

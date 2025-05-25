@@ -1,0 +1,428 @@
+:root {
+  /* Invision Color Palette */
+  --color-space-cadet: #141B41; /* Dark Blue */
+  --color-madder: #9E0031;      /* Deep Red */
+  --color-dim-gray: #6D7275;     /* Medium Gray */
+  --color-white-smoke: #F6F4F3;  /* Off-white */
+  --color-maize: #FEE440;       /* Bright Yellow */
+}
+
+body, html{
+    margin: 0;
+    background-color: var(--color-white-smoke);
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    overflow-x: hidden;
+    position: relative;
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
+
+/*  GENERAL PURPOSE  */
+
+.hide_on_pc{
+  display: none;
+}
+
+.hide_on_phone{
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .hide_on_pc{
+    display: block;
+  }
+
+  .hide_on_phone{
+    display: none;
+  }
+}
+
+/*  HEADER AND FOOTER  */
+
+.OHheader{
+  background: var(--color-dim-gray);
+  display: block;
+  width: 100%;
+  padding: 0.2rem 1rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.OHheader h2{
+  display: block;
+  margin-right: auto !important;
+  font-size: 3rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .OHheader h2{
+    font-size: 3rem;
+  }
+}
+
+.OHheader nav{
+  display: flex;
+  flex-direction: row;
+  text-align: justify;
+  align-items: center;
+  margin: auto;
+}
+
+.OHheader nav .hide_on_phone{
+  margin: auto;
+}
+
+.OHheader nav ul,
+.OHheader nav ul li,
+.OHheader nav ul li a {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  font-family: "Roboto Slab", serif;
+  color: var(--color-white-smoke);
+
+  text-decoration: none;
+  
+}
+
+.OHheader nav ul li {
+  list-style: none;
+}
+
+.OHheader .hide_on_pc button{
+  background: transparent;
+  display: block;
+  border: none;
+  height: 3rem;
+  margin: auto;
+}
+
+.OHheader .hide_on_pc button img{
+  background: transparent;
+  height: inherit;
+}
+
+.OHnav {
+  position: fixed;
+  top: 5.5rem;
+  left: 0;
+  width: 100%;
+  background-color: var(--color-space-cadet);
+  color: var(--color-white-smoke);
+  padding: 1rem 2rem;
+  border-bottom: 6px solid var(--color-madder);
+  box-shadow: 0px 5px 30px var(--color-madder);
+  z-index: 1000;
+
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  /* Animation */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-1rem);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  will-change: transform, opacity;
+}
+
+.OHnav.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+
+.OHnav li {
+  list-style: none;
+  margin: 0.5rem 0;
+}
+
+.OHnav li a {
+  color: var(--color-white-smoke);
+  text-decoration: none;
+  font-size: 1.2rem;
+  display: block;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.OHnav li a:hover {
+  background-color: var(--color-madder);
+  color: var(--color-white-smoke);
+}
+
+.OHheader .hide_on_pc .OHnav.active{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.OHfooter {
+  position: relative; /* create positioning context for ::before */
+  background-color: var(--color-space-cadet);
+  color: var(--color-white-smoke);
+  padding: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* prevent overflow of ::before */
+}
+
+.OHfooter::before {
+  content: ""; /* required for pseudo-element to appear */
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0; /* cover entire footer */
+  background-image: url("https://www.transparenttextures.com/patterns/bedge-grunge.png");
+  opacity: 0.3;
+  z-index: 0; /* behind footer content */
+  pointer-events: none; /* so it doesn't block clicks */
+}
+
+/* To ensure footer content stays above the overlay */
+.OHfooter > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+@media (max-width: 768px) {
+  .OHnav {
+    flex-direction: column !important; /* ✅ force vertical for mobile menu */
+  }
+
+  .OHnav li {
+    width: 100%;
+  }
+
+  .OHnav li a {
+    display: block;
+    width: 100%;
+  }
+}
+
+/* Holder for images and text */
+
+.OHholder {
+  display: flex;
+  height: 10rem;
+  flex-direction: row;
+  background-color: rgb(143, 53, 29);
+}
+
+.OHholder .genImg {
+  height: inherit;
+  width: 60%; /* clearer than calc(100% - 40%) */
+}
+
+.OHholder .genImg img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover; /* To maintain aspect ratio and fill container */
+}
+
+.OHholder .genText {
+  width: 40%;
+  height: inherit;
+  text-align: center; /* center the text */
+  margin: auto; /* center container horizontally */
+
+  background-image: url("pages/arches.png");
+  background-repeat: repeat;
+
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .OHholder .genText{
+    width: 100%;
+  }
+}
+
+/*Secodn holder*/
+
+.OHholderTwo{
+  margin: 1rem 0;
+  display: flex;
+  height: 50vh;
+  flex-direction: row;
+  background-color: rgb(143, 53, 29);
+  overflow: hidden;
+}
+
+.OHholderTwo .genText{
+  width: 50%;
+  padding: 1rem;
+  background-color: var(--color-space-cadet);
+  background-image: url("https://www.transparenttextures.com/patterns/cartographer.png");
+  background-repeat: repeat;
+
+  height: inherit;
+
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-content: center;
+
+  color: var(--color-white-smoke);
+}
+
+.OHholderTwo .genImg {
+  height: inherit;
+  width: 50%; /* clearer than calc(100% - 40%) */
+}
+
+.OHholderTwo .genImg img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover; /* To maintain aspect ratio and fill container */
+}
+
+@media (max-width: 768px) {
+  .OHholderTwo{
+    height: 60vh;
+  }
+  .OHholderTwo .genText{
+    width: 100%;
+  }
+}
+
+/* Third holder */
+
+
+.OHholderThree{
+  margin: 1rem 0;
+  display: flex;
+  height: 55vh;
+  flex-direction: row;
+  background-color: rgb(143, 53, 29);
+  overflow: hidden;
+}
+
+.OHholderThree .genText{
+  width: 60%;
+  padding: 1rem;
+  background-color: var(--color-madder);
+  background-image: url("https://www.transparenttextures.com/patterns/climpek.png");
+  background-repeat: repeat;
+
+  height: inherit;
+
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-content: center;
+
+  color: var(--color-white-smoke);
+}
+
+.OHholderThree .genImg {
+  height: inherit;
+  width: 40%; /* clearer than calc(100% - 40%) */
+}
+
+.OHholderThree .genImg img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover; /* To maintain aspect ratio and fill container */
+}
+
+@media (max-width: 768px) {
+  .OHholderThree{
+    height: 80vh;
+  }
+  .OHholderThree .genText{
+    width: 100%;
+  }
+}
+
+/* Mini game */
+
+#cards, #targets {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.card, .target {
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  padding: 30px 20px;
+  width: 220px;
+  min-height: 100px;
+  text-align: center;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.card {
+  cursor: grab;
+  font-weight: 600;
+  background-color: #e6f0ff;
+  border: 2px solid #5b9aff;
+  font-size: 1.1rem;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(91, 154, 255, 0.2);
+}
+
+.card.dragging {
+  opacity: 0.6;
+  transform: scale(0.95);
+}
+
+.target {
+  background-color: #f4f4f4;
+  border: 2px dashed #bbb;
+  color: #555;
+  transition: background-color 0.3s;
+}
+
+.target.highlight {
+  background-color: #eef;
+  border-color: #99c;
+}
+
+#result {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #333;
+}
+
+button#check {
+  display: block;
+  margin: 0 auto;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  background-color: #5b9aff;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button#check:hover {
+  background-color: #478ae6;
+  transform: translateY(-2px);
+}

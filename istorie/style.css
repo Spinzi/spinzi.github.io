@@ -724,3 +724,7 @@ button#check:hover {
 
   margin: 1rem 0;
 }
+
+.inProgress img{
+  max-width: 100vw;
+}

@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     load_el("OHheader", "pages/head_foot/header.html", ()=>{
         const OHhd = document.getElementById('swMenu');
         const OHhd_tg = document.getElementById('sandwich');
-        const OHnav = document.querySelector('.OHnav')
 
         if (!OHhd || !OHhd_tg) {
             console.log("Operation Sandwich not working, elements not found.");
@@ -119,6 +118,22 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
     load_el("OHfooter", "pages/head_foot/footer.html");
 });
+
+function switchMb(){
+  console.log("Opened menu");
+  const OHhd = document.getElementById('swMenu');
+  const OHhd_tg = document.getElementById('sandwich');
+
+  const header = document.querySelector('.OHheader');
+
+  if (!OHhd || !OHhd_tg) {
+      console.log("Operation Sandwich not working, elements not found.");
+      return;
+  }
+  OHhd_tg.classList.toggle('active');
+  header.classList.add('header--hide');
+  console.log("Sandwich modified, hiddeen phone thingy");
+}
 
 //mini game
 

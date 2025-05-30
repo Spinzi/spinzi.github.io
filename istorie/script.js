@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     load_el("OHheader", "pages/head_foot/header.html", ()=>{
         const OHhd = document.getElementById('swMenu');
         const OHhd_tg = document.getElementById('sandwich');
+        const OHnav = document.querySelector('.OHnav')
 
         if (!OHhd || !OHhd_tg) {
             console.log("Operation Sandwich not working, elements not found.");
@@ -113,6 +114,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
         OHhd.addEventListener('click', () => {
             OHhd_tg.classList.toggle('active');
             console.log("Sandwich modified");
+            console.log(document.querySelector('.OHnav')?.outerHTML);
         });
     });
     load_el("OHfooter", "pages/head_foot/footer.html");
@@ -123,8 +125,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
 const cards = document.querySelectorAll('.card');
 const targets = document.querySelectorAll('.target');
 let draggedCard = null;
+let isTouchDragging = false;
 
-// Ensure cards are draggable
+// ========== Desktop Drag & Drop ==========
 cards.forEach(card => {
   card.setAttribute('draggable', true);
 
@@ -155,8 +158,58 @@ targets.forEach(target => {
 
     target.appendChild(draggedCard);
   });
+
+  target.addEventListener('dragenter', () => {
+    target.classList.add('highlight');
+  });
+
+  target.addEventListener('dragleave', () => {
+    target.classList.remove('highlight');
+  });
 });
 
+// ========== Touch Drag & Drop ==========
+cards.forEach(card => {
+  card.addEventListener('touchstart', e => {
+    draggedCard = card;
+    isTouchDragging = true;
+    card.classList.add('dragging');
+    e.preventDefault();
+  }, { passive: false });
+});
+
+// use document to track movement globally
+document.addEventListener('touchmove', e => {
+  if (!isTouchDragging || !draggedCard) return;
+  const touch = e.touches[0];
+  const el = document.elementFromPoint(touch.clientX, touch.clientY);
+  targets.forEach(t => t.classList.remove('highlight'));
+  if (el?.classList.contains('target')) {
+    el.classList.add('highlight');
+  }
+  e.preventDefault();
+}, { passive: false });
+
+document.addEventListener('touchend', e => {
+  if (!isTouchDragging || !draggedCard) return;
+  const touch = e.changedTouches[0];
+  const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (dropTarget?.classList.contains('target')) {
+    const existingCard = dropTarget.querySelector('.card');
+    if (existingCard) {
+      document.getElementById('cards').appendChild(existingCard);
+    }
+    dropTarget.appendChild(draggedCard);
+  }
+
+  draggedCard.classList.remove('dragging');
+  targets.forEach(t => t.classList.remove('highlight'));
+  draggedCard = null;
+  isTouchDragging = false;
+  e.preventDefault();
+}, { passive: false });
+
+// ========== Score Checker ==========
 document.getElementById('check').addEventListener('click', () => {
   let score = 0;
 
@@ -165,7 +218,6 @@ document.getElementById('check').addEventListener('click', () => {
     const tratat = card?.getAttribute('data-tratat');
     const an = target.getAttribute('data-ani');
 
-    // Reset target background before evaluation
     target.style.backgroundColor = '';
 
     if (
@@ -174,19 +226,36 @@ document.getElementById('check').addEventListener('click', () => {
       (tratat === 'Maastricht' && an === '1992')
     ) {
       score++;
-      target.style.backgroundColor = '#a2f5a2'; // verde
+      target.style.backgroundColor = '#a2f5a2'; // green
     } else {
-      if (card) target.style.backgroundColor = '#f5a2a2'; // roșu doar dacă era o carte
+      if (card) target.style.backgroundColor = '#f5a2a2'; // red
     }
   });
 
   document.getElementById('result').textContent = `Ai potrivit corect ${score} din 3 tratate.`;
 });
 
-target.addEventListener('dragenter', () => {
-  target.classList.add('highlight');
-});
-target.addEventListener('dragleave', () => {
-  target.classList.remove('highlight');
-});
+const header = document.querySelector('.OHheader');
+let lastScrollY = window.scrollY;
 
+window.addEventListener('scroll', () => {
+  const currentY = window.scrollY;
+
+  // Ignore tiny jitters
+  if (Math.abs(currentY - lastScrollY) < 8) return;
+
+  if (currentY > lastScrollY && currentY > 80) {          // scrolling DOWN
+    header.classList.add('header--hide');
+  } else {                                                // scrolling UP
+    header.classList.remove('header--hide');
+  }
+  lastScrollY = currentY;
+}, { passive: true });
+
+function openPopup() {
+  document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}

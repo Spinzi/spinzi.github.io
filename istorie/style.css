@@ -723,3 +723,144 @@ button#check:hover {
 
   margin: 1rem 0;
 }
+
+.OHholderFive {
+  margin: 1rem 0;
+  display: flex;
+  height: 55vh;
+  flex-direction: row;
+  background-color: #6a0000;
+  overflow: hidden;
+}
+
+.OHholderFive .genText {
+  width: 50%;
+  padding: 0 1rem;
+  background-color: #6a0000;
+  background-image: url("https://www.transparenttextures.com/patterns/fabric-of-squares.png");
+  background-repeat: repeat;
+  color: var(--color-white-smoke);
+
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.OHholderFive .genImg {
+  height: inherit;
+  width: 50%;
+}
+
+.OHholderFive .genImg img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .OHholderFive {
+    flex-direction: column;
+    height: fit-content;
+  }
+  .OHholderFive .genText,
+  .OHholderFive .genImg {
+    width: 100%;
+  }
+}
+
+.OHholderSix {
+  margin: 1rem 0;
+  display: flex;
+  height: 55vh;
+  flex-direction: row;
+  background-color: #014421;
+  overflow: hidden;
+}
+
+.OHholderSix .genText {
+  width: 60%;
+  padding: 0 1rem;
+  background-color: #014421;
+  background-image: url("https://www.transparenttextures.com/patterns/green-dust-and-scratches.png");
+  background-repeat: repeat;
+  color: var(--color-white-smoke);
+
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.OHholderSix .genImg {
+  height: inherit;
+  width: 40%;
+}
+
+.OHholderSix .genImg img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .OHholderSix {
+    flex-direction: column;
+    height: fit-content;
+  }
+  .OHholderSix .genText,
+  .OHholderSix .genImg {
+    width: 100%;
+  }
+}
+
+.OHholderSeven {
+  margin: 1rem 0;
+  display: flex;
+  height: 55vh;
+  flex-direction: row;
+  background-color: #001f3f;
+  overflow: hidden;
+}
+
+.OHholderSeven .genText {
+  width: 50%;
+  padding: 0 1rem;
+  background-color: #001f3f;
+  background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+  background-repeat: repeat;
+  color: var(--color-white-smoke);
+
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.OHholderSeven .genImg {
+  height: inherit;
+  width: 50%;
+}
+
+.OHholderSeven .genImg img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .OHholderSeven {
+    flex-direction: column;
+    height: fit-content;
+  }
+  .OHholderSeven .genText,
+  .OHholderSeven .genImg {
+    width: 100%;
+  }
+}

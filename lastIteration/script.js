@@ -83,67 +83,88 @@ function feedbackPageManager(){
         async function loadMes() {
             adminMessages.innerHTML = ''; // Clear previous content
 
+            onValue(child(publicDataRef, 'feedback'), (snapshot) => {
+            adminMessages.innerHTML = '';
+
+            if (!snapshot.exists()) {
+                const noMsg = document.createElement('div');
+                noMsg.textContent = 'No feedback messages found.';
+                adminMessages.appendChild(noMsg);
+                return;
+            }
+
+            const feedbackArray = [];
+
+            snapshot.forEach((el) => {
+                const val = el.val();
+                feedbackArray.push({
+                    key: el.key,
+                    data: val
+                });
+            });
+
+            const divel = document.createElement('div');
+            divel.classList.add('feedbacktotalmessnumb');
+            let length = feedbackArray.length;
+
             const reloadButton = document.createElement('button');
             reloadButton.textContent = t('reload');
             reloadButton.onclick = loadMes;
             reloadButton.classList.add('styledButton');
             reloadButton.classList.add('red');
             reloadButton.style.marginBottom = '1rem';
-            adminMessages.appendChild(reloadButton);
+            const stat = document.createElement('h4');
+            stat.innerText = `${length} ${t('total_messages')}`;
 
-            onValue(child(publicDataRef, 'feedback'), (snapshot) => {
-                adminMessages.innerHTML = '';
-                adminMessages.appendChild(reloadButton);
+            divel.appendChild(reloadButton);
+            divel.append(stat);
 
-                if (!snapshot.exists()) {
-                    const noMsg = document.createElement('div');
-                    noMsg.textContent = 'No feedback messages found.';
-                    adminMessages.appendChild(noMsg);
-                    return;
-                }
+            adminMessages.appendChild(divel);
 
-                snapshot.forEach((el) => {
-                    const val = el.val();
+            // Sort by timestamp descending (newest first)
+            feedbackArray.sort((a, b) => (b.data.timestamp ?? 0) - (a.data.timestamp ?? 0));
 
-                    const entryDiv = document.createElement('div');
-                    entryDiv.classList.add('feedbackItem');
+            feedbackArray.forEach(({ key, data }) => {
+                const entryDiv = document.createElement('div');
+                entryDiv.classList.add('feedbackItem');
 
-                    const feedbackMsgDiv = document.createElement('div');
-                    feedbackMsgDiv.classList.add('feedbackMsgDivEl');
+                const feedbackMsgDiv = document.createElement('div');
+                feedbackMsgDiv.classList.add('feedbackMsgDivEl');
 
-                    const title = document.createElement('h3');
+                const title = document.createElement('h3');
 
-                    const strong = document.createElement('strong');
-                    strong.textContent = val.name ?? 'Anonymous';
+                const strong = document.createElement('strong');
+                strong.textContent = data.name ?? 'Anonymous';
 
-                    const em = document.createElement('em');
-                    em.textContent = new Date(val.timestamp ?? 0).toLocaleString();
+                const em = document.createElement('em');
+                em.textContent = new Date(data.timestamp ?? 0).toLocaleString();
 
-                    title.appendChild(strong);
-                    title.appendChild(em);
-                    feedbackMsgDiv.appendChild(title);
+                title.appendChild(strong);
+                title.appendChild(em);
+                feedbackMsgDiv.appendChild(title);
 
-                    const deleteButton = document.createElement('button');
-                    deleteButton.classList.add('styledButton', 'red');
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.addEventListener('click', () => {
-                        deleteFeedback(el.key);
-                    });
-
-                    feedbackMsgDiv.appendChild(deleteButton);
-
-                    const messageP = document.createElement('p');
-                    messageP.textContent = val.feedback ?? '';
-
-                    entryDiv.appendChild(feedbackMsgDiv);
-                    entryDiv.appendChild(messageP);
-                    adminMessages.appendChild(entryDiv);
-
-                    const divider = document.createElement('div');
-                    divider.classList.add('sidebar-divider');
-                    adminMessages.appendChild(divider);
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('styledButton', 'red');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => {
+                    deleteFeedback(key);
                 });
+
+                feedbackMsgDiv.appendChild(deleteButton);
+
+                const messageP = document.createElement('p');
+                messageP.textContent = data.feedback ?? '';
+
+                entryDiv.appendChild(feedbackMsgDiv);
+                entryDiv.appendChild(messageP);
+                adminMessages.appendChild(entryDiv);
+
+                const divider = document.createElement('div');
+                divider.classList.add('sidebar-divider');
+                adminMessages.appendChild(divider);
             });
+        });
+
         }
 
         loadMes();

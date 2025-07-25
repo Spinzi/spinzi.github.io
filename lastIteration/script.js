@@ -78,105 +78,104 @@ function feedbackPageManager(){
         console.log('Elements have been loaded correctly. ');
         if(!isAdmin){
             adminHolder.classList.add('hidden');
-        }else{
-            async function loadMes() {
-                adminMessages.innerHTML = ''; // Clear previous content
+        }
+        async function loadMes() {
+            adminMessages.innerHTML = ''; // Clear previous content
 
-                const reloadButton = document.createElement('button');
-                reloadButton.textContent = t('reload');
-                reloadButton.onclick = loadMes;
-                reloadButton.classList.add('styledButton');
-                reloadButton.classList.add('red');
-                reloadButton.style.marginBottom = '1rem';
+            const reloadButton = document.createElement('button');
+            reloadButton.textContent = t('reload');
+            reloadButton.onclick = loadMes;
+            reloadButton.classList.add('styledButton');
+            reloadButton.classList.add('red');
+            reloadButton.style.marginBottom = '1rem';
+            adminMessages.appendChild(reloadButton);
+
+            onValue(child(publicDataRef, 'feedback'), (snapshot) => {
+                adminMessages.innerHTML = '';
                 adminMessages.appendChild(reloadButton);
 
-                onValue(child(publicDataRef, 'feedback'), (snapshot) => {
-                    adminMessages.innerHTML = '';
-                    adminMessages.appendChild(reloadButton);
+                if (!snapshot.exists()) {
+                    const noMsg = document.createElement('div');
+                    noMsg.textContent = 'No feedback messages found.';
+                    adminMessages.appendChild(noMsg);
+                    return;
+                }
 
-                    if (!snapshot.exists()) {
-                        const noMsg = document.createElement('div');
-                        noMsg.textContent = 'No feedback messages found.';
-                        adminMessages.appendChild(noMsg);
-                        return;
-                    }
+                snapshot.forEach((el) => {
+                    const val = el.val();
 
-                    snapshot.forEach((el) => {
-                        const val = el.val();
+                    const entryDiv = document.createElement('div');
+                    entryDiv.classList.add('feedbackItem');
 
-                        const entryDiv = document.createElement('div');
-                        entryDiv.classList.add('feedbackItem');
+                    const feedbackMsgDiv = document.createElement('div');
+                    feedbackMsgDiv.classList.add('feedbackMsgDivEl');
 
-                        const feedbackMsgDiv = document.createElement('div');
-                        feedbackMsgDiv.classList.add('feedbackMsgDivEl');
+                    const title = document.createElement('h3');
 
-                        const title = document.createElement('h3');
+                    const strong = document.createElement('strong');
+                    strong.textContent = val.name ?? 'Anonymous';
 
-                        const strong = document.createElement('strong');
-                        strong.textContent = val.name ?? 'Anonymous';
+                    const em = document.createElement('em');
+                    em.textContent = new Date(val.timestamp ?? 0).toLocaleString();
 
-                        const em = document.createElement('em');
-                        em.textContent = new Date(val.timestamp ?? 0).toLocaleString();
+                    title.appendChild(strong);
+                    title.appendChild(em);
+                    feedbackMsgDiv.appendChild(title);
 
-                        title.appendChild(strong);
-                        title.appendChild(em);
-                        feedbackMsgDiv.appendChild(title);
-
-                        const deleteButton = document.createElement('button');
-                        deleteButton.classList.add('styledButton', 'red');
-                        deleteButton.textContent = 'Delete';
-                        deleteButton.addEventListener('click', () => {
-                            deleteFeedback(el.key);
-                        });
-
-                        feedbackMsgDiv.appendChild(deleteButton);
-
-                        const messageP = document.createElement('p');
-                        messageP.textContent = val.feedback ?? '';
-
-                        entryDiv.appendChild(feedbackMsgDiv);
-                        entryDiv.appendChild(messageP);
-                        adminMessages.appendChild(entryDiv);
-
-                        const divider = document.createElement('div');
-                        divider.classList.add('sidebar-divider');
-                        adminMessages.appendChild(divider);
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('styledButton', 'red');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', () => {
+                        deleteFeedback(el.key);
                     });
-                });
-            }
-            loadMes();
-            cancelButton.addEventListener('click', ()=>{
-                currentPage = 'home';
-                updatePage(currentPage);
-            });
-            submitButton.addEventListener('click', ()=>{
-                if (!formNameInput.value.trim() || !formMessageInput.value.trim()){
-                    notify(t('name_or_message_incomplete'));
-                    return;
-                }
-                if(formNameInput.value.trim().length > 20){
-                    notify(t('name_too_long'));
-                    return;
-                }
-                if(formMessageInput.value.trim().length > 500){
-                    notify(t('message_too_long'));
-                    return;
-                }
-                const msg = {
-                    feedback: formMessageInput.value.trim(),
-                    name: formNameInput.value.trim(),
-                    timestamp: Date.now()
-                }
-                push(child(publicDataRef, 'feedback'), msg)
-                .then(() => {
-                    notify(t('sent_succesfully'))
-                    formMessageInput.value = "";
-                }).catch((error) => {
-                    console.error(error);
-                    notify(t('failed_sending_message'));
+
+                    feedbackMsgDiv.appendChild(deleteButton);
+
+                    const messageP = document.createElement('p');
+                    messageP.textContent = val.feedback ?? '';
+
+                    entryDiv.appendChild(feedbackMsgDiv);
+                    entryDiv.appendChild(messageP);
+                    adminMessages.appendChild(entryDiv);
+
+                    const divider = document.createElement('div');
+                    divider.classList.add('sidebar-divider');
+                    adminMessages.appendChild(divider);
                 });
             });
         }
+        loadMes();
+        cancelButton.addEventListener('click', ()=>{
+            currentPage = 'home';
+            updatePage(currentPage);
+        });
+        submitButton.addEventListener('click', ()=>{
+            if (!formNameInput.value.trim() || !formMessageInput.value.trim()){
+                notify(t('name_or_message_incomplete'));
+                return;
+            }
+            if(formNameInput.value.trim().length > 20){
+                notify(t('name_too_long'));
+                return;
+            }
+            if(formMessageInput.value.trim().length > 500){
+                notify(t('message_too_long'));
+                return;
+            }
+            const msg = {
+                feedback: formMessageInput.value.trim(),
+                name: formNameInput.value.trim(),
+                timestamp: Date.now()
+            }
+            push(child(publicDataRef, 'feedback'), msg)
+            .then(() => {
+                notify(t('sent_succesfully'))
+                formMessageInput.value = "";
+            }).catch((error) => {
+                console.error(error);
+                notify(t('failed_sending_message'));
+            });
+        });
 
     }else{
         console.warn('Elements have not been loaded correctly in feedback page.');

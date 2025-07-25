@@ -596,6 +596,18 @@ body {
     margin-left: auto;
 }
 
+.feedbacktotalmessnumb{
+    display: flex;
+    flex-direction: row;
+}
+
+.feedbacktotalmessnumb h4{
+    margin: auto;
+    margin-right: 0;
+    font-size: 1.2rem;
+    color: gray;
+}
+
 /* card container, feedback is up */
 
 .cardContainer {

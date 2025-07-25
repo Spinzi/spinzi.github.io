@@ -79,6 +79,7 @@ function feedbackPageManager(){
         if(!isAdmin){
             adminHolder.classList.add('hidden');
         }
+
         async function loadMes() {
             adminMessages.innerHTML = ''; // Clear previous content
 
@@ -144,12 +145,16 @@ function feedbackPageManager(){
                 });
             });
         }
+
         loadMes();
+
         cancelButton.addEventListener('click', ()=>{
             currentPage = 'home';
             updatePage(currentPage);
         });
+
         submitButton.addEventListener('click', ()=>{
+            console.log('Attempting to send feedback...');
             if (!formNameInput.value.trim() || !formMessageInput.value.trim()){
                 notify(t('name_or_message_incomplete'));
                 return;

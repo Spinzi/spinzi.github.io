@@ -1,0 +1,742 @@
+/* Reset and base styles */
+:root{
+    --side-menu-width: 12rem;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    overflow: hidden;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background-color: ivory;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+}
+
+.selectable{
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+/* Header section styling (default desktop) */
+#headerSection {
+    background-image: url('https://images.unsplash.com/uploads/141327328038701afeede/eda0fb7c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-position: center;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    z-index: 99999;
+}
+
+/* Header title */
+#headerSection h1 {
+    font-size: 2rem;
+    margin: 0;
+    flex-grow: 1;
+    color: white;
+    text-align: left;
+}
+
+/* Header buttons */
+#headerSection button {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    background-color: transparent;
+    color: white;
+    font-size: 1.5rem;
+    border: 2px solid white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+#headerSection button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #240e04;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), inset 0 0 6px rgba(255, 255, 255, 0.5);
+    border-color: transparent;
+}
+
+#headerSection button:active{
+    transform: scale(0.95) translateY(1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+#hideSideBarButton{
+    display: none;
+}
+
+
+/* -------------------------- */
+/* 📱 Mobile */
+/* -------------------------- */
+@media (max-width: 768px) {
+    #headerSection {
+        all: unset;
+        position: absolute;
+        top: 1.2rem;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background: rgba(0, 0, 0, 0.65);
+        background-image: url('https://images.unsplash.com/photo-1570634345576-3510d21d244f?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-position: center 75%;
+        backdrop-filter: blur(30px);
+        border-radius: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.2rem;
+        width: 80%;
+        max-width: 26rem;
+        height: 4rem;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+        z-index: 99999;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    #headerSection h1 {
+        font-size: 1.75rem;
+        color: orange;
+        margin: 0;
+        text-align: center;
+    }
+
+    #headerSection button {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.2rem;
+        border: 2px solid orange;
+        background-color: rgba(255, 255, 255, 0.15);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease;
+    }
+
+    #headerSection button:hover {
+        background-color: rgba(137, 137, 137, 0.25);
+        transform: scale(1.15);
+        color: white;
+    }
+
+    #headerSection.phoneHide {
+        opacity: 0;
+        transform: translate(-50%, -150%);
+        pointer-events: none; /* Prevent interactions while hidden */
+    }
+
+    #hideSideBarButton{
+        display: block;
+    }
+}
+
+.sideBarButton {
+    all: unset;
+    cursor: pointer;
+    margin: 1rem 0.2rem;
+    border: rgba(0, 0, 0, 0.3) solid 0.2rem;
+    padding: 0.6rem 1.2rem;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-weight: 500;
+    border-radius: 10px;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    justify-content: center;
+}
+
+@media (max-width: 782px) {
+    .sideBarButton{
+        width: 50%;
+        align-self: center;
+        margin: 1rem auto;
+        text-align: center;
+    }
+}
+
+.sideBarButton:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: translate(+5px, -2px);
+}
+
+.sideBarButton:active {
+    transform: translateY(1px);
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#sideMenu .bitSmaller{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    margin: auto;
+}
+
+#sideMenu li.bitSmaller.sideBarButton{
+     display: flex; /* make child a flex container */
+    align-items: center; /* vertical center text inside button */
+    justify-content: center; /* horizontal center */
+    height: 2.5rem; /* fix height, or use min-height */
+    padding: 0 0.6rem;
+    font-size: 1rem;
+    width: 40%;
+    box-sizing: border-box; /* include padding in width */
+}
+
+#sideMenu li.bitSmaller.sideBarButton.active{
+    background-color: rgba(0, 128, 0, 0.333);
+}
+
+#sideMenu li.bitSmaller.sideBarButton.nonactive{
+    background-color: rgba(107, 107, 107, 0.333);
+}
+
+/* Hidden class */
+.hidden{
+    display: none !important;
+}
+
+/* Main content */
+
+.mainContentArea{
+    display: flex;
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Sidebar */
+
+#sideMenu ul, #sideMenu li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%;
+    display: block;
+}
+
+#sideMenu {
+    position: fixed;
+    top: 5rem; /* header height */
+    left: 0;
+    width: var(--side-menu-width);
+    padding: 0rem;
+    height: calc(100vh - 5rem);
+    overflow: auto;
+    z-index: 100; /* make sure it's above content, but below the header */
+    border-right: 2px solid teal;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.scrollable{
+    height: 100%;
+    padding: 1rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
+.scrollable::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+
+#sideMenuBg {
+    position: fixed;
+    top: 5rem; /* same as sideMenu */
+    left: 0;
+    width: var(--side-menu-width);
+    height: calc(100vh - 5rem);
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)),
+        url('https://i.pinimg.com/736x/41/93/e5/4193e5a2eb7f01c293a1f305f54b964c.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(40px);
+    transform: scale(1.1);
+    z-index: -1; /* just behind #sideMenu */
+    pointer-events: none; /* so clicks pass through */
+    overflow: hidden !important;
+}
+
+@media (max-width: 782px) {
+    #sideMenuBg{
+        width: 100vw;
+    }
+}
+
+
+
+#sideMenu.open::before {
+    opacity: 1;
+}
+
+
+@media (max-width: 768px) {
+    #sideMenu{
+        position: fixed;
+        top: 0;
+        height: 100%;
+        width: 100vw;
+        scroll-behavior: smooth;
+        overflow: hidden;
+    }
+}
+
+#sideMenu ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sideMenu.open{
+    transform: translateX(0%);
+}
+
+/* Notification thing */
+#notificationContainer {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column-reverse; /* Important: newest notifications go UP */
+    gap: 0.5rem;
+    z-index: 10000;
+}
+
+.notification {
+    background-color: #323232;
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    min-width: 200px;
+    max-width: 300px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    position: relative;
+    animation: fadeIn 0.3s ease;
+    transition: transform 0.2s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
+}
+
+.notification:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 24px 6px rgba(255, 200, 80, 0.45), 0 2px 16px rgba(0,0,0,0.25);
+}
+
+.notification button {
+    position: absolute;
+    top: 0.3rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn2 {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* slide up effect */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hide {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn2 0.2s ease-out;
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+/* Modal content box */
+.modal-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    text-align: center;
+}
+
+@media (max-width: 782px) {
+    .modal-content {
+        width: 90vw;
+        padding: 1rem;
+        border-radius: 0.75rem;
+    }
+}
+
+/* Exit button (X) */
+.modal-exit {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Input field */
+.input-field {
+    width: calc(100% - 1rem - 0.75rem);
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+/* Primary button */
+.btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Modal title */
+.modal-title {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+/* Dynamic content */
+
+#dynamicContent {
+    flex-grow: 1;
+    padding: 2rem;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    margin-top: 5rem;
+
+    min-height: calc(100vh - 5rem);
+    
+    width: 100%;
+    max-width: 100%; /* ✅ prevents overflow from padding */
+    box-sizing: border-box; /* ✅ includes padding in width */
+    
+    background-color: ivory;
+    
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 5rem);
+    
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap; /* ✅ allows line breaks in long text */
+}
+
+/* Shift dynamic content if sidebar is shown */
+#mainContentArea.sidebar-shown #dynamicContent {
+    margin-left: var(--side-menu-width);
+    width: calc(100% - var(--side-menu-width));
+}
+
+
+/* MOBILE — sidebar overlays content */
+@media (max-width: 768px) {
+    #dynamicContent{
+        margin-top: 0;
+        padding-top: 5rem;
+        min-height: 100vh;
+    }
+
+    #sideMenu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 1000;
+        transform: translateX(-100%);
+    }
+
+    #sideMenu.shown {
+        transform: translateX(0);
+    }
+
+    #mainContentArea.sidebar-shown #dynamicContent {
+        margin-left: 0;
+        filter: blur(3px);
+        background: rgba(0,0,0,0.2);
+    }
+}
+
+.sidebar-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(92, 92, 92, 0.2); /* or a subtle gray */
+    margin: 0.75rem 0;
+    border: none;
+}
+
+/* Feedback item */
+.feedbackItem {
+    background-color: transparent;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow: hidden;
+}
+
+.feedbackItem:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.feedbackItem h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #222;
+    margin: 0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 6px;
+    background-color: transparent;
+}
+
+.feedbackItem h3 em {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: gray;
+    margin: 0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 6px;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.feedbackItem p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    padding: 0.2rem 0.4rem;
+    line-height: 1.4;
+    border-radius: 6px;
+    backdrop-filter: blur(6px);
+}
+
+.feedbackMsgDivEl{
+    display: flex;
+    flex-direction: row;
+}
+
+.feedbackMsgDivEl button{
+    margin-left: auto;
+}
+
+/* card container, feedback is up */
+
+.cardContainer {
+    background-color: transparent;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.cardContainer:hover {
+    background-color: rgba(0, 0, 0, 0.05); /* subtle hover */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.styledButton {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.styledButton:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.styledButton:active {
+    background: rgba(0, 0, 0, 0.6);
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.styledButton.green {
+    background: rgba(0, 128, 0, 0.6);
+}
+
+.styledButton.green:hover {
+    background: rgba(0, 128, 0, 0.8);
+}
+
+.styledButton.red {
+    background: rgba(200, 0, 0, 0.5);
+}
+
+.styledButton.red:hover {
+    background: rgba(200, 0, 0, 0.7);
+}
+
+.cardContainer h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0.25rem 0rem;
+    color: #222;
+    padding: 0.2rem 0.4rem;
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    transition: background 0.2s ease;
+}
+
+.cardContainer p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0.25rem 0rem;
+    color: #333;
+    padding: 0.2rem 0.4rem;
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    transition: background 0.2s ease;
+}
+
+.cardInput {
+    width: calc(100% - 2rem);
+    min-height: 120px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #222;
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    transition: 
+        background 0.3s ease, 
+        box-shadow 0.3s ease, 
+        backdrop-filter 0.3s ease;
+    resize: vertical;
+}
+
+.cardInput:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(100, 100, 255, 0.2);
+    backdrop-filter: blur(12px);
+}
+
+.cardInputShort {
+    width: calc(100% - 2rem);
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #222;
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(10px);
+    transition:
+        background 0.3s ease,
+        box-shadow 0.3s ease,
+        backdrop-filter 0.3s ease;
+}
+
+.cardInputShort:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(100, 100, 255, 0.2);
+    backdrop-filter: blur(12px);
+}
+
+
+.buttonRow {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}

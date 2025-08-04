@@ -1,0 +1,33 @@
+<div class="cardContainer" id="messagesCard">
+  <h2 class="selectable" data-i18n="messagesTitle" id="messagesTitle">Messages</h2>
+
+  <!-- Description when messages are enabled -->
+  <p class="cardDescription selectable" data-i18n="messagesDescription" id="messagesDescription">
+    Leave a message to be seen by others. Please be respectful, as all messages are public. ✨
+  </p>
+
+  <!-- Description when messages are disabled -->
+  <p class="cardDescription selectable" data-i18n="messagesDescriptionDisabled" id="messagesDescriptionDisabled">
+    Messages are currently disabled, possibly for maintenance or specific reasons. Please check back later — the feature may be enabled again soon.
+  </p>
+
+  <!-- Name Input -->
+  <textarea class="cardInputShort" data-i18n-placeholder="messagesNamePlaceholder" placeholder="Write your name here..." id="messagesNameInput"></textarea>
+
+  <!-- Message Input -->
+  <textarea class="cardInput" data-i18n-placeholder="messagesPlaceholder" placeholder="Write your message here..." id="messagesMessageInput"></textarea>
+
+  <!-- Buttons -->
+  <div class="buttonRow">
+    <button class="styledButton green" data-i18n="submit" id="messagesSubmitButton">Submit</button>
+    <button class="styledButton red" data-i18n="cancel" id="messagesCancelButton">Cancel</button>
+  </div>
+</div>
+
+<!-- Displayed messages -->
+<div class="cardContainer" id="messagesDisplay">
+  <h2 class="selectable" id="messagesDisplayTitle"><span data-i18n="userMessages">User Messages</span> <span style="display: inline-flex;" id="usersNumber"></span></h2> 
+  <div id="messagesDisplayContent">
+    <!-- Loaded messages go here -->
+  </div>
+</div>

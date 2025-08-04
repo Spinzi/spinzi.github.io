@@ -27,6 +27,16 @@
     <section id="headerPlaceholder">
     </section>
 
+    <div id="loadingOverlay" class="loading-overlay hiddens">
+        <div class="spinner one"></div>
+        <div class="spinner two"></div>
+        <div class="spinner three"></div>
+    </div>
+
+    <div id="loadingOverlayError" class="loading-overlay hiddens">
+        <h3 data-i18n="loading_error">Loading error.</h3>
+    </div>
+
     <div id="notificationContainer" class="notification-container"></div>
 
     <article id="mainContentArea">
@@ -45,25 +55,28 @@
                             </li>
                         </ul>
                     </li>
+                    <li><button class="sideBarButton" id="adminButton" data-i18n="admin">Admin</button></li>
                     <li><button class="sideBarButton" id="logInButton" data-i18n="logIn">Log in</button></li>
                     <li><button class="sideBarButton" id="adminName"></button></li>
                     <li><button class="sideBarButton" id="signOutButton" data-i18n="signOut">Sign out</button></li>
+                    <li><button class="sideBarButton" id="settingsButton" data-i18n="settings">Settings</button></li>
                     <li><div class="sidebar-divider"></div></li>
-                    <li><button class="sideBarButton" id="homeButton">Home</button></li>
+                    <li><button class="sideBarButton" id="consoleButton" data-i18n="console">Console</button></li>
+                    <li><div class="sidebar-divider"></div></li>
+                    <li><button class="sideBarButton" id="homeButton" data-i18n="home">Home</button></li>
+                    <li><button class="sideBarButton" id="messageButton" data-i18n="messages">Message</button></li>
                     <li><button class="sideBarButton" id="feedbackButton">Feedback</button></li>
                 </ul>
             </div>
             <div id="sideMenuBg"></div>
         </aside>
-        <div id="dynamicContent" class="">
-        
+        <div id="dynamicContent">
             <div class="cardContainer">
                 <p class="selectable">Welcome!</p>
                 <button class="styledButton">Hi</button>
                 <button class="styledButton green">Hi</button>
                 <button class="styledButton red">Hi</button>
             </div>
-
         </div>
     </article>
 

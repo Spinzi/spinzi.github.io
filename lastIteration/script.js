@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -22,6 +22,7 @@ const database = getDatabase(app);
 
 const publicDataRef = ref(database, 'publicData'); // Changed from database.ref('publicData')
 const adminDataRef = ref(database, 'adminData');   // Changed from database.ref('adminData')
+const controlData = ref(database, 'controlData');
 
 const adminNamesLocation = child(adminDataRef, "adminNames");
 
@@ -33,20 +34,65 @@ let admin_id;
 
 let translations = {};
 
-let currentPage = 'home';
+let currentPage = localStorage.currentPage || 'home';
 
-function pageManager(page){
+let loadingTimeout;
+
+function showLoading() {
+    console.log('🔻 showLoading called');
+    clearTimeout(loadingTimeout);
+    document.getElementById("loadingOverlay").classList.remove("hiddens");
+    
+    loadingTimeout = setTimeout(()=>{
+        document.getElementById("loadingOverlay").classList.add("hiddens");
+        document.getElementById('loadingOverlayError').classList.remove('hiddens');
+        console.error(t("Loading took too long. Showing error."));
+        notify(t("loading_took_too_long_error"));
+    }, 5000);
+}
+
+function hideLoading() {
+    console.log("🔻 hideLoading called");
+    document.getElementById("loadingOverlay").classList.add("hiddens");
+    document.getElementById('loadingOverlayError').classList.add('hiddens');
+    clearTimeout(loadingTimeout);
+}
+
+showLoading();
+
+function pageManager(page, callback){
     // verify if page is correct
-    const validPages = ['home', 'feedback']
+    showLoading();
+    const validPages = ['home', 'feedback', 'settings', 'messages', 'console'];
     if(!validPages.includes(page))
-        page = 'home'
+        page = 'home';
+    
     loadHtmlInto(`pages/pag/${page}.html`, 'dynamicContent',() => {
         // now we need to apply functionality for the elements of the page
         if(page === 'home'){
             homePageManager();
         }else if(page === 'feedback'){
             feedbackPageManager();
+        }else if(page === 'messages'){
+            messagePageManager();
+        }else if(page === 'settings'){
+            if(!isAdmin){
+                notify(t("not_admin_no_function"));
+                currentPage = 'home';
+                updatePage();
+            }else{
+                settingsManager();
+            }
+        }else if(page === 'console'){
+            consoleManager();
         }
+        hideLoading();
+        
+        setTimeout(() => {
+            if(callback) {
+                callback();
+            }
+        }, 100);
     });
 }
 
@@ -54,9 +100,508 @@ function homePageManager(){
     return;
 }
 
+function consoleReqLogData(data) {
+    if (typeof data === 'object' && typeof data['raw_message'] === 'string') {
+        let retMessage = "";
+
+        if (data['err']) {
+            retMessage += `ERROR: ${data['err']}\n`;
+        }
+
+        if (data['cmd']) {
+            retMessage += `COMMAND: ${data['cmd']}\n`;
+            // You can handle different commands here later
+        } else if (Array.isArray(data)) {
+            data.forEach(element => {
+                retMessage += `${element.key}: ${element.data}\n`;
+            });
+        }
+
+        retMessage += `RAW_MESSAGE: ${data['raw_message']}`;
+        return retMessage;
+    }
+
+    return JSON.stringify(data); // Fallback
+}
+
+
+function consoleManager(){
+    const consoleOutput = document.getElementById('firebaseConsoleOutput');
+    const consoleInput = document.getElementById('firebaseConsoleInput');
+
+    const autoScrollToggle = document.getElementById('autoScrollToggle');
+
+    let autoScrollEnabled = true;
+
+    if( localStorage.getItem('autoScrollConsole') !== null ){
+        autoScrollEnabled = localStorage.getItem('autoScrollConsole') === 'true';
+    }else{
+        autoScrollEnabled = autoScrollToggle.checked;
+    }
+    autoScrollToggle.checked = autoScrollEnabled;
+
+    autoScrollToggle.addEventListener('change', () => {
+        autoScrollEnabled = autoScrollToggle.checked;
+        localStorage.setItem('autoScrollConsole', autoScrollEnabled);
+        scrollToBottom();
+    });
+
+    function scrollToBottom() {
+        if (autoScrollEnabled) {
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            console.log('Auto scrolled.');
+        }else{
+            console.log('Skipped scroll, variable negative.');
+        }
+    }
+
+    onValue(child(adminDataRef, 'logs'), (snapshot) => {
+        if(!snapshot.exists){
+            consoleOutput.innerHTML = "<p data-i18n='no_logs'>No logs...</p>";
+        }
+
+        consoleOutput.innerHTML = '';
+        
+        let logsArr = [];
+
+        snapshot.forEach((el) => {
+            logsArr.push({
+                key: el.key,
+                data: el.val()
+            });
+        });
+
+        logsArr.sort((a, b) => (a.data.timestamp ?? 0) - (b.data.timestamp ?? 0));
+
+        logsArr.forEach((data) => {
+            const msg = document.createElement('div');
+            msg.classList.add('selectable');
+            
+            let finalText;
+
+            finalText = consoleReqLogData(data.data.message) ; 
+
+            const _header = document.createElement('h3');
+
+            const _text = document.createElement('p');
+
+            const date = new Date(data.data.timestamp);
+            const formattedDate = date.toISOString().slice(0, 16).replace('T', ' ');
+            _header.innerText = `[${formattedDate}](${data.data.source})`;
+
+            _text.innerHTML = finalText
+            .replace(/\\n/g, '<br>')
+            .replace(/\n/g, '<br>')
+            .replace(/\\"/g, "\"")
+            .replace(/ERROR:/g, '<font color="red">ERROR:</font>');
+
+            
+            msg.appendChild(_header);
+            msg.appendChild(_text);
+
+            consoleOutput.appendChild(msg);
+        });
+        scrollToBottom();
+    })
+
+    consoleInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Optional: prevent form submission or line break
+            
+            let messages = consoleInput.value.trim().split(" ");
+            consoleInput.value = '';
+            
+            function log(message){
+                const source = 'web';
+                const timestamp = Date.now();
+                push(logsRef, {
+                    source: source,
+                    timestamp: timestamp,
+                    message: message
+                });
+                notify(t('message_logged'));
+            }
+
+            if(messages.length > 2){
+                log('ERROR: Message excedes two spaces. Use \'help\'.');
+                return;
+            }
+
+            if(messages[0] === 'help'){
+                log("-+-+-\nHelp\n-+-+-");
+            }else if(messages[0] === 'say'){
+                log(messages[1]);
+            }else if(messages[0] === 'clr'){
+                set(logsRef, '');
+                getAdminName(admin_id, (name)=>{
+                    log(`<font color="red">Admin</font> ${name} cleared the logs.`);
+                });
+            }else if(messages[0] === 'stats'){
+                let lgMsg = '';
+                lgMsg += "-+-+-\n<font color=\"#81A6FF\">WEBSITE STATS</font>\n-+-+-\n";
+                
+                let tm = new Date();
+                let formatted = tm.getFullYear() + '-' +
+                                String(tm.getMonth() + 1).padStart(2, '0') + '-' +
+                                String(tm.getDate()).padStart(2, '0') + ' ' +
+                                String(tm.getHours()).padStart(2, '0') + ':' +
+                                String(tm.getMinutes()).padStart(2, '0');
+
+                lgMsg += `<font color="#81A6FF">[${formatted}]</font>\n\n`;
+                log(lgMsg);
+            }else if(messages[0] === 'addAdmin'){
+                const uidToAdd = messages[1];
+                const adminRef = child(adminDataRef, 'admins/' + uidToAdd);
+
+                set(adminRef, true)
+                    .then(() => {
+                        log(`Added <font color="#81A6FF">${messages[1]}</font> to admin list.`);
+                    })
+                    .catch((error) => {
+                        log(`<font color="red">Error:</font> ${error.message}`);
+                    });
+            }else{
+                log(`Unknown command\n<font color="#81A6FF">${messages[0]} ${messages[1] ?? ''}</font>\nPlease use 'help' for support.`);
+            }
+        }
+    });
+
+}
+
+async function reqStatus(settingId, callback) {
+    const validSettings = ['feedback', 'message'];
+    if (!validSettings.includes(settingId)) {
+        notify(t('error_setting_id_not_existent') + ` ID: ${settingId}`);
+        return null;
+    }
+
+    try {
+        const snapshot = await get(child(controlData, settingId));
+        if (!snapshot.exists()) {
+            console.error(`Setting '${settingId}' doesn't exist in database.`);
+            if(callback) callback(404);
+            return 404;
+        }
+        const value = snapshot.val();
+        if(callback) callback(value.value===true);
+        return value.value === true; // returns boolean
+
+    } catch (error) {
+        console.error(`Error fetching setting '${settingId}':`, error);
+        return null;
+    }
+}
+
+function settingsManager(){
+    if(!isAdmin){
+        return;
+    }
+
+    const feedbackButton = document.getElementById('toggleFeedbackPanelButton');
+    const feedbackStatus = document.getElementById('toggleFeedbackPanelButtonStatus');
+
+    const messageButton = document.getElementById('toggleMessagePanelButton');
+    const messageStatus = document.getElementById('toggleMessagePanelButtonStatus');
+
+    if (!feedbackButton || !feedbackStatus || !messageButton || !messageStatus) {
+        notify(t('elements_not_loaded'));
+        return;
+    }
+
+    const validSettings = ['feedback', 'message'];
+
+    async function updateStatus(paragraphId, settingId, el) {
+        const element = document.getElementById(paragraphId);
+        if (!validSettings.includes(settingId)) {
+            notify(t('error_setting_id_not_existent') + ` ID: ${settingId}`);
+            return;
+        }
+        if(!element){
+            notify(t('no_element_with_id'));
+            return;
+        }
+
+        element.innerText = t('parsing_data');
+        try {
+            const response = await reqStatus(settingId);
+
+            if (response === 404) {
+                element.innerText = t('setting_not_existent');
+                if(el){
+                    el.classList.remove('green');
+                    el.classList.remove('red');
+                }
+            } else if (response === true) {
+                element.innerText = t('setting_activated');
+                if(el){
+                    el.classList.add('green');
+                    el.classList.remove('red');
+                }
+            } else if (response === false) {
+                element.innerText = t('setting_deactivated');
+                if(el){
+                    el.classList.remove('green');
+                    el.classList.add('red');
+                }
+            } else {
+                element.innerText = t('unknown_error_in_processing_data') + ` Value read: ${response}`;
+                if(el){
+                    el.classList.remove('green');
+                    el.classList.remove('red');
+                }
+            }
+        } catch (error) {
+            element.innerText = t('unknown_error_in_processing_data') + ` ${error}`;
+        }
+
+        console.log(`Status updated on: ${paragraphId}`);
+    }
+    
+    function addEv(el, st, settingId){
+        el.addEventListener('click', () => {
+            reqStatus(settingId, (stat)=>{
+                if(stat === 404){
+                    console.log(`Status of feedback found: ${stat}, executing propper program...`);
+                    st.innerText = t('creating_element_in_database');
+                    set(child(controlData, settingId), {
+                        value: false
+                    })
+                    .catch((error)=>{
+                        console.error(`Error in feedback setting: ${error}`);
+                    });
+                }else if(stat === true){
+                    console.log(`Status of feedback found: ${stat}, executing propper program...`);
+                    st.innerText = t('updating_element_in_database');
+                    set(child(controlData, settingId), {
+                        value: false
+                    })
+                    .catch((error)=>{
+                        console.error(`Error in feedback setting: ${error}`);
+                    });
+                }else if(stat === false){
+                    console.log(`Status of feedback found: ${stat}, executing propper program...`);
+                    st.innerText = t('updating_element_in_database');
+                    set(child(controlData, settingId), {
+                        value: true
+                    })
+                    .catch((error)=>{
+                        console.error(`Error in feedback setting: ${error}`);
+                    });
+                }else{
+                    console.error(`Could not read the status of the button. Status read: ${stat}`);
+                }
+                updateStatus(`${st.id}`, settingId, el);
+            });
+        });
+    }
+    
+    addEv(feedbackButton, feedbackStatus, 'feedback');
+    addEv(messageButton, messageStatus, 'message');
+    // setTimeout(() => {
+        try {
+            updateStatus(feedbackStatus.id, 'feedback', feedbackButton);
+            updateStatus(messageStatus.id, 'message', messageButton);
+        } catch (error) {
+            notify(t('error') + ` ${error}`);
+        }
+    // }, 300);
+}
+
+function messagePageManager() {
+    const holder = document.getElementById('messagesCard');
+    const displayHolder = document.getElementById('messagesDisplayContent');
+    const msgDisplayHolder= document.getElementById('messagesDisplay');
+
+    const functionalMessage = document.getElementById('messagesDescription');
+    const nonFunctionalMessage = document.getElementById('messagesDescriptionDisabled');
+
+    const formNameInput = document.getElementById('messagesNameInput');
+    const formMessageInput = document.getElementById('messagesMessageInput');
+
+    const submitButton = document.getElementById('messagesSubmitButton');
+    const cancelButton = document.getElementById('messagesCancelButton');
+
+    const messagesNumber = document.getElementById('usersNumber');
+
+    if (
+        holder &&
+        displayHolder &&
+        functionalMessage &&
+        nonFunctionalMessage &&
+        formNameInput &&
+        formMessageInput &&
+        submitButton &&
+        cancelButton &&
+        messagesNumber
+    ) {
+        console.log('Messages page elements loaded correctly.');
+
+        function loadMessages() {
+            displayHolder.innerHTML = '';
+
+            onValue(child(publicDataRef, 'messages'), (snapshot) => {
+                displayHolder.innerHTML = '';
+
+                if (!snapshot.exists()) {
+                    const noMsg = document.createElement('div');
+                    noMsg.textContent = t('no_user_messages_found');
+                    displayHolder.appendChild(noMsg);
+                    return;
+                }
+
+                const messagesArray = [];
+                snapshot.forEach((el) => {
+                    const val = el.val();
+                    messagesArray.push({
+                        key: el.key,
+                        data: val
+                    });
+                });
+                messagesNumber.innerText = `${messagesArray.length} ${t('messages_number')}`;
+                messagesNumber.style.fontSize = '1.2rem';
+                messagesNumber.style.color = 'gray';
+
+                // Sort by timestamp descending
+                messagesArray.sort((a, b) => (b.data.timestamp ?? 0) - (a.data.timestamp ?? 0));
+
+                messagesArray.forEach(({ key, data }) => {
+                    const entryDiv = document.createElement('div');
+                    entryDiv.classList.add('feedbackItem');
+
+                    const feedbackMsgDiv = document.createElement('div');
+                    feedbackMsgDiv.classList.add('feedbackMsgDivEl');
+
+                    const title = document.createElement('h3');
+                    
+                    const strong = document.createElement('strong');
+                    strong.textContent = data.name ?? 'Anonymous';
+                    
+                    const em = document.createElement('em');
+                    em.textContent = new Date(data.timestamp ?? 0).toLocaleString();
+
+                    title.appendChild(strong);
+                    title.appendChild(em);
+                    
+                    feedbackMsgDiv.appendChild(title);
+
+                    if(isAdmin){
+                        const deleteButton = document.createElement('button');
+                        deleteButton.classList.add('styledButton', 'red');
+                        
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.addEventListener('click', () => {
+                            if(isAdmin){
+                                const refToDelete = child(publicDataRef, `messages/${key}`);
+                                console.log(refToDelete);
+                                set(refToDelete, null)
+                                    .then(() => notify('Removed element'))
+                                    .catch((error) => {
+                                        console.error("Error removing element:", error);
+                                        notify('Failed to remove feedback.');
+                                    });
+                            }
+                        });
+                        feedbackMsgDiv.appendChild(deleteButton);
+                    }
+
+                    const messageP = document.createElement('p');
+                    messageP.textContent = data.message ?? '';
+
+                    entryDiv.appendChild(feedbackMsgDiv);
+                    entryDiv.appendChild(messageP);
+                    displayHolder.appendChild(entryDiv);
+
+                    const divider = document.createElement('div');
+                    divider.classList.add('sidebar-divider');
+                    displayHolder.appendChild(divider);
+                });
+
+                let lang = localStorage.getItem('lang');
+                if (!lang) lang = 'ro';
+                setLanguage(lang);
+            });
+        }
+
+        loadMessages();
+
+        cancelButton.addEventListener('click', () => {
+            currentPage = 'home';
+            updatePage(currentPage);
+        });
+
+        reqStatus('message', (stat) => {
+            if (stat === true) {
+                formNameInput.disabled = false;
+                formMessageInput.disabled = false;
+                submitButton.classList.add('green');
+
+                functionalMessage.classList.remove('hidden');
+                nonFunctionalMessage.classList.add('hidden');
+                formNameInput.classList.remove('hidden');
+                formMessageInput.classList.remove('hidden');
+                msgDisplayHolder.classList.remove('hidden');
+
+                submitButton.addEventListener('click', () => {
+                    console.log('Attempting to send message...');
+                    if (!formNameInput.value.trim() || !formMessageInput.value.trim()) {
+                        notify(t('name_or_message_incomplete'));
+                        return;
+                    }
+                    if (formNameInput.value.trim().length > 20) {
+                        notify(t('name_too_long'));
+                        return;
+                    }
+                    if (formMessageInput.value.trim().length > 500) {
+                        notify(t('message_too_long'));
+                        return;
+                    }
+
+                    const msg = {
+                        message: formMessageInput.value.trim(),
+                        name: formNameInput.value.trim(),
+                        timestamp: Date.now()
+                    };
+
+                    push(child(publicDataRef, 'messages'), msg)
+                        .then(() => {
+                            notify(t('sent_succesfully'));
+                            formMessageInput.value = '';
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            notify(t('failed_sending_message'));
+                        });
+                });
+
+            } else if (stat === false) {
+                submitButton.classList.remove('green');
+                formNameInput.disabled = true;
+                formMessageInput.disabled = true;
+
+                if(!isAdmin)msgDisplayHolder.classList.add('hidden');
+                else msgDisplayHolder.classList.remove('hidden');
+
+                functionalMessage.classList.add('hidden');
+                nonFunctionalMessage.classList.remove('hidden');
+                
+                formNameInput.classList.add('hidden');
+                formMessageInput.classList.add('hidden');
+            }
+        });
+
+    } else {
+        console.warn('Messages page elements failed to load.');
+        notify('Error loading messages page, attempting to reload.');
+        pageManager(currentPage);
+    }
+}
+
 function feedbackPageManager(){
     const holder = document.getElementById('feedbackCard');
     const adminHolder= document.getElementById('feedbackAdminOnly');
+
+    const functionalMessage = document.getElementById('feedbackDescription');
+    const nonFunctionalMessage = document.getElementById('feedbackDescriptionDisabled');
 
     const formNameInput = document.getElementById('feedbackNameInput');
     const formMessageInput = document.getElementById('feedbackMessageInput');
@@ -80,7 +625,7 @@ function feedbackPageManager(){
             adminHolder.classList.add('hidden');
         }
 
-        async function loadMes() {
+        function loadMes() {
             adminMessages.innerHTML = ''; // Clear previous content
 
             onValue(child(publicDataRef, 'feedback'), (snapshot) => {
@@ -88,7 +633,7 @@ function feedbackPageManager(){
 
             if (!snapshot.exists()) {
                 const noMsg = document.createElement('div');
-                noMsg.textContent = 'No feedback messages found.';
+                noMsg.textContent = t('no_feedback_messages_found');
                 adminMessages.appendChild(noMsg);
                 return;
             }
@@ -108,8 +653,11 @@ function feedbackPageManager(){
             let length = feedbackArray.length;
 
             const reloadButton = document.createElement('button');
-            reloadButton.textContent = t('reload');
-            reloadButton.onclick = loadMes;
+            reloadButton.setAttribute("data-i18n", "reload");
+            reloadButton.onclick = ()=>{
+                loadMes();
+                notify('messages_havaaaaae_been_reloaded');
+            };
             reloadButton.classList.add('styledButton');
             reloadButton.classList.add('red');
             reloadButton.style.marginBottom = '1rem';
@@ -163,6 +711,10 @@ function feedbackPageManager(){
                 divider.classList.add('sidebar-divider');
                 adminMessages.appendChild(divider);
             });
+
+            let lang = localStorage.getItem('lang');
+            if(!lang) lang = 'ro';
+            setLanguage(lang);
         });
 
         }
@@ -174,34 +726,56 @@ function feedbackPageManager(){
             updatePage(currentPage);
         });
 
-        submitButton.addEventListener('click', ()=>{
-            console.log('Attempting to send feedback...');
-            if (!formNameInput.value.trim() || !formMessageInput.value.trim()){
-                notify(t('name_or_message_incomplete'));
-                return;
+        reqStatus('feedback', (stat) => {
+            if(stat === true){
+                formNameInput.disabled = false;
+                formMessageInput.disabled = false;
+                submitButton.addEventListener('click', ()=>{
+                
+                    console.log('Attempting to send feedback...');
+                    if (!formNameInput.value.trim() || !formMessageInput.value.trim()){
+                        notify(t('name_or_message_incomplete'));
+                        return;
+                    }
+                    if(formNameInput.value.trim().length > 20){
+                        notify(t('name_too_long'));
+                        return;
+                    }
+                    if(formMessageInput.value.trim().length > 500){
+                        notify(t('message_too_long'));
+                        return;
+                    }
+                    const msg = {
+                        feedback: formMessageInput.value.trim(),
+                        name: formNameInput.value.trim(),
+                        timestamp: Date.now()
+                    }
+                    push(child(publicDataRef, 'feedback'), msg)
+                    .then(() => {
+                        notify(t('sent_succesfully'))
+                        formMessageInput.value = "";
+                    }).catch((error) => {
+                        console.error(error);
+                        notify(t('failed_sending_message'));
+                    });
+
+                });
+                submitButton.classList.add('green');
+                functionalMessage.classList.remove('hidden');
+                nonFunctionalMessage.classList.add('hidden');
+                formNameInput.classList.remove('hidden');
+                formMessageInput.classList.remove('hidden');
+            }else if(stat === false){
+                submitButton.classList.remove('green');
+                formNameInput.disabled = true;
+                formMessageInput.disabled = true;
+                functionalMessage.classList.add('hidden');
+                nonFunctionalMessage.classList.remove('hidden');
+                formNameInput.classList.add('hidden');
+                formMessageInput.classList.add('hidden');
             }
-            if(formNameInput.value.trim().length > 20){
-                notify(t('name_too_long'));
-                return;
-            }
-            if(formMessageInput.value.trim().length > 500){
-                notify(t('message_too_long'));
-                return;
-            }
-            const msg = {
-                feedback: formMessageInput.value.trim(),
-                name: formNameInput.value.trim(),
-                timestamp: Date.now()
-            }
-            push(child(publicDataRef, 'feedback'), msg)
-            .then(() => {
-                notify(t('sent_succesfully'))
-                formMessageInput.value = "";
-            }).catch((error) => {
-                console.error(error);
-                notify(t('failed_sending_message'));
-            });
         });
+
 
     }else{
         console.warn('Elements have not been loaded correctly in feedback page.');
@@ -209,6 +783,7 @@ function feedbackPageManager(){
         pageManager(currentPage);
     }
 }
+
 function deleteFeedback(key) {
     const refToDelete = child(publicDataRef, `feedback/${key}`);
     set(refToDelete, null)
@@ -220,18 +795,29 @@ function deleteFeedback(key) {
 }
 
 function updatePage(){
+    const adminAboutButton = document.getElementById('adminButton');
+    const settingsButton = document.getElementById('settingsButton');
+    const consoleButton = document.getElementById('consoleButton');
     if(isAdmin){
         const adminRenameButton = document.getElementById('adminName');
         getAdminName(admin_id, (name) => {
             adminRenameButton.innerText = name;
         });
+
+        adminAboutButton.classList.remove('hidden');
+        settingsButton.classList.remove('hidden');
+        consoleButton.classList.remove('hidden');
+    }else{
+        adminAboutButton.classList.add('hidden');
+        settingsButton.classList.add('hidden');
+        consoleButton.classList.add('hidden');
     }
 
-    pageManager(currentPage);
-    let lang = localStorage.getItem('lang');
-    if(!lang) lang = 'ro';
-    setLanguage(lang);
-
+    pageManager(currentPage, ()=>{
+        let lang = localStorage.getItem('lang');
+        if(!lang) lang = 'ro';
+        setLanguage(lang);
+    });
 }
 
 function t(key){
@@ -325,7 +911,7 @@ function notify(message) {
 
     // Add message and close button
     notif.innerHTML = `
-        ${message}
+        <p>${message}</p>
         <button onclick="this.parentElement.remove()">×</button>
     `;
 
@@ -357,7 +943,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             const langEnButton = document.getElementById('enLangButton');
             const dynamicContent = document.getElementById('dynamicContent');
             const feedbackButton = document.getElementById('feedbackButton');
+            const messagesButton = document.getElementById('messageButton');
             const homeButton = document.getElementById('homeButton');
+            const settingsButton = document.getElementById('settingsButton');
+            const consoleButton = document.getElementById('consoleButton');
             
             if(secondSideBarButton && headerArea && mainContentArea && sidebarButton && sidebarButton.dataset.bound !== 'true'){
                 sidebarHandler(headerArea, mainContentArea, sideMenu, sidebarButton, secondSideBarButton, dynamicContent);
@@ -390,7 +979,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     updatePage();
                     console.log("Changed lang to Ro.");
                 });
-                langRoButton.dataset.button = 'true';
+                langRoButton.dataset.bound = 'true';
             }
 
             if(langEnButton && langEnButton.dataset.bound !== 'true'){
@@ -402,17 +991,54 @@ document.addEventListener("DOMContentLoaded", async () => {
                 langEnButton.dataset.bound = 'true';
             }
 
+            if(settingsButton && settingsButton.dataset.bound !== 'true'){
+                settingsButton.addEventListener('click', ()=>{
+                    if(!isAdmin){
+                        notify(t("not_admin_no_function"));
+                        return;
+                    }
+                    currentPage = 'settings';
+                    localStorage.currentPage = 'settings';
+                    updatePage();
+                });
+                settingsButton.dataset.bound = 'true';
+            }
+
             if(feedbackButton && feedbackButton.dataset.bound !== 'true'){
                 feedbackButton.addEventListener('click', () => {
                     currentPage = 'feedback';
+                    localStorage.currentPage = 'feedback';
                     updatePage();
                 })
                 feedbackButton.dataset.bound = 'true';
             }
 
+            if(messagesButton && messagesButton.dataset.bound !== 'true'){
+                messagesButton.addEventListener('click', ()=>{
+                    currentPage = 'messages';
+                    localStorage.currentPage = 'messages';
+                    updatePage();
+                });
+                messagesButton.dataset.bound = 'true';
+            }
+
+            if(consoleButton && consoleButton.dataset.bound !== 'true'){
+                consoleButton.addEventListener('click', ()=>{
+                    if(!isAdmin){
+                        notify(t("not_admin_no_function"));
+                        return;
+                    }
+                    currentPage = 'console';
+                    localStorage.currentPage = 'console';
+                    updatePage();
+                });
+                consoleButton.dataset.bound = 'true';
+            }
+
             if(homeButton && homeButton.dataset.bound !== 'true'){
                 homeButton.addEventListener('click', () => {
                     currentPage = 'home';
+                    localStorage.currentPage = 'home'
                     updatePage();
                 })
                 homeButton.dataset.bound = 'true';
@@ -431,7 +1057,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 langEnButton &&
                 dynamicContent &&
                 feedbackButton &&
-                homeButton
+                homeButton &&
+                settingsButton &&
+                messagesButton &&
+                consoleButton
             ) {
                 taskFinished = true;
             }       
@@ -440,7 +1069,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 resolve();
                 clearTimeout(timeout);
                 clearInterval(ALL);
-                updatePage();
             }
         }, 100);
         const timeout = setTimeout(()=>{
@@ -580,17 +1208,18 @@ function getAdminName(adminId, callback) {
             console.log("Fetched admin data:", data);
 
             if (!data || typeof data.name !== 'string' || data.name.trim() === '') {
-                callback(t('unnamed'));
-                console.log('auiwdfgbeyfgbaiwejfgeyuif');
+                if(callback) callback(t('unnamed'));
+                return t('unnamed');
             } else {
-                callback(data.name);
+                if(callback) callback(data.name);
+                return data.name;
             }
         }, {
             onlyOnce: true // optional: only fetch once
         });
     } else {
-        callback(t('unnamed'));
-        console.log('auiwdfgbeyfgbaiwejfgeyuif');
+        if(callback) callback(t('unnamed'));
+        return t('unnamed');
     }
 }
 
@@ -644,7 +1273,6 @@ onAuthStateChanged(auth, async (user) => {
         getAdminName(admin_id, (name) => {
             adminRenameButton.innerText = name;
         });
-        updatePage();
     }else{
         isAdmin = false;
         admin_id = 0;
@@ -660,6 +1288,9 @@ onAuthStateChanged(auth, async (user) => {
         if(signOutButton)
             signOutButton.classList.add('hidden');
     }
+
+    currentPage = localStorage.currentPage || 'home';
+    updatePage();
 });
 
 function signOutUser(){

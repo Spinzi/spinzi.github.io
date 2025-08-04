@@ -341,12 +341,14 @@ body {
 }
 
 .notification {
+    display: flex;
+    flex-direction: row;
     background-color: #323232;
     color: white;
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 0.5rem;
     min-width: 200px;
-    max-width: 300px;
+    width: fit-content;
     font-size: 0.9rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     position: relative;
@@ -359,15 +361,20 @@ body {
     box-shadow: 0 0 24px 6px rgba(255, 200, 80, 0.45), 0 2px 16px rgba(0,0,0,0.25);
 }
 
+.notification p{
+    text-align: center;
+    justify-self: center;
+    margin-left: 0.5rem;
+}
+
 .notification button {
-    position: absolute;
-    top: 0.3rem;
-    right: 0.5rem;
+    position: relative;
     background: none;
     border: none;
     color: white;
     font-size: 2rem;
     cursor: pointer;
+    margin: 0;
 }
 
 @keyframes fadeIn {
@@ -552,8 +559,7 @@ body {
 }
 
 .feedbackItem:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .feedbackItem h3 {
@@ -584,7 +590,6 @@ body {
     padding: 0.2rem 0.4rem;
     line-height: 1.4;
     border-radius: 6px;
-    backdrop-filter: blur(6px);
 }
 
 .feedbackMsgDivEl{
@@ -608,7 +613,15 @@ body {
     color: gray;
 }
 
-/* card container, feedback is up */
+/* settings zone */
+
+.settingsButtonHolder{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+/* card container */
 
 .cardContainer {
     background-color: transparent;
@@ -751,4 +764,169 @@ body {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+}
+
+/* console */
+.consoleOutput {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 1rem;
+    color: #e0e0e0;
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.consoleOutput div{
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #e0e0e0;
+    border-radius: 0;
+    border-bottom: 1px solid ivory;
+    margin: 1rem 0;
+}
+
+.consoleOutput div h3{
+    padding: 0;
+    margin: 0;
+}
+
+.consoleOutput div p{
+    color: #e0e0e0;
+}
+
+.consoleOutput::-webkit-scrollbar {
+    width: 8px;
+}
+.consoleOutput::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+.consoleOutput::-webkit-scrollbar-track {
+    background: transparent;
+}
+.autoScrollLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: #e0e0e0;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  user-select: none;
+  margin-top: 1rem;
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.1);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.autoScrollLabel:hover {
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.15);
+}
+
+.autoScrollLabel input[type="checkbox"] {
+  accent-color: ivory;
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+}
+
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(50px);
+
+    opacity: 1;
+    pointer-events: all;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay.hiddens {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Spinner Base */
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 8px solid #f3f3f3;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: spinColor 4s ease-in-out infinite;
+}
+
+/* Sizes and speeds */
+.spinner.one {
+    width: 100px;
+    height: 100px;
+    animation-duration: 6s;
+}
+.spinner.two {
+    width: 80px;
+    height: 80px;
+    animation-duration: 3s;
+}
+.spinner.three {
+    width: 60px;
+    height: 60px;
+    animation-duration: 1.5s;
+}
+
+/* Combined Spin + Color + Scale Animation */
+@keyframes spinColor {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    border-top-color: #f5a9b8;
+    border-right-color: #aee2ff;
+    border-bottom-color: #fddde6;
+    border-left-color: #e0bbf9;
+  }
+  25% {
+    transform: translate(-50%, -50%) rotate(90deg) scale(1.03);
+    border-top-color: #ffe5b4;
+    border-right-color: #b5ead7;
+    border-bottom-color: #fbc4ab;
+    border-left-color: #dcd6f7;
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(180deg) scale(1.06);
+    border-top-color: #caffbf;
+    border-right-color: #ffd6a5;
+    border-bottom-color: #9bf6ff;
+    border-left-color: #bdb2ff;
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(270deg) scale(1.03);
+    border-top-color: #ffadad;
+    border-right-color: #caffbf;
+    border-bottom-color: #a0c4ff;
+    border-left-color: #b9fbc0;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1);
+    border-top-color: #f5a9b8;
+    border-right-color: #aee2ff;
+    border-bottom-color: #fddde6;
+    border-left-color: #e0bbf9;
+  }
 }

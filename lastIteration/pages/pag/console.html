@@ -1,0 +1,29 @@
+<div class="cardContainer" id="firebaseConsoleCard">
+  <h2 class="selectable" id="firebaseConsoleTitle" data-i18n="firebaseConsoleTitle">Firebase Admin Console</h2>
+
+  <p class="cardDescription selectable" id="firebaseConsoleDescription" data-i18n="firebaseConsoleDescription">
+    Use this console to interact directly with the Firebase Realtime Database using commands. Type `help` for a list of commands.
+  </p>
+
+  <label class="autoScrollLabel">
+    <input type="checkbox" id="autoScrollToggle" checked />
+    Auto-scroll to bottom
+  </label>
+
+
+  <!-- Console Output -->
+  <div class="consoleOutput" id="firebaseConsoleOutput">
+    <!-- Live logs will appear here -->
+  </div>
+
+  <!-- Command Input -->
+  <div class="consoleInputWrapper">
+    <input
+      type="text"
+      class="cardInputShort consoleInput"
+      id="firebaseConsoleInput"
+      placeholder="Type a command and press Enter..."
+      autocomplete="off"
+    />
+  </div>
+</div>

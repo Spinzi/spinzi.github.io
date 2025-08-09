@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, fetchSignInMethodsForEmail, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getDatabase, ref, push, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
@@ -47,6 +47,7 @@ function showLoading() {
         document.getElementById("loadingOverlay").classList.add("hiddens");
         document.getElementById('loadingOverlayError').classList.remove('hiddens');
         console.error(t("Loading took too long. Showing error."));
+        localStorage.setItem('currentPage', 'home');
         notify(t("loading_took_too_long_error"));
     }, 5000);
 }
@@ -63,7 +64,7 @@ showLoading();
 function pageManager(page, callback){
     // verify if page is correct
     showLoading();
-    const validPages = ['home', 'feedback', 'settings', 'messages', 'console'];
+    const validPages = ['home', 'feedback', 'settings', 'messages', 'console', 'controlPanel'];
     if(!validPages.includes(page))
         page = 'home';
     
@@ -84,7 +85,21 @@ function pageManager(page, callback){
                 settingsManager();
             }
         }else if(page === 'console'){
-            consoleManager();
+            if(!isAdmin){
+                notify(t("not_admin_no_function"));
+                currentPage = 'home';
+                updatePage();
+            }else{
+                consoleManager();
+            }
+        }else if(page === 'controlPanel'){
+            if(!isAdmin){
+                notify(t("not_admin_no_function"));
+                currentPage = 'home';
+                updatePage();
+            }else{
+                controlPanelManager();
+            }
         }
         hideLoading();
         
@@ -100,8 +115,309 @@ function homePageManager(){
     return;
 }
 
+function controlPanelManager(){
+    if(!isAdmin){
+        localStorage.setItem("currentPage", "home");
+        updatePage();
+    }
+    const settingsTable = document.getElementById("settingsTable");
+    const settingsTableBody = settingsTable.querySelector("tbody");
+    const plantDataTable = document.getElementById("plantDataTable");
+    const saveBtn = document.getElementById('controlPanelSaveButton');
+
+    function log(message, skip){
+        const source = 'web';
+        const timestamp = Date.now();
+        push(logsRef, {
+            source: source,
+            timestamp: timestamp,
+            message: message
+        });
+        if(!skip)notify(t('message_logged'));
+    }
+
+    async function loadSettings() {
+        onValue(child(adminDataRef, 'settings'), (snapshot)=>{
+            if(!snapshot.exists()){
+                notify(t('couldnt_get_settings'));
+                console.error("Couldn't get settings from firebase.")
+                return;
+            }
+
+            const data = snapshot.val();
+            console.log(data);
+            settingsTableBody.innerHTML = '';
+
+            for(const [key, value] of Object.entries(data)){
+                const validKeys = ['data limit', 'delay', 'name'];
+                if(!validKeys.includes(key)){
+                    return;
+                }
+                const el = document.createElement('tr');
+
+                const tit = document.createElement('td');
+                tit.textContent = key;
+
+                const val = document.createElement('td');
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = value;
+                input.dataset.key = key;
+                input.dataset.originalValue = value;
+
+                input.addEventListener('input', () => {
+                    saveBtn.classList.remove('hidden')
+                })
+
+                val.appendChild(input);
+                el.appendChild(tit);
+                el.appendChild(val);
+                settingsTableBody.appendChild(el);
+                
+                const inputs = document.querySelectorAll('#settingsTable tbody tr td input ');
+                inputs.forEach((input, index) => {
+                    input.addEventListener('keydown', (event) => {
+                        if(event.key === 'Enter'){
+                            event.preventDefault();
+    
+                            const nextInput = inputs[index+1];
+                            if(nextInput){
+                                nextInput.focus();
+                                nextInput.select();
+                            }else{
+                                saveBtn.focus();
+                            }
+                        }
+                    });
+                });
+            }
+
+        });
+    }
+
+    function loadPannel() {
+        let finalTable = document.createElement('div');
+        let shownData = null;
+
+        // Listen to settings/showData once to get allowed keys, then listen for data changes
+        onValue(child(adminDataRef, 'settings/showData'), (settingsSnap) => {
+            if (settingsSnap.exists()) {
+                shownData = settingsSnap.val();
+                const allowedLists = Object.keys(shownData);
+
+                // Now listen for data changes, every time data updates this callback fires
+                onValue(child(adminDataRef, 'data'), (dataSnap) => {
+                    if (dataSnap.exists()) {
+                        const data = dataSnap.val();
+
+                        // Clear previous table container
+                        finalTable.innerHTML = '';
+
+                        function createTable(timeString, itemsArr) {
+                            const table = document.createElement('table');
+                            table.classList.add('data-table');
+
+                            const caption = document.createElement('caption');
+                            caption.textContent = `Created on: ${timeString}`;
+                            caption.style.fontWeight = 'bold';
+                            caption.style.padding = '0.5rem';
+                            caption.style.textAlign = 'left';
+                            caption.style.captionSide = 'top';
+                            table.appendChild(caption);
+
+                            const thead = document.createElement('thead');
+                            const headerRow = document.createElement('tr');
+                            for (const [key] of itemsArr) {
+                                const th = document.createElement('th');
+                                th.textContent = key;
+                                headerRow.appendChild(th);
+                            }
+                            thead.appendChild(headerRow);
+
+                            const tbody = document.createElement('tbody');
+                            const valueRow = document.createElement('tr');
+                            for (const [key, value] of itemsArr) {
+                                const td = document.createElement('td');
+                                td.textContent = value;
+
+                                const maxValue = shownData[key] || 100;
+
+                                const numericValue = Number(value);
+                                let ratio = 0;
+                                if(!isNaN(numericValue) && maxValue > 0){
+                                    ratio = Math.min(Math.max(numericValue / maxValue, 0), 1);
+                                }
+
+                                const r = Math.round(255 * (1 - ratio));
+                                const b = 0;
+                                const g = Math.round(255 * ratio);
+
+                                td.style.backgroundColor = `rgba(${r},${g},${b}, 0.4)`;
+
+                                valueRow.appendChild(td);
+                            }
+                            tbody.appendChild(valueRow);
+
+                            table.appendChild(thead);
+                            table.appendChild(tbody);
+                            return table;
+                        }
+
+                        Object.values(data)
+                            .sort((a, b) => b.timestamp - a.timestamp)
+                            .forEach((entry) => {
+                                if (!entry['message'] || !entry['timestamp']) {
+                                    console.error('Could not find message or timestamp in entry:', entry);
+                                    return;
+                                }
+
+                                const obj = [];
+                                for (const [key, value] of Object.entries(entry['message'])) {
+                                    if (allowedLists.includes(key)) {
+                                        obj.push([key, value]);
+                                    }
+                                }
+
+                                if (obj.length === 0) return;
+
+                                const ts = new Date(entry['timestamp']);
+                                const timeString = `${ts.getFullYear()}-${String(ts.getMonth() + 1).padStart(2, '0')}-${String(ts.getDate()).padStart(2, '0')} ${String(ts.getHours()).padStart(2, '0')}:${String(ts.getMinutes()).padStart(2, '0')}:${String(ts.getSeconds()).padStart(2, '0')}`;
+
+                                const tableElement = createTable(timeString, obj);
+                                finalTable.appendChild(tableElement);
+                            });
+
+                        plantDataTable.innerHTML = '';
+                        plantDataTable.appendChild(finalTable);
+
+                    } else {
+                        plantDataTable.innerHTML = '<h3>No plant data found.</h3>';
+                    }
+                });
+            } else {
+                console.log('No plant data settings found.');
+            }
+        });
+    }
+
+    function updateSetting(key, value) {
+        const settingsRef = child(adminDataRef, `settings/${key}`);
+        return set(settingsRef, value)
+            .then(() => {
+                console.log(`Setting '${key}' updated to:`, value);
+            })
+            .catch((error) => {
+                console.error(`Error updating setting '${key}':`, error);
+                notify(`Error updating setting: ${error.message}`);
+            });
+    }
+    
+    saveBtn.addEventListener('click', async () => {
+        const info = settingsTableBody.querySelectorAll('input');
+        let updates = [];
+        
+        info.forEach((el)=>{
+            const key = el.dataset.key;
+            const val = el.value.trim();
+
+            if(key === 'delay'){
+                const num = Number(val);
+                if (!val || isNaN(num) || num < 0 || !Number.isInteger(num)) {
+                    console.warn('Invalid delay value:', val);
+                    notify('Delay must be a valid non-negative integer.');
+                    return;
+                }
+
+                if(val === el.dataset.originalValue){
+                    console.log("Found setting to be unchanged, skipping saving.");
+                    return
+                }
+
+                const p = new Promise((resolve) => {
+                    getAdminName(admin_id, (name)=>{
+                        updateSetting('delay', num);
+                        log(`\nAdmin <font color="red">${name}</font> changed setting.\nSetting name: 'delay'\nValue: ${num}\n`, true);
+                        resolve(true);
+                    })
+                })
+                updates.push(p);
+
+            }else if(key === 'name'){
+                if (!val) {
+                    console.warn('Name is empty.');
+                    notify('Name cannot be empty.');
+                    return;
+                }
+
+                if (val.length > 50) {
+                    console.warn('Name is too long:', val);
+                    notify('Name must be less than 50 characters.');
+                    return;
+                }
+
+                // Optional: disallow special characters (only letters, numbers, space, dash, underscore)
+                const nameRegex = /^[a-zA-Z0-9 _-]+$/;
+                if (!nameRegex.test(val)) {
+                    console.warn('Invalid characters in name:', val);
+                    notify('Name can only contain letters, numbers, spaces, dashes and underscores.');
+                    return;
+                }
+
+                if(val === el.dataset.originalValue){
+                    console.log("Found setting to be unchanged, skipping saving.");
+                    return
+                }
+
+                const p = new Promise((resolve) => {
+                    getAdminName(admin_id, (name)=>{
+                        updateSetting('name', val);
+                        log(`\nAdmin <font color="red">${name}</font> changed setting.\nSetting name: 'name'\nValue: ${val}\n`, true);
+                        resolve(true);
+                    })
+                })
+                updates.push(p);
+
+            }else if(key === 'data limit'){
+                const num = Number(val);
+                if (!val || isNaN(num) || num < 0 || !Number.isInteger(num)) {
+                    console.warn('Invalid delay value:', val);
+                    notify('Delay must be a valid non-negative integer.');
+                    return;
+                }
+
+                if(val === el.dataset.originalValue){
+                    console.log("Found setting to be unchanged, skipping saving.");
+                    return
+                }
+
+                const p = new Promise((resolve) => {
+                    getAdminName(admin_id, (name)=>{
+                        updateSetting('data limit', num);
+                        log(`\nAdmin <font color="red">${name}</font> changed setting.\nSetting name: 'data limit'\nValue: ${num}\n`, true);
+                        resolve(true);
+                    })
+                })
+                updates.push(p);
+
+            }else{
+                console.warn('Unknow setting element, skipping.');
+            }
+        });
+        if(updates.length > 0){
+            await Promise.all(updates);
+            notify('Updated settings');
+            saveBtn.classList.add('hidden');
+            loadSettings();
+        }
+    });
+
+    loadSettings();
+    loadPannel();
+
+}
+
 function consoleReqLogData(data) {
-    if (typeof data === 'object' && typeof data['raw_message'] === 'string') {
+    if (typeof data === 'object' || typeof data['raw_message'] === 'string') {
         let retMessage = "";
 
         if (data['err']) {
@@ -117,7 +433,7 @@ function consoleReqLogData(data) {
             });
         }
 
-        retMessage += `RAW_MESSAGE: ${data['raw_message']}`;
+        if(data['raw_message'])retMessage += `RAW_MESSAGE: ${data['raw_message']}`;
         return retMessage;
     }
 
@@ -179,7 +495,7 @@ function consoleManager(){
             
             let finalText;
 
-            finalText = consoleReqLogData(data.data.message) ; 
+            finalText = consoleReqLogData(data.data.message).replace(/^"(.*)"$/, '$1') ; 
 
             const _header = document.createElement('h3');
 
@@ -194,7 +510,6 @@ function consoleManager(){
             .replace(/\n/g, '<br>')
             .replace(/\\"/g, "\"")
             .replace(/ERROR:/g, '<font color="red">ERROR:</font>');
-
             
             msg.appendChild(_header);
             msg.appendChild(_text);
@@ -208,8 +523,28 @@ function consoleManager(){
         if (event.key === 'Enter') {
             event.preventDefault(); // Optional: prevent form submission or line break
             
-            let messages = consoleInput.value.trim().split(" ");
+            function parseCommand(input) {
+                const trimmed = input.trim();
+
+                // Match: command with optional "argument"
+                const match = trimmed.match(/^(\w+)(?:\s+"(.*)")?$/);
+
+                if (!match) {
+                    return null;
+                }
+
+                const [, command, argument] = match;
+                return { command, argument: argument || null };
+            }
+
+            let messages = parseCommand(consoleInput.value);
+            console.log(messages);
             consoleInput.value = '';
+
+            if (!messages) {
+                log(`ERROR: Invalid command format. Use: &lt;command&gt; "argument"`);
+                return;
+            }
             
             function log(message){
                 const source = 'web';
@@ -222,23 +557,56 @@ function consoleManager(){
                 notify(t('message_logged'));
             }
 
-            if(messages.length > 2){
-                log('ERROR: Message excedes two spaces. Use \'help\'.');
-                return;
+            function bufLog(message){
+                try {
+                    const source = 'web';
+                    const timestamp = Date.now();
+                    push(bufRef, {
+                        source: source,
+                        timestamp: timestamp,
+                        message: message
+                    });
+                    log(`<b>Logged message in buffer:</b>\n${message}`)
+                    notify(t('message_logged_in_buf'));
+                } catch (error) {
+                    notify('Error logging message in buffer.');
+                    console.error(error);
+                    log(`Error logging message in buffer: ${error.message}`);
+                }
             }
 
-            if(messages[0] === 'help'){
-                log("-+-+-\nHelp\n-+-+-");
-            }else if(messages[0] === 'say'){
-                log(messages[1]);
-            }else if(messages[0] === 'clr'){
+            if(messages.command === 'help'){
+                const helpMessage = `
+<font color="#81A6FF">-+-+-</font><br>
+<b>Help</b><br>
+<font color="#81A6FF">-+-+-</font><br><br>
+<font color="cyan">say "message"</font> - Log a message as a user<br>
+<font color="cyan">clr</font> - Clear all logs<br>
+<font color="cyan">stats</font> - View website stats<br>
+<font color="cyan">empty "messages"</font> - Delete all public messages<br>
+<font color="cyan">empty "feedback"</font> - Delete all feedback messages<br>
+<font color="cyan">addAdmin "uid"</font> - Add user to admin list<br>
+<font color="cyan">addDataVariable "name$maxVal"</font> - Add a data variable to be shown<br>
+<font color="cyan">removeDataVariable "name"</font> - Remove a data variable from being shown<br>
+<font color="cyan">showDataVariables</font> - Display all current data variables set to show<br>
+<font color="cyan">buffSay "message"</font> - Log a message in the buffer<br>
+<font color="cyan">buffClr</font> - Clear the buffer<br>
+<font color="cyan">help</font> - Show this help message<br>
+    `;
+                    log(helpMessage);
+            }else if(messages.command === 'say'){
+                if(messages.argument === ''){
+                    log('Missing argument, try putting it in between \" \".');
+                }
+                log(messages.argument);
+            }else if(messages.command === 'clr'){
                 set(logsRef, '');
                 getAdminName(admin_id, (name)=>{
                     log(`<font color="red">Admin</font> ${name} cleared the logs.`);
                 });
-            }else if(messages[0] === 'stats'){
+            }else if(messages.command === 'stats'){
                 let lgMsg = '';
-                lgMsg += "-+-+-\n<font color=\"#81A6FF\">WEBSITE STATS</font>\n-+-+-\n";
+                lgMsg += "\n-+-+-\n<font color=\"#81A6FF\">WEBSITE STATS</font>\n-+-+-\n";
                 
                 let tm = new Date();
                 let formatted = tm.getFullYear() + '-' +
@@ -248,20 +616,197 @@ function consoleManager(){
                                 String(tm.getMinutes()).padStart(2, '0');
 
                 lgMsg += `<font color="#81A6FF">[${formatted}]</font>\n\n`;
-                log(lgMsg);
-            }else if(messages[0] === 'addAdmin'){
-                const uidToAdd = messages[1];
+
+                async function printData() {
+                    lgMsg += `<b>Admin Data:</b><br>`;
+
+                    const adminsNumber = await get(child(adminDataRef, 'admins')).then(snapshot => {
+                        return snapshot.exists() ? snapshot.size || Object.keys(snapshot.val()).length : 0;
+                    }).catch(error => `<font color="red">ERROR</font>`);
+
+                    lgMsg += `  -> <font color="cyan">${adminsNumber}</font> admins.<br>`;
+
+                    const adminNamed = await get(child(adminDataRef, 'adminNames')).then(snapshot => {
+                        return snapshot.exists() ? snapshot.size || Object.keys(snapshot.val()).length : 0;
+                    }).catch(error => `<font color="red">ERROR</font>`);
+
+                    lgMsg += `  -> <font color="cyan">${adminNamed}</font> named admins.<br>`;
+
+                    const logsLength = await get(child(adminDataRef, 'logs')).then(snapshot => {
+                        return snapshot.exists() ? snapshot.size || Object.keys(snapshot.val()).length : 0;
+                    }).catch(error => `<font color="red">ERROR</font>`);
+
+                    lgMsg += `  -> <font color="cyan">${logsLength}</font> logs.<br>`;
+
+                    const bufferLength = await get(child(adminDataRef, 'buffer')).then(snapshot => {
+                        return snapshot.exists() ? snapshot.size || Object.keys(snapshot.val()).length : 0;
+                    }).catch(error => `<font color="red">ERROR</font>`);
+
+                    lgMsg += `  -> <font color="cyan">${bufferLength}</font> buffer messages.<br>`;
+
+                    lgMsg += `<b>Control Data:</b><br>`;
+
+                    const feedbackAllowed = await get(child(controlData, 'feedback')).then(snapshot => {
+                        if (!snapshot.exists()) return '<font color="red">Could not get value</font>';
+                        return snapshot.val()["value"]
+                            ? '<font color="green">Allowed</font>'
+                            : '<font color="orange">Denied</font>';
+                    }).catch(error => `<font color="red">ERROR</font>`);
+
+                    lgMsg += `  -> Feedback: ${feedbackAllowed}.<br>`;
+
+                    const messagesAllowed = await get(child(controlData, 'message')).then(snapshot => {
+                        if (!snapshot.exists()) return '<font color="red">Could not get value</font>';
+                        return snapshot.val()["value"]
+                            ? '<font color="green">Allowed</font>'
+                            : '<font color="orange">Denied</font>';
+                    }).catch(error => `<font color="red">ERROR</font>`);
+
+                    lgMsg += `  -> Messages: ${messagesAllowed}.<br>`;
+
+                    lgMsg += `<b>Public Data:</b><br>`;
+
+                    const messagesLength = await get(child(publicDataRef, 'messages')).then(snapshot => {
+                        return snapshot.exists() ? snapshot.size || Object.keys(snapshot.val()).length : 0;
+                    }).catch(error => `<font color="red">ERROR</font>`);
+
+                    lgMsg += `  -> Number of messages: <font color="cyan">${messagesLength}</font>.<br>`;
+
+                    const feedbackMsgLength = await get(child(publicDataRef, 'feedback')).then(snapshot => {
+                        return snapshot.exists() ? snapshot.size || Object.keys(snapshot.val()).length : 0;
+                    }).catch(error => `<font color="red">ERROR</font>`);
+
+                    lgMsg += `  -> Number of feedback messages: <font color="cyan">${feedbackMsgLength}</font>.<br>`;
+
+                    log(lgMsg);
+                }
+
+
+                printData();
+            }else if(messages.command === 'addAdmin'){
+                const uidToAdd = messages.argument;
+                console.log(uidToAdd);
                 const adminRef = child(adminDataRef, 'admins/' + uidToAdd);
 
                 set(adminRef, true)
                     .then(() => {
-                        log(`Added <font color="#81A6FF">${messages[1]}</font> to admin list.`);
+                        log(`Added <font color="#81A6FF">${messages.argument}</font> to admin list.`);
                     })
                     .catch((error) => {
                         log(`<font color="red">Error:</font> ${error.message}`);
                     });
-            }else{
-                log(`Unknown command\n<font color="#81A6FF">${messages[0]} ${messages[1] ?? ''}</font>\nPlease use 'help' for support.`);
+            }else if(messages.command === 'empty'){
+                 if (messages.argument === "messages") {
+                    set(ref(database, 'publicData/messages'), null)
+                        .then(() => {
+                            getAdminName(admin_id, (name) => {
+                                log(`<font color="red">Admin</font> ${name} cleared the <b>messages</b>.`);
+                            });
+                        })
+                        .catch((error) => log(`ERROR: ${error.message}`));
+                } else if (messages.argument === "feedback") {
+                    set(ref(database, 'publicData/feedback'), null)
+                        .then(() => {
+                            getAdminName(admin_id, (name) => {
+                                log(`<font color="red">Admin</font> ${name} cleared the <b>feedback</b>.`);
+                            });
+                        })
+                        .catch((error) => log(`ERROR: ${error.message}`));
+                } else {
+                    log("Argument doesn't match the description. Available are: \"messages\", \"feedback\"");
+                }
+            }else if(messages.command === 'addDataVariable'){
+                if (!messages.argument) {
+                    log('Missing argument for addDataVariable. Usage: addDataVariable "variableName"');
+                } else {
+                    const variable = messages.argument.trim();
+                    const dt = variable.split('$');
+                    const variableName = dt[0].trim();
+
+                    if (dt.length > 1) {
+                        const secondElement = dt[1].trim();
+                        const isNumber = !isNaN(secondElement) && secondElement !== '';
+                        
+                        if (isNumber) {
+                            const ref = child(adminDataRef, `settings/showData/${variableName}`);
+                            set(ref, secondElement)
+                                .then(() => {
+                                    log(`Added data variable <font color="#81A6FF">${variableName}</font> with value <font color="#81A6FF">${secondElement}</font> to showData.`);
+                                })
+                                .catch((error) => {
+                                    log(`<font color="red">Error:</font> ${error.message}`);
+                                });
+                        } else {
+                            log(`Second element "${secondElement}" is NOT a number.`);
+                            return;
+                        }
+                    } else {
+                        log('No second element found after splitting by $.');
+                        return;
+                    }
+                }
+            }
+            else if (messages.command === 'showDataVariables') {
+                const ref = child(adminDataRef, 'settings/showData');
+                get(ref)
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const variables = snapshot.val();
+
+                            // Check if variables is an object
+                            if (typeof variables !== 'object' || variables === null) {
+                                log('Expected showData to be an object of variables and values.');
+                                return;
+                            }
+
+                            const variableList = Object.entries(variables).map(
+                                ([key, value]) => `<font color="#81A6FF">${key}</font>: <font color="cyan">${value}</font>`
+                            );
+
+                            if (variableList.length === 0) {
+                                log('No data variables found in showData.');
+                            } else {
+                                log(`<b>ShowData variables:</b><br>` + variableList.join(', '));
+                            }
+                        } else {
+                            log('No showData variables found.');
+                        }
+                    })
+                    .catch((error) => {
+                        log(`<font color="red">Error:</font> ${error.message}`);
+                    });
+            }
+            else if(messages.command === 'removeDataVariable'){
+                if (!messages.argument) {
+                    log('Missing argument for removeDataVariable. Usage: removeDataVariable "variableName"');
+                } else {
+                    const variableName = messages.argument.trim();
+                    const ref = child(adminDataRef, `settings/showData/${variableName}`);
+                    set(ref, null)
+                        .then(() => {
+                            log(`Removed data variable <font color="#81A6FF">${variableName}</font> from showData.`);
+                        })
+                        .catch((error) => {
+                            log(`<font color="red">Error:</font> ${error.message}`);
+                        });
+                }
+            }else if(messages.command === 'buffSay'){
+                if(messages.argument === ''){
+                    log('Missing argument, try putting it in between \" \".');
+                }
+                bufLog(messages.argument);
+            }
+            else if(messages.command === 'buffClr'){
+                set(bufRef, '')
+                    .then(() => {
+                        getAdminName(admin_id, (name) => {
+                            log(`<font color="red">Admin</font> ${name} cleared the buffer.`);
+                        });
+                    })
+                    .catch((error) => log(`ERROR: ${error.message}`));
+            }
+            else{
+                log(`Unknown command<br><font color="#81A6FF">${messages.command} ${messages.argument ?? ''}</font><br>Please use 'help' for support.`);
             }
         }
     });
@@ -541,6 +1086,13 @@ function messagePageManager() {
                 formMessageInput.classList.remove('hidden');
                 msgDisplayHolder.classList.remove('hidden');
 
+                if(isAdmin){
+                    getAdminName(admin_id, (name)=>{
+                        formNameInput.value = name;
+                        notify(t('auto_completed_name'));
+                    })
+                }
+
                 submitButton.addEventListener('click', () => {
                     console.log('Attempting to send message...');
                     if (!formNameInput.value.trim() || !formMessageInput.value.trim()) {
@@ -627,96 +1179,94 @@ function feedbackPageManager(){
 
         function loadMes() {
             adminMessages.innerHTML = ''; // Clear previous content
-
             onValue(child(publicDataRef, 'feedback'), (snapshot) => {
-            adminMessages.innerHTML = '';
+                adminMessages.innerHTML = '';
 
-            if (!snapshot.exists()) {
-                const noMsg = document.createElement('div');
-                noMsg.textContent = t('no_feedback_messages_found');
-                adminMessages.appendChild(noMsg);
-                return;
-            }
+                if (!snapshot.exists()) {
+                    const noMsg = document.createElement('div');
+                    noMsg.textContent = t('no_feedback_messages_found');
+                    adminMessages.appendChild(noMsg);
+                    return;
+                }
 
-            const feedbackArray = [];
+                const feedbackArray = [];
 
-            snapshot.forEach((el) => {
-                const val = el.val();
-                feedbackArray.push({
-                    key: el.key,
-                    data: val
-                });
-            });
-
-            const divel = document.createElement('div');
-            divel.classList.add('feedbacktotalmessnumb');
-            let length = feedbackArray.length;
-
-            const reloadButton = document.createElement('button');
-            reloadButton.setAttribute("data-i18n", "reload");
-            reloadButton.onclick = ()=>{
-                loadMes();
-                notify('messages_havaaaaae_been_reloaded');
-            };
-            reloadButton.classList.add('styledButton');
-            reloadButton.classList.add('red');
-            reloadButton.style.marginBottom = '1rem';
-            const stat = document.createElement('h4');
-            stat.innerText = `${length} ${t('total_messages')}`;
-
-            divel.appendChild(reloadButton);
-            divel.append(stat);
-
-            adminMessages.appendChild(divel);
-
-            // Sort by timestamp descending (newest first)
-            feedbackArray.sort((a, b) => (b.data.timestamp ?? 0) - (a.data.timestamp ?? 0));
-
-            feedbackArray.forEach(({ key, data }) => {
-                const entryDiv = document.createElement('div');
-                entryDiv.classList.add('feedbackItem');
-
-                const feedbackMsgDiv = document.createElement('div');
-                feedbackMsgDiv.classList.add('feedbackMsgDivEl');
-
-                const title = document.createElement('h3');
-
-                const strong = document.createElement('strong');
-                strong.textContent = data.name ?? 'Anonymous';
-
-                const em = document.createElement('em');
-                em.textContent = new Date(data.timestamp ?? 0).toLocaleString();
-
-                title.appendChild(strong);
-                title.appendChild(em);
-                feedbackMsgDiv.appendChild(title);
-
-                const deleteButton = document.createElement('button');
-                deleteButton.classList.add('styledButton', 'red');
-                deleteButton.textContent = 'Delete';
-                deleteButton.addEventListener('click', () => {
-                    deleteFeedback(key);
+                snapshot.forEach((el) => {
+                    const val = el.val();
+                    feedbackArray.push({
+                        key: el.key,
+                        data: val
+                    });
                 });
 
-                feedbackMsgDiv.appendChild(deleteButton);
+                const divel = document.createElement('div');
+                divel.classList.add('feedbacktotalmessnumb');
+                let length = feedbackArray.length;
 
-                const messageP = document.createElement('p');
-                messageP.textContent = data.feedback ?? '';
+                const reloadButton = document.createElement('button');
+                reloadButton.setAttribute("data-i18n", "reload");
+                reloadButton.onclick = ()=>{
+                    loadMes();
+                    notify('messages_havaaaaae_been_reloaded');
+                };
+                reloadButton.classList.add('styledButton');
+                reloadButton.classList.add('red');
+                reloadButton.style.marginBottom = '1rem';
+                const stat = document.createElement('h4');
+                stat.innerText = `${length} ${t('total_messages')}`;
 
-                entryDiv.appendChild(feedbackMsgDiv);
-                entryDiv.appendChild(messageP);
-                adminMessages.appendChild(entryDiv);
+                divel.appendChild(reloadButton);
+                divel.append(stat);
 
-                const divider = document.createElement('div');
-                divider.classList.add('sidebar-divider');
-                adminMessages.appendChild(divider);
+                adminMessages.appendChild(divel);
+
+                // Sort by timestamp descending (newest first)
+                feedbackArray.sort((a, b) => (b.data.timestamp ?? 0) - (a.data.timestamp ?? 0));
+
+                feedbackArray.forEach(({ key, data }) => {
+                    const entryDiv = document.createElement('div');
+                    entryDiv.classList.add('feedbackItem');
+
+                    const feedbackMsgDiv = document.createElement('div');
+                    feedbackMsgDiv.classList.add('feedbackMsgDivEl');
+
+                    const title = document.createElement('h3');
+
+                    const strong = document.createElement('strong');
+                    strong.textContent = data.name ?? 'Anonymous';
+
+                    const em = document.createElement('em');
+                    em.textContent = new Date(data.timestamp ?? 0).toLocaleString();
+
+                    title.appendChild(strong);
+                    title.appendChild(em);
+                    feedbackMsgDiv.appendChild(title);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('styledButton', 'red');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', () => {
+                        deleteFeedback(key);
+                    });
+
+                    feedbackMsgDiv.appendChild(deleteButton);
+
+                    const messageP = document.createElement('p');
+                    messageP.textContent = data.feedback ?? '';
+
+                    entryDiv.appendChild(feedbackMsgDiv);
+                    entryDiv.appendChild(messageP);
+                    adminMessages.appendChild(entryDiv);
+
+                    const divider = document.createElement('div');
+                    divider.classList.add('sidebar-divider');
+                    adminMessages.appendChild(divider);
+                });
+
+                let lang = localStorage.getItem('lang');
+                if(!lang) lang = 'ro';
+                setLanguage(lang);
             });
-
-            let lang = localStorage.getItem('lang');
-            if(!lang) lang = 'ro';
-            setLanguage(lang);
-        });
-
         }
 
         loadMes();
@@ -765,6 +1315,12 @@ function feedbackPageManager(){
                 nonFunctionalMessage.classList.add('hidden');
                 formNameInput.classList.remove('hidden');
                 formMessageInput.classList.remove('hidden');
+                if(isAdmin){
+                    getAdminName(admin_id, (name)=>{
+                        formNameInput.value = name;
+                        notify(t('auto_completed_name'));
+                    })
+                }
             }else if(stat === false){
                 submitButton.classList.remove('green');
                 formNameInput.disabled = true;
@@ -798,6 +1354,7 @@ function updatePage(){
     const adminAboutButton = document.getElementById('adminButton');
     const settingsButton = document.getElementById('settingsButton');
     const consoleButton = document.getElementById('consoleButton');
+    const controlPanelButton =  document.getElementById('controlButton');
     if(isAdmin){
         const adminRenameButton = document.getElementById('adminName');
         getAdminName(admin_id, (name) => {
@@ -807,10 +1364,12 @@ function updatePage(){
         adminAboutButton.classList.remove('hidden');
         settingsButton.classList.remove('hidden');
         consoleButton.classList.remove('hidden');
+        controlPanelButton.classList.remove('hidden');
     }else{
         adminAboutButton.classList.add('hidden');
         settingsButton.classList.add('hidden');
         consoleButton.classList.add('hidden');
+        controlPanelButton.classList.add('hidden');
     }
 
     pageManager(currentPage, ()=>{
@@ -947,6 +1506,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const homeButton = document.getElementById('homeButton');
             const settingsButton = document.getElementById('settingsButton');
             const consoleButton = document.getElementById('consoleButton');
+            const controlButton = document.getElementById('controlButton');
             
             if(secondSideBarButton && headerArea && mainContentArea && sidebarButton && sidebarButton.dataset.bound !== 'true'){
                 sidebarHandler(headerArea, mainContentArea, sideMenu, sidebarButton, secondSideBarButton, dynamicContent);
@@ -1043,6 +1603,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 })
                 homeButton.dataset.bound = 'true';
             }
+
+            if(controlButton && controlButton.dataset.bound !== 'true'){
+                controlButton.addEventListener('click', () => {
+                    currentPage = 'controlPanel';
+                    localStorage.currentPage = 'controlPanel';
+                    updatePage();
+                });
+                controlButton.dataset.bound = 'true';
+            }
             
             let taskFinished = false;
 
@@ -1060,7 +1629,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 homeButton &&
                 settingsButton &&
                 messagesButton &&
-                consoleButton
+                consoleButton &&
+                controlButton
             ) {
                 taskFinished = true;
             }       
@@ -1078,20 +1648,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, 3000);
     })
 });
-
-function signInUser(email, password){
-    signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-        const user = userCredential.user;
-        console.log("User signed in:", user.email, "UID:", user.uid);
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error("Sign in error:", errorCode, errorMessage);
-        alert("Sign in failed: " + errorMessage);
-    })
-}
 
 function createRenameModal() {
     if (!isAdmin) {
@@ -1224,29 +1780,46 @@ function getAdminName(adminId, callback) {
 }
 
 function submitLogin() {
-    let email = document.getElementById('loginEmailInput').value;
-    let password = document.getElementById('loginPasswordInput').value;
-    signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-        const user = userCredential.user;
-        admin_id = user.uid;
-        isAdmin = true;
-        console.log("User signed in:", user.email, "UID:", user.uid);
+  let email = document.getElementById('loginEmailInput').value.trim().toLowerCase();
+  let password = document.getElementById('loginPasswordInput').value;
 
-        getAdminName(admin_id, (name) => {
-            const btn = document.getElementById('adminName');
-            if (btn) btn.innerText = name;
-            notify(`${t("logged_in_as")} ${name || "Admin"}`);
-        });
+  if (!email || !password) {
+    alert("⚠️ Please enter both email and password.");
+    return;
+  }
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(userCredential => {
+      const user = userCredential.user;
+      admin_id = user.uid;
+      isAdmin = true;
+      console.log("User signed in:", user.email, "UID:", user.uid);
+
+      getAdminName(admin_id, (name) => {
+        const btn = document.getElementById('adminName');
+        if (btn) btn.innerText = name;
+        notify(`${t("logged_in_as")} ${name || "Admin"}`);
+      });
 
     })
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error("Sign in error:", errorCode, errorMessage);
-        alert("Sign in failed: " + errorMessage);
+    .catch(error => {
+      const genericMsg = "Login failed. Please check your email and password.";
+
+      switch (error.code) {
+        case 'auth/too-many-requests':
+          alert("🚫 Too many failed attempts. Please wait and try again later.");
+          break;
+        case 'auth/network-request-failed':
+          alert("🌐 Network error. Check your connection.");
+          break;
+        default:
+          alert(genericMsg);
+      }
+
+      console.error("Sign in error:", error.code, error.message);
     })
 }
+
 
 onAuthStateChanged(auth, async (user) => {
     if(user){
@@ -1256,6 +1829,7 @@ onAuthStateChanged(auth, async (user) => {
         const adminRenameButton = document.getElementById('adminName');
         const loginButton = document.getElementById('logInButton');
         const signOutButton = document.getElementById('signOutButton');
+        const hideNonAdmin = document.getElementById('hideNonAdmin');
 
         if (adminRenameButton && adminRenameButton.dataset.bound !== 'true') {
             adminRenameButton.addEventListener('click', createRenameModal);
@@ -1268,6 +1842,8 @@ onAuthStateChanged(auth, async (user) => {
             loginButton.classList.add('hidden');
         if(signOutButton)
             signOutButton.classList.remove('hidden');
+        if(hideNonAdmin)
+            hideNonAdmin.classList.remove('hidden');
 
         // Punem numele
         getAdminName(admin_id, (name) => {
@@ -1276,6 +1852,7 @@ onAuthStateChanged(auth, async (user) => {
     }else{
         isAdmin = false;
         admin_id = 0;
+        const hideNonAdmin = document.getElementById('hideNonAdmin');
 
         const adminRenameButton = document.getElementById('adminName');
         const loginButton = document.getElementById('logInButton');
@@ -1287,6 +1864,8 @@ onAuthStateChanged(auth, async (user) => {
             loginButton.classList.remove('hidden');
         if(signOutButton)
             signOutButton.classList.add('hidden');
+        if(hideNonAdmin)
+            hideNonAdmin.classList.add('hidden');
     }
 
     currentPage = localStorage.currentPage || 'home';

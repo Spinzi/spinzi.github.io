@@ -40,5 +40,6 @@
   "toggleMessagesPanelButtonStatus": "Loading...",
   "toggleFeedbackPanel": "Toggle Feedback Panel",
   "toggleFeedbackPanelButtonStatus": "Loading...",
-  "console": "Console"
+  "console": "Console",
+  "save_changes": "Save changes"
 }

@@ -40,5 +40,6 @@
   "toggleMessagesPanelButtonStatus": "Se încarcă...",
   "toggleFeedbackPanel": "Comută panoul de feedback",
   "toggleFeedbackPanelButtonStatus": "Se încarcă...",
-  "console": "Consolă"
+  "console": "Consolă",
+  "save_changes": "Salvează schimbările"
 }

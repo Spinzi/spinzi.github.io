@@ -1,0 +1,27 @@
+:root {
+    /* Backgrounds */
+    --bg-main: #D3FFF3;          /* Main page background */
+    --bg-soft: #F6F1D1;          /* Soft/light backgrounds for cards, containers, etc. */
+
+    /* Border */
+    --border-main: #414073;
+
+    /* Text colors */
+    --text-primary: #292E1E;     /* Main text */
+    
+    /* Accent / elements */
+    --accent-primary: #048A81;   /* Primary buttons, highlights */
+    --accent-secondary: #048A81; /* Secondary elements, borders, etc. */
+}
+
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+    "wdth" 100;
+}

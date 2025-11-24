@@ -1,0 +1,47 @@
+@import "common.css";
+
+/* Base button style */
+button {
+    font-family: inherit;
+    font-size: 1rem;                /* Scales with root font */
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;         /* Vertical | Horizontal */
+    border-radius: 0.5rem;          /* Smooth rounded corners */
+    border: 2px solid var(--accent-primary);
+    background-color: var(--accent-primary);
+    color: var(--bg-soft);          /* Text color contrasting background */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hover state */
+button:hover {
+    background-color: var(--bg-soft);
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+/* Active / pressed state */
+button:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+/* Disabled state */
+button:disabled {
+    background-color: #ccc;
+    color: #666;
+    border-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Small / Large variations (optional) */
+button.small {
+    font-size: 0.875rem;
+    padding: 0.4rem 0.8rem;
+}
+
+button.large {
+    font-size: 1.25rem;
+    padding: 0.8rem 1.6rem;
+}

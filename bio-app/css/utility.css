@@ -45,3 +45,86 @@ button.large {
     font-size: 1.25rem;
     padding: 0.8rem 1.6rem;
 }
+
+/* Base input style */
+input {
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.6rem 1.2rem;          /* Matches button padding */
+    border-radius: 0.5rem;           /* Same rounded corners as button */
+    border: 2px solid var(--accent-primary);
+    background-color: var(--bg-soft);
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    width: 100%;                      /* Full-width, optional */
+    box-sizing: border-box;           /* Include padding in width */
+    margin: 0.1rem;
+}
+
+/* Placeholder color */
+input::placeholder {
+    color: var(--accent-secondary);
+}
+
+/* Focus state */
+input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* subtle focus glow */
+}
+
+/* Disabled state */
+input:disabled {
+    background-color: #eee;
+    color: #666;
+    border-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Small / Large variations */
+input.small {
+    font-size: 0.875rem;
+    padding: 0.4rem 0.8rem;
+}
+
+input.large {
+    font-size: 1.25rem;
+    padding: 0.8rem 1.6rem;
+}
+
+input[type="checkbox"] {
+    appearance: none;                        /* Remove default checkbox */
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    padding: 0;
+    border: 2px solid var(--accent-primary); /* Match your theme */
+    border-radius: 0.25rem;                  /* Slight rounding */
+    background-color: var(--bg-soft);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.15s ease-in-out;
+    align-items: center;
+}
+
+input[type="checkbox"]:hover {
+    border-color: var(--accent-primary-hover, var(--accent-primary));
+    background-color: var(--bg-soft-hover, var(--bg-soft));
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+/* Checkmark */
+input[type="checkbox"]:checked::after {
+    content: "✔";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* centers the checkmark */
+    font-size: 1rem;
+    color: var(--bg-soft);
+    pointer-events: none;             /* so click passes through */
+}

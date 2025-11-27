@@ -1,0 +1,62 @@
+html, body {
+    height: 100%;            /* Make body take full viewport height */
+    margin: 0;               /* Remove default margins */
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+    align-items: center;     /* Vertical centering */
+}
+
+h1{
+    text-align: center;
+}
+
+#login-text{
+    font-size: 3rem;
+}
+
+#login-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--accent-secondary);
+    padding: 1rem;
+    border-radius: 1rem;
+
+    background-image: url("https://www.transparenttextures.com/patterns/always-grey.png");
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+
+p[data-translate-key="or-continue-with"]{
+    align-self: center;
+    text-align: center;
+    font-weight: 500;
+}
+
+.provider-button{
+    background-color: white !important;
+    color:var(--text-primary);
+}
+
+#provider-logo{
+    width: 20px;            /* Adjust the size */
+    height: 20px;           /* Keep aspect ratio or set auto */
+    margin-right: 0.5rem;   /* Space between icon and text */
+    vertical-align: middle; /* Align with text */
+}
+
+.show-password-holder{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* ensures left alignment */
+    gap: 6px; /* small spacing between checkbox and label */
+    width: 100%; /* makes alignment predictable */
+    margin-top: 6px; /* optional, add breathing room */
+}
+
+@media only screen and (max-width: 600px) {
+    #login-container{
+        height: 100%;
+        width: 100%;
+    }
+}

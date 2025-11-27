@@ -3,5 +3,6 @@
     "home": "Home",
     "tests": "Tests",
     "create_test": "Create Test",
-    "authenticate": "Login"
+    "authenticate": "Login",
+    "or-continue-with": "or continue with"
 }

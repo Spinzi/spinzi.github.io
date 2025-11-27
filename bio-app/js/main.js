@@ -35,7 +35,7 @@ async function load_translation_elements(){
     
     console.log(`Translating elements:\nFound elements to translate: ${JSON.stringify(componentElements, null, 2)}\nTranslation file:\n${JSON.stringify(translations, null, 2)}`);
 
-    for (el of componentElements){
+    for (var el of componentElements){
         var translation = translations[el.dataset.translateKey];
         console.log("trans");
         if(translation == null)
@@ -55,7 +55,6 @@ async function init_elements() {
 }
 
 document.addEventListener("DOMContentLoaded", async()=>{
-    __init();
     await load_html_elements();
     await load_translation_elements();
     await init_elements();

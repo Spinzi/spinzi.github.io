@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BioApp Login</title>
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/utility.css">
+  <script type="module" src="js/main.js" defer></script>
+  <script type="module" src="js/auth.js" defer></script>
+</head>
+<body>
+  <div id="login-container">
+    <h1>Bio-app<br><span id="login-text">Login</span></h1>
+
+    <div>
+        <input type="email" id="email" placeholder="Email" />
+        <input type="password" id="password" placeholder="Password" />
+        <div class="show-password-holder">
+            <input type="checkbox" id="show-password" value="bool" name="show-password">
+            <label for="show-password">Show password</label>
+        </div>
+    </div>
+    
+    <div>
+        <button id="login-btn">Login with Email</button>
+        <button id="signup-btn">Sign Up</button>
+    </div>
+
+    <div>
+        <p data-translate-key="or-continue-with">or continue with</p>
+        <button id="google-btn" class="provider-button">
+            <img id="provider-logo" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
+            Google
+        </button>
+    </div>
+
+    <p id="error-msg"></p>
+  </div>
+
+</body>
+</html>

@@ -73,6 +73,25 @@ async function load_translation_elements() {
 
 }
 
+let last_burger = false;
+function execute_burger() {
+    const burgerOne = document.getElementById("burger_one");
+    const burgerTwo = document.getElementById("burger_two");
+
+    if (last_burger) {
+        burgerOne.classList.add("visible");
+        burgerTwo.classList.add("visible");
+    } else {
+        burgerOne.classList.remove("visible");
+        burgerTwo.classList.remove("visible");
+    }
+}
+
+function swap_burger(){
+    last_burger = !last_burger;
+    execute_burger();
+}
+
 async function init_elements() {
 
     document.getElementById("login-btn").addEventListener("click", () => {
@@ -89,6 +108,10 @@ async function init_elements() {
         }).catch((error)=>{
 
         });
+    });
+
+    document.getElementById("toggle-burger").addEventListener("click", ()=>{
+        swap_burger();
     });
 
 }
@@ -118,4 +141,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     await load_html_elements();
     await load_translation_elements();
     await init_elements();
+
+    execute_burger();
 });

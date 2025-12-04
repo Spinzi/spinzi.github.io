@@ -124,6 +124,9 @@ button:active{
         monospace;       /* generic fallback */
     font-size: 0.9rem;   /* slightly smaller than body text */
     line-height: 1.4;
+
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .container div.code button{

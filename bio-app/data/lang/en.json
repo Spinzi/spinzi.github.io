@@ -4,5 +4,6 @@
     "tests": "Tests",
     "create_test": "Create Test",
     "authenticate": "Login",
-    "or-continue-with": "or continue with"
+    "or-continue-with": "or continue with",
+    "my-account":"My account"
 }

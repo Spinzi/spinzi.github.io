@@ -46,6 +46,12 @@
 }
 
 /* Account box (login button container) */
+.account-box{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
 .account-box button {
     background-color: var(--accent-primary);
     color: var(--bg-soft);

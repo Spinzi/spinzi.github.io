@@ -23,29 +23,15 @@
 
     <div data-load-from-html="header.html"></div>
 
-    <h1>My Dashboard</h1>
+    <form id="new-name-form">
+        <h3>Enter new name:</h3>
+    
+        <p id="new-name-message"></p>
 
-    <table id="user-dashboard" border="1" cellpadding="8" cellspacing="0">
-        <tbody>
-            <tr>
-                <td>Name</td>
-                <td id="dashboard-name" onclick="window.location.href='change-name.html'" title="Change name">[name]</td>
-            </tr>
-            <tr>
-                <td>Account Age</td>
-                <td id="dashboard-age">[age]</td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td id="dashboard-email">[email]</td>
-            </tr>
-            <tr>
-                <td>Points</td>
-                <td id="dashboard-points">[points]</td>
-            </tr>
-        </tbody>
-    </table>
+        <input type="text" placeholder="New name" id="new-name"/>
 
+        <button type="button" id="new-name-button">Submit</button>
+    </form>
 
     <div data-load-from-html="footer.html"></div>
 

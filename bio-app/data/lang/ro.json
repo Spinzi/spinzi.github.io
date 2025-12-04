@@ -4,5 +4,6 @@
     "tests": "Teste",
     "create_test": "Creează test",
     "authenticate": "Autentificare",
-    "or-continue-with": "sau continua cu"
+    "or-continue-with": "sau continua cu",
+    "my-account":"Contul meu"
 }

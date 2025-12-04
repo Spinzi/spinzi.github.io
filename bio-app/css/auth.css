@@ -4,9 +4,10 @@ html, body {
     display: flex;
     justify-content: center; /* Horizontal centering */
     align-items: center;     /* Vertical centering */
+    padding: 0%;
 }
 
-h1{
+h1, h3{
     text-align: center;
 }
 
@@ -52,6 +53,22 @@ p[data-translate-key="or-continue-with"]{
     gap: 6px; /* small spacing between checkbox and label */
     width: 100%; /* makes alignment predictable */
     margin-top: 6px; /* optional, add breathing room */
+}
+
+.g-recaptcha{
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+
+#login-form, #sing-in-form-with-email{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    border-radius: 1rem;
+}
+
+#error-msg{
+    color: rgb(174, 0, 0);
 }
 
 @media only screen and (max-width: 600px) {

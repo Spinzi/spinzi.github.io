@@ -1,0 +1,108 @@
+/* dashboard.css */
+@import "common.css";
+@import "utility.css";
+
+/* Dashboard Container */
+body h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 2rem;
+    color: var(--text-primary);
+}
+
+#user-dashboard {
+    width: 90%;
+    max-width: 800px;
+    margin: 2rem auto;
+    border-collapse: collapse;
+    background-color: var(--bg-soft);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.06);
+    font-size: 1.1rem;
+    text-align: left;
+}
+
+#user-dashboard td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--accent-secondary);
+}
+
+#user-dashboard tr:last-child td {
+    border-bottom: none;
+}
+
+#user-dashboard td:first-child {
+    font-weight: 600;
+    width: 35%;
+    background-color: var(--accent-secondary, #e0f0f0);
+    color: var(--text-primary);
+}
+
+#user-dashboard td:nth-child(2) {
+    width: 65%;
+}
+
+/* Highlight on hover */
+#user-dashboard tr:hover td {
+    background-color: rgba(4, 138, 129, 0.1);
+}
+
+/* Sign-out button style override */
+#user-dashboard button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.95rem;
+    background-color: #ff4d4f;
+    border: 2px solid #ff4d4f;
+    color: white;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#user-dashboard button:hover {
+    background-color: #d9363e;
+    border-color: #d9363e;
+}
+
+a{
+    text-decoration: none;
+}
+
+#new-name-message{
+    margin-top: 0;
+    font-size: medium;
+}
+
+#dashboard-name, a{
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+#new-name-form {
+    background-color: var(--bg-soft);
+    border: 5px solid var(--border-main);
+    border-radius: 1rem;
+    padding: 1rem 2%;              /* more consistent padding */
+    display: flex;
+    flex-direction: column;
+    align-items: left;           /* vertically center content */
+    justify-content: space-between; /* logo on left, nav/account on right */
+    font-size: 1.5rem;
+    gap: 0.5rem;
+    margin: 1%;
+    flex-wrap: wrap;               /* allows wrapping on smaller screens */
+    box-shadow: 0 8px 24px rgba(0,0,0,0.32), 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    #user-dashboard {
+        width: 95%;
+        font-size: 1rem;
+    }
+
+    #user-dashboard td {
+        padding: 10px 15px;
+    }
+}

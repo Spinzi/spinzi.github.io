@@ -14,13 +14,15 @@
 <body>
   <div id="login-container">
     <div class="header-section">
-      <h1>Bio-app<br><span id="login-text">Login</span></h1>
-      <h3>Don't have an account? <a href="create-account.html">Create one now.</a></h3>
+      <h1>Bio-app<br><span id="sing-in-text">Create account</span></h1>
+      <h3>Already have an account? <a href="auth.html">Log in now.</a></h3>
     </div>
 
-    <form id="login-form">
+    <form id="sing-in-form-with-email">
+        <input type="text" id="name" placeholder="Name" />
         <input type="email" id="email" placeholder="Email" />
         <input type="password" id="password" placeholder="Password" />
+        <input type="password" id="confirm-password" placeholder="Confirm Password" />
         <div class="show-password-holder">
             <input type="checkbox" id="show-password" value="bool" name="show-password">
             <label for="show-password" data-translate-key="show-password" >Show password</label>
@@ -30,8 +32,7 @@
         </div>
     
         <div>
-            <button type="submit" id="submit-btn" data-translate-key="login-with-email" >Login with Email</button>
-            <button type="button" id="forgot-password" data-translate-key="forgot-password" >Forgot your password?</button>
+            <button type="submit" id="submit-create-account-btn" data-translate-key="create-account">Create account</button>
         </div>
     
     </form>

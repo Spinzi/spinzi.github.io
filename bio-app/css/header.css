@@ -95,8 +95,7 @@
 
     .header-holder{
         flex-direction: row;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-start;
         gap: 1rem;
     }
 
@@ -116,31 +115,39 @@
     .main-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.5rem;
+        gap: 0rem;
     }
 
     .nav-links {
         display: flex;
         flex-direction: column;
         width: 100%;
-        justify-content: space-around;
+        justify-content: flex-start;
     }
 
     .account-box {
         margin-top: 0.5rem;
     }
-
+    
     .nav-links,
     .account-box {
         opacity: 0;
         max-height: 0;
+        margin: 0;
         overflow: hidden;
+        padding: 0;
         transition: opacity 0.4s ease, max-height 0.4s ease;
     }
+
+    
 
     .nav-links.visible,
     .account-box.visible {
         opacity: 1;
         max-height: 500px; /* large enough for content */
+    }
+
+    .account-box.visible{
+        margin-top: 1rem;
     }
 }

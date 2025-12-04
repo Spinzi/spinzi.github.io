@@ -1,0 +1,146 @@
+:root {
+    /* Base colors */
+    --bg-page: #1e1e1e;
+    --text-primary: #d4d4d4;
+    --surface-bg: #252526;
+    --surface-border: #3c3c3c;
+
+    /* Titles */
+    --title-color: #569cd6;
+    --title-color-secondary: #8db8dc;
+
+    /* Syntax */
+    --syntax-bg: #1a1a1a;
+    --syntax-color: #c586c0;
+
+    /* Code block */
+    --code-bg: #1a1a1a;
+    --code-border: #569cd6;
+
+    /* Copy button */
+    --copy-bg: #0e639c;
+    --copy-hover-bg: #1177bb;
+    --copy-text: #ffffff;
+}
+
+html, body{
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+    "wdth" 100;
+}
+
+header{
+    background-color: var(--surface-bg);
+    border: 3px var(--code-border) solid;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    box-shadow: 5px 10px var(--copy-bg);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+h1, h2{
+    color: var(--title-color);
+}
+
+h3{
+    color: var(--title-color-secondary);
+}
+
+header button{
+    margin-left: auto;
+    height: fit-content;
+}
+
+a{
+    color: var(--text-primary);
+}
+
+button{
+    background-color: var(--copy-bg);
+    border-radius: 1rem;
+    border: 2px solid var(--surface-border);
+    font-size: large;
+    padding: 1rem;
+
+    transition: all 0.2s ease;
+}
+
+button:hover{
+    background-color: var(--copy-hover-bg);
+}
+
+button:active{
+    transform: scale(0.95);
+}
+
+.container{
+    background-color: var(--surface-bg);
+    border: 2px solid var(--surface-border);
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.container hr{
+    background-color: var(--syntax-color);
+    border: 1px solid var(--syntax-color);
+    border-radius: 1rem;
+}
+
+.container p{
+    text-indent: 1rem;
+}
+
+.inline-code{
+    font-family: 
+        'Fira Code',     /* popular coding font with ligatures */
+        'JetBrains Mono',/* also great for coding */
+        'Courier New',   /* fallback */
+        monospace;       /* generic fallback */
+    font-size: 0.9rem;   /* slightly smaller than body text */
+    background-color: var(--code-bg);
+    padding: 0.3rem;
+    border-radius: 0.3rem;
+}
+
+.container div.code{
+    position: relative;
+    background-color: var(--code-bg);
+    padding: 1rem;
+    border: 3px solid var(--code-border);
+    border-radius: 0.3rem;
+    font-family: 
+        'Fira Code',     /* popular coding font with ligatures */
+        'JetBrains Mono',/* also great for coding */
+        'Courier New',   /* fallback */
+        monospace;       /* generic fallback */
+    font-size: 0.9rem;   /* slightly smaller than body text */
+    line-height: 1.4;
+}
+
+.container div.code button{
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    padding: 0.5rem;
+    font-size: medium;
+    border-color: var(--surface-border);
+}
+
+.syntax{
+    background-color: var(--syntax-bg);
+    color: var(--syntax-color);
+    padding: 0.3rem;
+    border-radius: 0.2rem;
+    margin: 0.5rem;
+    border: 2px solid var(--surface-border);
+    width: fit-content;
+}

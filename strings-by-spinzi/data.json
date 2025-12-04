@@ -1,0 +1,14 @@
+[
+    {
+        "h2": "Strings",
+        "h3": "What are they? Why do we even use chars?!",
+        "hr": "",
+        "p": "Strings are everywhere in computers. Every message you read, every button you click, even this text right now — all stored as strings. A string is basically a collection of characters grouped together in a safe, easy-to-use way. In C++, a string looks like this:",
+        "syntax": "std::string message = \"Hello, I am Bob!\";",
+        "p1": "<i>\"But we don’t learn this in high-school!\"</i> True. In school we usually start with the most low-level form of text storage — <b>chars</b>. Long before the modern <code>std::string</code> existed, programmers used <b>char arrays</b> to store text. And because of something called <b>Backward Compatibility</b>, modern C++ still lets us use many string functions on these old char arrays.",
+        "p2": "To make the difference crystal clear, take a look at this code example:",
+        "code": "#include <iostream>\n#include <string>\n\nint main() {\n    // Single character\n    char letter = 'A';\n\n    // Array of characters (C-style string)\n    char oldSchool[] = \"Hello\";  // stored as H e l l o \\0\n\n    // Modern C++ string\n    std::string modern = \"Hello\";\n\n    std::cout << \"letter: \" << letter << \"\\n\";\n    std::cout << \"oldSchool: \" << oldSchool << \"\\n\";\n    std::cout << \"modern: \" << modern << \"\\n\";\n\n    return 0;\n}",
+        "p3": "If you want to try this code yourself, you can download <a href=\"https://visualstudio.microsoft.com/\" target=\"_blank\">Visual Studio</a> (a great tool from Microsoft) or quickly run it in your browser on <a href=\"https://www.onlinegdb.com/online_c++_compiler\" target=\"_blank\">OnlineGDB</a>.",
+        "p4": "Before we move on, just a small heads-up: from here on, we’ll explore functions made for <span class=\"inline-code\">std::string</span> that also work on char arrays thanks to backward compatibility. I’ll explain everything in a simple and friendly way, but you should already know a little bit of C++ basics — things like variables, arrays, <span class=\"inline-code\">#include</span>, and <span class=\"inline-code\">std::cout</span>. Don’t worry, I won’t throw anything impossible at you, but this isn’t meant for total beginners either."
+    }
+]

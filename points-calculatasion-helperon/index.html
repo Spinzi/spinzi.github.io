@@ -11,29 +11,44 @@
         padding: 20px;
     }
     h1 {
-        margin-bottom: 20px;
+        margin-bottom: 12px;
+    }
+    .controls {
+        display:flex;
+        gap:10px;
+        align-items:center;
+        margin-bottom:12px;
     }
     .criteria {
         background: white;
-        padding: 15px;
+        padding: 12px;
         border-radius: 10px;
         margin-bottom: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.08);
     }
     .row {
         display: flex;
         gap: 10px;
         margin-top: 8px;
+        align-items:center;
     }
     input[type="text"], input[type="number"] {
-        padding: 6px;
+        padding: 8px;
         flex: 1;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+    .small {
+        width: 120px;
+        flex: 0 0 120px;
     }
     button {
         padding: 8px 14px;
         border: none;
         border-radius: 6px;
         cursor: pointer;
+        font-weight: 600;
     }
     #addBtn {
         background: #4caf50;
@@ -42,55 +57,146 @@
     #calcBtn {
         background: #2196f3;
         color: white;
-        margin-top: 20px;
+    }
+    .removeBtn {
+        background: #ef5350;
+        color: white;
+        padding:6px 10px;
+        font-size:13px;
     }
     #result {
-        margin-top: 20px;
-        font-size: 20px;
+        margin-top: 16px;
+        font-size: 18px;
         font-weight: bold;
+    }
+    .note {
+        color: #a94442;
+        margin-top:8px;
     }
 </style>
 </head>
 <body>
 <h1>Criteria Grader</h1>
-<button id="addBtn">Add Criteria</button>
+<div class="controls">
+    <button id="addBtn">Add Criteria</button>
+    <button id="calcBtn">Calculate Final Percentage</button>
+</div>
 <div id="criteriaContainer"></div>
-<button id="calcBtn">Calculate Final Percentage</button>
 <div id="result"></div>
 
 <script>
+(function(){
     const container = document.getElementById("criteriaContainer");
-    document.getElementById("addBtn").onclick = () => {
+    const addBtn = document.getElementById("addBtn");
+    const calcBtn = document.getElementById("calcBtn");
+    const resultEl = document.getElementById("result");
+
+    function createCriterion(name = '', weight = '', score = ''){
         const div = document.createElement("div");
         div.className = "criteria";
 
         div.innerHTML = `
             <div class="row">
-                <input type="text" placeholder="Criteria name" class="critName">
-                <input type="number" placeholder="Weight %" class="critWeight" min="1" max="100">
+                <input type="text" placeholder="Criteria name" class="critName" value="${escapeHtml(name)}">
+                <input type="number" placeholder="Weight %" class="critWeight small" min="0" max="100" value="${escapeHtml(weight)}">
+                <button class="removeBtn">Remove</button>
             </div>
             <div class="row">
-                <input type="number" placeholder="Score 1-10" class="critScore" min="1" max="10">
+                <input type="number" placeholder="Score 1-10" class="critScore small" min="1" max="10" value="${escapeHtml(score)}">
+                <span class="subtotal">Subtotal: 0%</span>
             </div>
         `;
 
-        container.appendChild(div);
-    };
+        // attach listeners for live subtotal update and remove
+        const weightInput = div.querySelector('.critWeight');
+        const scoreInput = div.querySelector('.critScore');
+        const subtotalEl = div.querySelector('.subtotal');
+        const removeBtn = div.querySelector('.removeBtn');
 
-    document.getElementById("calcBtn").onclick = () => {
+        function updateSubtotal(){
+            const w = parseFloat(weightInput.value);
+            const s = parseFloat(scoreInput.value);
+            if (Number.isFinite(w) && Number.isFinite(s)){
+                const subtotal = (s * w) / 10;
+                subtotalEl.textContent = `Subtotal: ${subtotal.toFixed(2)}%`;
+            } else {
+                subtotalEl.textContent = 'Subtotal: 0%';
+            }
+        }
+
+        weightInput.addEventListener('input', updateSubtotal);
+        scoreInput.addEventListener('input', updateSubtotal);
+
+        removeBtn.addEventListener('click', () => {
+            div.remove();
+        });
+
+        container.appendChild(div);
+        return div;
+    }
+
+    function escapeHtml(str){
+        if (str === null || str === undefined) return '';
+        return String(str).replace(/[&<>"']/g, function(c){
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c];
+        });
+    }
+
+    addBtn.addEventListener('click', () => createCriterion());
+
+    // add one default criterion so UI isn't empty
+    createCriterion('Presentation', '25', '8');
+
+    calcBtn.addEventListener('click', () => {
+        const entries = document.querySelectorAll('.criteria');
         let total = 0;
-        const entries = document.querySelectorAll(".criteria");
+        let sumWeights = 0;
 
         entries.forEach(c => {
-            const weight = parseFloat(c.querySelector(".critWeight").value);
-            const score = parseFloat(c.querySelector(".critScore").value);
-            if (!isNaN(weight) && !isNaN(score)) {
-                total += (score * weight) / 10;
+            const weight = parseFloat(c.querySelector('.critWeight').value);
+            const score = parseFloat(c.querySelector('.critScore').value);
+            const subtotalEl = c.querySelector('.subtotal');
+
+            const w = Number.isFinite(weight) ? weight : 0;
+            const s = Number.isFinite(score) ? score : NaN;
+
+            sumWeights += w;
+
+            if (Number.isFinite(w) && Number.isFinite(s)){
+                const subtotal = (s * w) / 10;
+                subtotalEl.textContent = `Subtotal: ${subtotal.toFixed(2)}%`;
+                total += subtotal;
+            } else {
+                subtotalEl.textContent = 'Subtotal: 0%';
             }
         });
 
-        document.getElementById("result").innerText = "Final Percentage: " + total.toFixed(2) + "%";
-    };
+        // use epsilon for floating point rounding
+        const epsilon = 0.0001;
+        if (Math.abs(sumWeights - 100) > epsilon){
+            resultEl.innerHTML = `⚠️ Total weight must be 100%. Current: ${sumWeights}%`;
+            resultEl.classList.add('note');
+            return;
+        }
+
+        resultEl.classList.remove('note');
+        // build subtotal breakdown
+        let breakdown = '<h3>Subtotal</h3>';
+        let index = 1;
+        entries.forEach(c => {
+            const name = c.querySelector('.critName').value || 'Unnamed';
+            const weight = parseFloat(c.querySelector('.critWeight').value);
+            const score = parseFloat(c.querySelector('.critScore').value);
+            const subtotal = Number.isFinite(weight) && Number.isFinite(score) ? (score * weight) / 10 : 0;
+            breakdown += `<div><strong>${index}. ${name}</strong><br>${subtotal.toFixed(2)}%</div>`;
+            index++;
+        });
+
+        resultEl.classList.remove('note');
+        resultEl.innerHTML = breakdown + `<h3>Final percentage</h3><div>${total.toFixed(2)}%</div>`;(2) + '%';
+    });
+
+})();
 </script>
 </body>
 </html>

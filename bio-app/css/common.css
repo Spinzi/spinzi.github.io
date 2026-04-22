@@ -18,5 +18,5 @@
 body {
     background-color: var(--bg-main);
     color: var(--text-primary);
-    
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
 }

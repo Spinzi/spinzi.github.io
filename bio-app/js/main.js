@@ -25,6 +25,18 @@ async function verify_and_fix_data_integrity(uid){
 
 }
 
+async function load_html_into(fileName, html_id){
+    let el = document.getElementById(html_id);
+
+    try {
+        const response = await fetch(`components/${fileName}`);
+        if (!response.ok) throw new Error(`Failed to load ${fileName}`);
+        el.innerHTML = await response.text();
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 async function load_html_elements() {
     const componentElements = document.querySelectorAll("[data-load-from-html]");
 
@@ -114,6 +126,8 @@ async function init_elements() {
         swap_burger();
     });
 
+    init_page_chosen();
+
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -136,6 +150,18 @@ onAuthStateChanged(auth, (user) => {
         document.getElementById("log-out").style.display = "none";
     }
 });
+
+function init_page_chosen(){
+
+    let choice = localStorage.getItem("page_chosen");
+
+    if(!choice){
+        document.getElementById("header-title").textContent = "???";
+        load_html_into("web-choice.html", "content");
+        
+    }
+
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
     await load_html_elements();

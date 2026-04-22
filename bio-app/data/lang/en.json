@@ -5,5 +5,10 @@
     "create_test": "Create Test",
     "authenticate": "Login",
     "or-continue-with": "or continue with",
-    "my-account":"My account"
+    "my-account":"My account",
+    "log-out":"Log out",
+    "enter_new_name":"Enter new name:",
+    "choose_website": "Choose a website you want to see. You can edit it later in My account > Website",
+    "website_french": "French",
+    "website_biology": "Biology"
 }

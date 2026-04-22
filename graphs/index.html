@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Theory — Interactive Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   RESET & TOKENS
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0a0a0a;
+  --surface:  #111111;
+  --border:   #222222;
+  --border2:  #2e2e2e;
+  --text:     #e8e8e8;
+  --text-dim: #666666;
+  --text-mid: #999999;
+  --accent:   #f0f0f0;
+  --white:    #ffffff;
+  --node-fill:#1a1a1a;
+  --node-str: #e8e8e8;
+  --sel:      #ffffff;
+  --hi:       #888888;
+  --path-col: #ffffff;
+  --edge-col: #444444;
+  --font-disp: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --sidebar-w: 220px;
+  --panel-w:   420px;
+  --hdr-h:     52px;
+  --radius:    4px;
+  --trans:     0.2s ease;
+}
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT SHELL
+═══════════════════════════════════════════ */
+#app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr 4px var(--panel-w);
+  grid-template-rows: var(--hdr-h) 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════ */
+#header {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+  position: relative;
+  z-index: 100;
+}
+
+#hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius);
+  transition: background var(--trans);
+}
+#hamburger:hover { background: var(--border); }
+#hamburger span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--text-mid);
+  transition: all 0.3s ease;
+}
+#hamburger.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+#hamburger.open span:nth-child(2) { opacity: 0; }
+#hamburger.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+.hdr-title {
+  font-family: var(--font-disp);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.hdr-title span { color: var(--text-dim); font-weight: 400; }
+
+.hdr-sep { flex: 1; }
+
+.hdr-chapter {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hdr-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.mode-pill {
+  padding: 4px 10px;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--trans);
+  white-space: nowrap;
+}
+.mode-pill:hover { border-color: var(--text-mid); color: var(--text); }
+.mode-pill.active { background: var(--white); color: var(--bg); border-color: var(--white); }
+
+/* ═══════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════ */
+#sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+#sidebar.collapsed {
+  width: 0;
+  overflow: hidden;
+  border: none;
+}
+
+.sidebar-section {
+  padding: 20px 0 8px;
+}
+.sidebar-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 0 20px 8px;
+}
+
+.chapter-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: background var(--trans);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 2px solid transparent;
+}
+.chapter-link:hover { background: var(--border); }
+.chapter-link.active {
+  background: var(--border);
+  border-left-color: var(--white);
+}
+.chapter-link .ch-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  min-width: 20px;
+}
+.chapter-link .ch-name {
+  font-family: var(--font-disp);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-mid);
+  transition: color var(--trans);
+}
+.chapter-link:hover .ch-name,
+.chapter-link.active .ch-name { color: var(--white); }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+.sidebar-footer strong { color: var(--text-mid); }
+
+/* ═══════════════════════════════════════════
+   CANVAS AREA
+═══════════════════════════════════════════ */
+#canvas-area {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+#graphCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+/* Canvas toolbar */
+#canvas-toolbar {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  padding: 8px 12px;
+  border-radius: 3px;
+  z-index: 10;
+}
+
+.ct-btn {
+  padding: 5px 12px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all var(--trans);
+}
+.ct-btn:hover { background: var(--border); color: var(--text); }
+.ct-btn.danger:hover { background: #1a0000; color: #ff6666; border-color: #442222; }
+
+.ct-divider {
+  width: 1px;
+  background: var(--border);
+  margin: 0 2px;
+}
+
+/* Status strip */
+#status-bar {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 4px 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  border-radius: 2px;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* Graph stats */
+#graph-stats {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════
+   RIGHT PANEL
+═══════════════════════════════════════════ */
+#right-panel {
+  grid-column: 4;
+  grid-row: 2;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.rp-section {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rp-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.chapter-title {
+  font-family: var(--font-disp);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.chapter-def {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.7;
+  border-left: 2px solid var(--border2);
+  padding-left: 12px;
+  margin-bottom: 0;
+}
+
+.guide-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.guide-step {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.step-num {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  min-width: 16px;
+  padding-top: 2px;
+  text-align: right;
+}
+
+.step-text {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+
+.step-text.done { color: var(--text-dim); text-decoration: line-through; }
+.step-text.current { color: var(--white); }
+
+/* Fact callout */
+.fact-box {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  padding: 12px;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-mid);
+  line-height: 1.7;
+  margin-top: 0;
+}
+.fact-box .fact-label {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+/* Matrix / List display */
+.data-display {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--text-mid);
+  overflow-x: auto;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  padding: 12px;
+  border-radius: var(--radius);
+  white-space: pre;
+  min-height: 60px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Log */
+#log-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+#log-box {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.8;
+  min-height: 100px;
+  max-height: 180px;
+}
+.log-entry { padding: 1px 0; }
+.log-entry.ok { color: #8aff8a; }
+.log-entry.info { color: var(--text-mid); }
+.log-entry.warn { color: #ffcc66; }
+.log-entry.path { color: var(--white); font-weight: 500; }
+
+/* Weighted toggle */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.toggle-row span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.tog {
+  position: relative;
+  width: 36px;
+  height: 18px;
+}
+.tog input { opacity: 0; width: 0; height: 0; }
+.tog-track {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--border2);
+  border-radius: 18px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.tog-track::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 3px;
+  width: 12px; height: 12px;
+  background: var(--text-dim);
+  border-radius: 50%;
+  transition: transform 0.2s, background 0.2s;
+}
+.tog input:checked + .tog-track { background: var(--white); }
+.tog input:checked + .tog-track::after { transform: translateX(18px); background: var(--bg); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+/* Page transitions */
+.page-enter {
+  animation: pageIn 0.25s ease forwards;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Weight input popup */
+#weight-popup {
+  display: none;
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  z-index: 200;
+  gap: 6px;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-mid);
+}
+#weight-popup.visible { display: flex; }
+#weight-input {
+  width: 50px;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 3px 6px;
+  border-radius: 2px;
+  outline: none;
+  text-align: center;
+}
+#weight-input:focus { border-color: var(--text-mid); }
+#weight-confirm {
+  padding: 3px 8px;
+  background: var(--white);
+  color: var(--bg);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+/* Path highlight popover */
+.euler-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  border-radius: 2px;
+  margin-top: 6px;
+}
+.euler-badge.yes { border-color: #4a9; color: #4a9; }
+.euler-badge.no  { border-color: #944; color: #944; }
+
+/* Scrollable sidebar */
+#sidebar::-webkit-scrollbar { width: 0; }
+
+/* Mobile hint */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; --panel-w: 300px; }
+  #sidebar { display: none; }
+}
+
+/* ═══════════════════════════════════════════
+   TAB SYSTEM
+═══════════════════════════════════════════ */
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  gap: 0;
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.tab-btn {
+  padding: 9px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--trans);
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text-mid); }
+.tab-btn.active { color: var(--white); border-bottom-color: var(--white); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ═══════════════════════════════════════════
+   TEACHING SECTIONS
+═══════════════════════════════════════════ */
+.teach-block {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.teach-block:last-child { border-bottom: none; }
+
+.teach-tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.teach-title {
+  font-family: var(--font-disp);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.teach-body {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--text-mid);
+  line-height: 1.75;
+}
+
+.teach-formal {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text);
+  line-height: 1.8;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--text-dim);
+  padding: 10px 14px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 10px 0;
+}
+
+.teach-theorem {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #c8c8c8;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-left: 3px solid #888;
+  padding: 10px 14px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 8px 0;
+  line-height: 1.8;
+}
+.teach-theorem .thm-label {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.teach-insight {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-mid);
+  line-height: 1.8;
+  margin-top: 8px;
+}
+
+.try-step {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+.try-step:last-child { border-bottom: none; }
+.try-num {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  min-width: 18px;
+  padding-top: 2px;
+}
+.try-text {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════════
+   LIVE DATA / DYNAMIC BADGES
+═══════════════════════════════════════════ */
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  border-radius: 2px;
+  margin: 3px 2px 3px 0;
+}
+.live-badge.yes { border-color: #3a8a6a; color: #4dbb8a; }
+.live-badge.no  { border-color: #883333; color: #cc6666; }
+.live-badge.warn{ border-color: #886633; color: #ccaa55; }
+.live-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.degree-table {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6px;
+}
+.degree-table td {
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.degree-table td:first-child { color: var(--text-mid); font-weight: 500; }
+.degree-table td.odd { color: #cc6666; }
+.degree-table td.even { color: #4dbb8a; }
+.degree-table td.dirac-ok { color: #4dbb8a; }
+.degree-table td.dirac-no { color: #cc6666; }
+
+.condition-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.condition-row:last-child { border-bottom: none; }
+.condition-label { color: var(--text-dim); flex: 1; }
+.condition-val { color: var(--text); }
+.condition-pass { color: #4dbb8a; }
+.condition-fail { color: #cc6666; }
+
+/* ═══════════════════════════════════════════
+   RESIZABLE PANEL DIVIDER
+═══════════════════════════════════════════ */
+#drag-divider {
+  grid-column: 3;
+  grid-row: 2;
+  width: 4px;
+  background: var(--border);
+  cursor: col-resize;
+  position: relative;
+  z-index: 50;
+  transition: background var(--trans);
+  margin-left: -4px;
+}
+#drag-divider:hover, #drag-divider.dragging { background: var(--text-dim); }
+
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- HEADER -->
+  <header id="header">
+    <div id="hamburger" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="hdr-title">Graph <span>/</span> Theory</div>
+    <div class="hdr-sep"></div>
+    <div class="hdr-chapter" id="hdr-chapter-label">— What is a Graph</div>
+    <div class="hdr-controls" id="mode-controls">
+      <button class="mode-pill active" onclick="setMode('vertex')" id="modeVertex" title="Add Node">+ Node</button>
+      <button class="mode-pill" onclick="setMode('edge')" id="modeEdge" title="Add Edge">+ Edge</button>
+      <button class="mode-pill" onclick="setMode('move')" id="modeMove" title="Move">Move</button>
+      <button class="mode-pill" onclick="setMode('delete')" id="modeDelete" title="Delete">Delete</button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Chapters</div>
+      <!-- dynamically filled -->
+    </div>
+    <div class="sidebar-footer">
+      <strong>Spinzi</strong><br>
+      OnHisa Team<br>
+      Developer
+    </div>
+  </nav>
+
+  <!-- CANVAS -->
+  <div id="canvas-area">
+    <canvas id="graphCanvas"></canvas>
+
+    <div id="status-bar">Click canvas to add a node</div>
+
+    <div id="graph-stats">
+      <span>V: <strong id="stat-v">0</strong></span>
+      <span>E: <strong id="stat-e">0</strong></span>
+    </div>
+
+    <div id="canvas-toolbar">
+      <button class="ct-btn" onclick="loadExampleForChapter()">Load Example</button>
+      <div class="ct-divider"></div>
+      <button class="ct-btn" onclick="clearGraph()">Clear</button>
+      <div class="ct-divider"></div>
+      <button class="ct-btn" onclick="resetColors()">Reset Colors</button>
+    </div>
+
+    <div id="weight-popup">
+      <span>Weight:</span>
+      <input id="weight-input" type="number" value="1" min="1" max="999">
+      <button id="weight-confirm" onclick="confirmWeight()">OK</button>
+    </div>
+  </div>
+
+  <!-- DRAG DIVIDER -->
+  <div id="drag-divider"></div>
+
+  <!-- RIGHT PANEL -->
+  <aside id="right-panel">
+    <div id="chapter-content"><!-- dynamically filled --></div>
+
+    <!-- Toggles -->
+    <div class="rp-section" id="toggles-section">
+      <div class="rp-label">Graph Options</div>
+      <div class="toggle-row">
+        <span>Directed</span>
+        <label class="tog"><input type="checkbox" id="tog-directed" onchange="onDirectedChange()"><div class="tog-track"></div></label>
+      </div>
+      <div class="toggle-row">
+        <span>Weighted</span>
+        <label class="tog"><input type="checkbox" id="tog-weighted" onchange="onWeightedChange()"><div class="tog-track"></div></label>
+      </div>
+    </div>
+
+    <!-- Dynamic chapter-specific tools -->
+    <div id="chapter-tools"></div>
+
+    <!-- Log -->
+    <div class="rp-section" id="log-panel">
+      <div class="rp-label">Log</div>
+      <div id="log-box"></div>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   GRAPH ENGINE
+═══════════════════════════════════════════════════════════ */
+const canvas = document.getElementById('graphCanvas');
+const ctx = canvas.getContext('2d');
+
+let vertices = [], edges = [];
+let mode = 'vertex';
+let edgeSrc = null;
+let dragging = null, dragOffX = 0, dragOffY = 0;
+let directed = false, weighted = false;
+let autoLabel = 65; // 'A'
+let animating = false;
+let pendingEdge = null; // for weight popup
+let highlightedPath = [];
+let highlightedEdges = [];
+
+const NODE_R = 20;
+const COL_NODE_DEF  = '#1c1c1c';
+const COL_NODE_SEL  = '#ffffff';
+const COL_NODE_HI   = '#444444';
+const COL_NODE_PATH = '#e8e8e8';
+const COL_EDGE_DEF  = '#333333';
+const COL_EDGE_SEL  = '#888888';
+const COL_EDGE_PATH = '#ffffff';
+const COL_EDGE_TRAV = '#555555';
+
+// per-chapter graph states
+const chapterStates = {};
+
+function resizeCanvas() {
+  const area = document.getElementById('canvas-area');
+  canvas.width = area.clientWidth;
+  canvas.height = area.clientHeight;
+  draw();
+}
+
+/* ─── Drawing ─── */
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawGrid();
+  edges.forEach(drawEdge);
+  vertices.forEach(drawVertex);
+  updateStats();
+}
+
+function drawGrid() {
+  const step = 40;
+  ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < canvas.width; x += step) {
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke();
+  }
+  for (let y = 0; y < canvas.height; y += step) {
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
+  }
+}
+
+function drawEdge(e) {
+  const a = vertices[e.from], b = vertices[e.to];
+  if (!a || !b) return;
+
+  const col = e.highlight === 'path' ? COL_EDGE_PATH :
+              e.highlight === 'trav' ? COL_EDGE_TRAV :
+              e.selected ? COL_EDGE_SEL : COL_EDGE_DEF;
+
+  // Offset for parallel edges (bidirectional)
+  let dx = b.x - a.x, dy = b.y - a.y;
+  const len = Math.sqrt(dx*dx + dy*dy);
+  if (len === 0) return;
+  const ux = dx/len, uy = dy/len;
+  const nx = -uy, ny = ux; // normal
+
+  const hasSibling = directed && edges.some(e2 =>
+    e2 !== e && e2.from === e.to && e2.to === e.from
+  );
+  const offset = hasSibling ? 6 : 0;
+  const ox = nx * offset, oy = ny * offset;
+
+  const sx = a.x + ox, sy = a.y + oy;
+  const ex = b.x + ox, ey = b.y + oy;
+
+  ctx.save();
+  ctx.strokeStyle = col;
+  ctx.lineWidth = e.highlight === 'path' ? 2 : 1.5;
+  ctx.beginPath();
+  ctx.moveTo(sx, sy);
+  ctx.lineTo(ex, ey);
+  ctx.stroke();
+
+  if (directed) {
+    // Arrowhead
+    const arrowLen = 10, arrowW = 5;
+    const ex2 = ex - ux * (NODE_R + 2), ey2 = ey - uy * (NODE_R + 2);
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.moveTo(ex2, ey2);
+    ctx.lineTo(ex2 - ux*arrowLen + nx*arrowW, ey2 - uy*arrowLen + ny*arrowW);
+    ctx.lineTo(ex2 - ux*arrowLen - nx*arrowW, ey2 - uy*arrowLen - ny*arrowW);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  if (weighted && e.weight != null) {
+    const mx = (sx+ex)/2 + nx*12, my = (sy+ey)/2 + ny*12;
+    ctx.fillStyle = col;
+    ctx.font = '10px DM Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(e.weight, mx, my);
+  }
+  ctx.restore();
+}
+
+function drawVertex(v) {
+  const col = v.highlight === 'path'    ? COL_NODE_PATH :
+              v.highlight === 'current' ? COL_NODE_SEL  :
+              v.selected                ? COL_NODE_SEL  :
+              v === edgeSrc             ? COL_NODE_SEL  : COL_NODE_DEF;
+  const strokeCol = v.highlight === 'path'    ? '#ffffff' :
+                    v.highlight === 'current' ? '#ffffff' :
+                    v.selected                ? '#ffffff' :
+                    v === edgeSrc             ? '#ffffff' : '#555555';
+  const textCol = col === COL_NODE_SEL || col === COL_NODE_PATH ? '#000000' : '#e8e8e8';
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(v.x, v.y, NODE_R, 0, Math.PI*2);
+  ctx.fillStyle = col;
+  ctx.fill();
+  ctx.strokeStyle = strokeCol;
+  ctx.lineWidth = col === COL_NODE_SEL || col === COL_NODE_PATH ? 2 : 1;
+  ctx.stroke();
+  ctx.fillStyle = textCol;
+  ctx.font = 'bold 13px Syne, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(v.label, v.x, v.y);
+  ctx.restore();
+}
+
+/* ─── Interaction ─── */
+canvas.addEventListener('mousedown', onMouseDown);
+canvas.addEventListener('mousemove', onMouseMove);
+canvas.addEventListener('mouseup',   onMouseUp);
+canvas.addEventListener('contextmenu', e => { e.preventDefault(); });
+
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+function hitVertex(x, y) {
+  for (let i = vertices.length-1; i >= 0; i--) {
+    const v = vertices[i];
+    const d = Math.hypot(v.x-x, v.y-y);
+    if (d <= NODE_R) return i;
+  }
+  return -1;
+}
+
+function hitEdge(x, y) {
+  for (let i = edges.length-1; i >= 0; i--) {
+    const e = edges[i];
+    const a = vertices[e.from], b = vertices[e.to];
+    if (!a||!b) continue;
+    // distance from point to segment
+    const dx=b.x-a.x, dy=b.y-a.y;
+    const len2=dx*dx+dy*dy;
+    if(len2===0) continue;
+    const t=Math.max(0,Math.min(1,((x-a.x)*dx+(y-a.y)*dy)/len2));
+    const px=a.x+t*dx, py=a.y+t*dy;
+    if(Math.hypot(x-px,y-py)<6) return i;
+  }
+  return -1;
+}
+
+function onMouseDown(e) {
+  if (animating) return;
+  const {x,y} = getPos(e);
+  if (e.button === 2) return; // right-click ignored
+
+  if (mode === 'vertex') {
+    const hi = hitVertex(x,y);
+    if (hi < 0) {
+      addVertex(x, y);
+    }
+  } else if (mode === 'edge') {
+    const hi = hitVertex(x,y);
+    if (hi >= 0) {
+      if (edgeSrc === null) {
+        edgeSrc = vertices[hi];
+        setStatus(`Edge from ${edgeSrc.label} — now click target`);
+        draw();
+      } else {
+        if (vertices[hi] !== edgeSrc) {
+          const fi = vertices.indexOf(edgeSrc);
+          const ti = hi;
+          // prevent duplicates
+          const exists = edges.some(e => e.from===fi&&e.to===ti || (!directed&&e.from===ti&&e.to===fi));
+          if (!exists) {
+            if (weighted) {
+              pendingEdge = {from: fi, to: ti};
+              showWeightPopup(x, y);
+            } else {
+              edges.push({from:fi, to:ti, weight:1});
+              logEntry(`Edge ${edgeSrc.label}→${vertices[hi].label} added`, 'ok');
+            }
+          } else {
+            logEntry('Edge already exists', 'warn');
+          }
+        }
+        edgeSrc = null;
+        setStatus('Click source node for next edge');
+        draw();
+      }
+    }
+  } else if (mode === 'delete') {
+    const vi = hitVertex(x,y);
+    if (vi >= 0) {
+      deleteVertex(vi);
+    } else {
+      const ei = hitEdge(x,y);
+      if (ei >= 0) deleteEdge(ei);
+    }
+  } else if (mode === 'move') {
+    const vi = hitVertex(x,y);
+    if (vi >= 0) {
+      dragging = vi;
+      dragOffX = x - vertices[vi].x;
+      dragOffY = y - vertices[vi].y;
+      canvas.style.cursor = 'grabbing';
+    }
+  }
+  updateChapterDynamic();
+}
+
+function onMouseMove(e) {
+  if (dragging !== null) {
+    const {x,y} = getPos(e);
+    vertices[dragging].x = x - dragOffX;
+    vertices[dragging].y = y - dragOffY;
+    draw();
+    updateChapterDynamic();
+  }
+}
+
+function onMouseUp() {
+  if (dragging !== null) {
+    dragging = null;
+    canvas.style.cursor = mode === 'move' ? 'grab' : 'crosshair';
+  }
+}
+
+function addVertex(x, y) {
+  const label = String.fromCharCode(autoLabel++);
+  if (autoLabel > 90) autoLabel = 65; // wrap
+  vertices.push({x, y, label, highlight: null, selected: false});
+  logEntry(`Node ${label} added`, 'ok');
+  draw();
+}
+
+function deleteVertex(vi) {
+  const v = vertices[vi];
+  edges = edges.filter(e => e.from !== vi && e.to !== vi);
+  edges = edges.map(e => ({
+    ...e,
+    from: e.from > vi ? e.from-1 : e.from,
+    to:   e.to   > vi ? e.to  -1 : e.to
+  }));
+  vertices.splice(vi, 1);
+  logEntry(`Node ${v.label} deleted`, 'warn');
+  draw();
+}
+
+function deleteEdge(ei) {
+  const e = edges[ei];
+  logEntry(`Edge ${vertices[e.from].label}→${vertices[e.to].label} deleted`, 'warn');
+  edges.splice(ei, 1);
+  draw();
+}
+
+function clearGraph() {
+  vertices = []; edges = []; edgeSrc = null; autoLabel = 65;
+  resetColors(false);
+  logEntry('Graph cleared', 'warn');
+  draw();
+  updateChapterDynamic();
+}
+
+function setMode(m) {
+  mode = m; edgeSrc = null;
+  document.querySelectorAll('.mode-pill').forEach(b => b.classList.remove('active'));
+  const map = {vertex:'Vertex',edge:'Edge',move:'Move',delete:'Delete'};
+  const el = document.getElementById('mode'+map[m]);
+  if(el) el.classList.add('active');
+  canvas.style.cursor = m === 'move' ? 'grab' : 'crosshair';
+  const msgs = {
+    vertex: 'Click canvas to add a node',
+    edge:   'Click source node, then target',
+    move:   'Drag nodes to reposition',
+    delete: 'Click node or edge to delete'
+  };
+  setStatus(msgs[m]);
+}
+
+function setStatus(t) {
+  document.getElementById('status-bar').textContent = t;
+}
+
+function updateStats() {
+  document.getElementById('stat-v').textContent = vertices.length;
+  document.getElementById('stat-e').textContent = edges.length;
+}
+
+/* Weight popup */
+function showWeightPopup(x, y) {
+  const popup = document.getElementById('weight-popup');
+  popup.classList.add('visible');
+  const area = document.getElementById('canvas-area').getBoundingClientRect();
+  popup.style.left = Math.min(x, canvas.width-140) + 'px';
+  popup.style.top  = Math.max(y-50, 10) + 'px';
+  document.getElementById('weight-input').value = 1;
+  document.getElementById('weight-input').focus();
+}
+
+function confirmWeight() {
+  const w = parseInt(document.getElementById('weight-input').value) || 1;
+  if (pendingEdge) {
+    edges.push({...pendingEdge, weight: w});
+    const fl = vertices[pendingEdge.from].label, tl = vertices[pendingEdge.to].label;
+    logEntry(`Edge ${fl}→${tl} (w=${w}) added`, 'ok');
+    pendingEdge = null;
+  }
+  document.getElementById('weight-popup').classList.remove('visible');
+  draw();
+  updateChapterDynamic();
+}
+
+document.getElementById('weight-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') confirmWeight();
+});
+
+/* Toggles */
+function onDirectedChange() {
+  directed = document.getElementById('tog-directed').checked;
+  logEntry(`Graph is now ${directed?'directed':'undirected'}`, 'info');
+  draw();
+}
+
+function onWeightedChange() {
+  weighted = document.getElementById('tog-weighted').checked;
+  logEntry(`Weights ${weighted?'enabled':'disabled'}`, 'info');
+  draw();
+}
+
+/* Colors */
+function resetColors(doLog=true) {
+  vertices.forEach(v => { v.highlight=null; v.selected=false; });
+  edges.forEach(e => { e.highlight=null; e.selected=false; });
+  if(doLog) logEntry('Colors reset', 'info');
+  draw();
+}
+
+/* Log */
+function logEntry(text, cls='info') {
+  const box = document.getElementById('log-box');
+  const d = document.createElement('div');
+  d.className = 'log-entry ' + cls;
+  d.textContent = text;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+/* Stats refresh */
+function updateStats() {
+  document.getElementById('stat-v').textContent = vertices.length;
+  document.getElementById('stat-e').textContent = edges.length;
+}
+
+/* ─── Helpers ─── */
+function neighbors(vi) {
+  const result = [];
+  edges.forEach(e => {
+    if (e.from === vi) result.push({to: e.to, w: e.weight||1, edge: e});
+    else if (!directed && e.to === vi) result.push({to: e.from, w: e.weight||1, edge: e});
+  });
+  return result;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function animSteps(steps, delay=350) {
+  animating = true;
+  for (const s of steps) { s(); await sleep(delay); }
+  animating = false;
+}
+
+/* ─── Example graph loader ─── */
+function buildCircle(n, label_start=65, wMin=1, wMax=9) {
+  vertices = []; edges = []; autoLabel = label_start;
+  const cx=canvas.width/2, cy=canvas.height/2;
+  const r = Math.min(canvas.width, canvas.height)*0.3;
+  for (let i=0;i<n;i++) {
+    const a = (i/n)*Math.PI*2 - Math.PI/2;
+    vertices.push({x:cx+r*Math.cos(a), y:cy+r*Math.sin(a), label:String.fromCharCode(label_start+i), highlight:null, selected:false});
+  }
+  autoLabel = label_start + n;
+  return {cx,cy,r};
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CHAPTER SYSTEM
+═══════════════════════════════════════════════════════════ */
+const CHAPTERS = [
+  { id:'intro',       title:'What is a Graph',   num:'01' },
+  { id:'vertices',    title:'Vertices',           num:'02' },
+  { id:'edges',       title:'Edges',              num:'03' },
+  { id:'weighted',    title:'Weighted Graphs',    num:'04' },
+  { id:'paths',       title:'Paths',              num:'05' },
+  { id:'adj-list',    title:'Adjacency List',     num:'06' },
+  { id:'adj-matrix',  title:'Adjacency Matrix',   num:'07' },
+  { id:'eulerian',    title:'Eulerian Graphs',    num:'08' },
+  { id:'hamiltonian', title:'Hamiltonian Graphs', num:'09' },
+];
+
+let currentChapter = 'intro';
+
+/* Build sidebar */
+function buildSidebar() {
+  const section = document.querySelector('#sidebar .sidebar-section');
+  section.innerHTML = '<div class="sidebar-label">Chapters</div>';
+  CHAPTERS.forEach(ch => {
+    const div = document.createElement('div');
+    div.className = 'chapter-link' + (ch.id === currentChapter ? ' active' : '');
+    div.dataset.id = ch.id;
+    div.innerHTML = `<span class="ch-num">${ch.num}</span><span class="ch-name">${ch.title}</span>`;
+    div.onclick = () => navigateTo(ch.id);
+    section.appendChild(div);
+  });
+}
+
+function navigateTo(id) {
+  // Save graph state
+  chapterStates[currentChapter] = { vertices: JSON.parse(JSON.stringify(vertices)), edges: JSON.parse(JSON.stringify(edges)), directed, weighted, autoLabel };
+  currentChapter = id;
+
+  // Restore or init
+  if (chapterStates[id]) {
+    const s = chapterStates[id];
+    vertices = JSON.parse(JSON.stringify(s.vertices));
+    edges    = JSON.parse(JSON.stringify(s.edges));
+    directed = s.directed;
+    weighted = s.weighted;
+    autoLabel = s.autoLabel;
+    document.getElementById('tog-directed').checked = directed;
+    document.getElementById('tog-weighted').checked = weighted;
+  } else {
+    clearGraph();
+    loadExampleForChapter();
+  }
+
+  // Update sidebar
+  document.querySelectorAll('.chapter-link').forEach(l => {
+    l.classList.toggle('active', l.dataset.id === id);
+  });
+
+  const ch = CHAPTERS.find(c => c.id === id);
+  document.getElementById('hdr-chapter-label').textContent = `— ${ch.title}`;
+
+  renderChapterContent(id);
+  draw();
+}
+
+function loadExampleForChapter() {
+  switch(currentChapter) {
+    case 'intro':       exIntro();       break;
+    case 'vertices':    exVertices();    break;
+    case 'edges':       exEdges();       break;
+    case 'weighted':    exWeighted();    break;
+    case 'paths':       exPaths();       break;
+    case 'adj-list':    exAdjList();     break;
+    case 'adj-matrix':  exAdjMatrix();   break;
+    case 'eulerian':    exEulerian();    break;
+    case 'hamiltonian': exHamiltonian(); break;
+    default:            exIntro();
+  }
+}
+
+/* ─── Example loaders ─── */
+function exIntro() {
+  clearGraph();
+  directed = false; weighted = false;
+  document.getElementById('tog-directed').checked = false;
+  document.getElementById('tog-weighted').checked = false;
+  buildCircle(5);
+  [[0,1],[1,2],[2,3],[3,4],[4,0],[0,2]].forEach(([f,t]) => edges.push({from:f,to:t,weight:1,highlight:null}));
+  logEntry('Example: simple undirected graph loaded', 'ok');
+  draw(); updateChapterDynamic();
+}
+
+function exVertices() {
+  clearGraph();
+  directed=false; weighted=false;
+  document.getElementById('tog-directed').checked=false;
+  document.getElementById('tog-weighted').checked=false;
+  buildCircle(4);
+  logEntry('4 isolated vertices loaded — no edges yet', 'ok');
+  draw(); updateChapterDynamic();
+}
+
+function exEdges() {
+  clearGraph();
+  directed=false; weighted=false;
+  document.getElementById('tog-directed').checked=false;
+  document.getElementById('tog-weighted').checked=false;
+  buildCircle(4);
+  [[0,1],[1,2],[2,3]].forEach(([f,t]) => edges.push({from:f,to:t,weight:1,highlight:null}));
+  logEntry('Graph with 3 edges loaded', 'ok');
+  draw(); updateChapterDynamic();
+}
+
+function exWeighted() {
+  clearGraph();
+  directed=false; weighted=true;
+  document.getElementById('tog-directed').checked=false;
+  document.getElementById('tog-weighted').checked=true;
+  buildCircle(5);
+  [[0,1,4],[1,2,2],[2,3,7],[3,4,1],[4,0,5],[0,2,9]].forEach(([f,t,w]) => edges.push({from:f,to:t,weight:w,highlight:null}));
+  logEntry('Weighted graph loaded', 'ok');
+  draw(); updateChapterDynamic();
+}
+
+function exPaths() {
+  clearGraph();
+  directed=false; weighted=false;
+  document.getElementById('tog-directed').checked=false;
+  document.getElementById('tog-weighted').checked=false;
+  buildCircle(6);
+  [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[0,3],[1,4]].forEach(([f,t]) => edges.push({from:f,to:t,weight:1,highlight:null}));
+  logEntry('Graph ready — use Find Path below', 'ok');
+  draw(); updateChapterDynamic();
+}
+
+function exAdjList() {
+  clearGraph();
+  directed=false; weighted=false;
+  document.getElementById('tog-directed').checked=false;
+  document.getElementById('tog-weighted').checked=false;
+  buildCircle(5);
+  [[0,1],[0,2],[1,3],[2,3],[3,4],[4,0]].forEach(([f,t]) => edges.push({from:f,to:t,weight:1,highlight:null}));
+  logEntry('Adjacency list will update as you edit', 'ok');
+  draw(); updateChapterDynamic();
+}
+
+function exAdjMatrix() {
+  clearGraph();
+  directed=false; weighted=false;
+  document.getElementById('tog-directed').checked=false;
+  document.getElementById('tog-weighted').checked=false;
+  buildCircle(4);
+  [[0,1],[1,2],[2,3],[3,0],[0,2]].forEach(([f,t]) => edges.push({from:f,to:t,weight:1,highlight:null}));
+  logEntry('Adjacency matrix will update as you edit', 'ok');
+  draw(); updateChapterDynamic();
+}
+
+function exEulerian() {
+  clearGraph();
+  directed=false; weighted=false;
+  document.getElementById('tog-directed').checked=false;
+  document.getElementById('tog-weighted').checked=false;
+  // Eulerian graph — all vertices even degree
+  buildCircle(4);
+  [[0,1],[1,2],[2,3],[3,0],[0,2],[1,3]].forEach(([f,t]) => edges.push({from:f,to:t,weight:1,highlight:null}));
+  logEntry('Eulerian graph loaded (all even degrees)', 'ok');
+  draw(); updateChapterDynamic();
+}
+
+function exHamiltonian() {
+  clearGraph();
+  directed=false; weighted=false;
+  document.getElementById('tog-directed').checked=false;
+  document.getElementById('tog-weighted').checked=false;
+  buildCircle(5);
+  [[0,1],[1,2],[2,3],[3,4],[4,0],[0,2],[1,3]].forEach(([f,t]) => edges.push({from:f,to:t,weight:1,highlight:null}));
+  logEntry('Graph loaded — try finding a Hamiltonian cycle', 'ok');
+  draw(); updateChapterDynamic();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CHAPTER CONTENT
+═══════════════════════════════════════════════════════════ */
+const chapterData = {
+  intro: {
+    title: 'What is a Graph?',
+    tabs: ['Overview', 'Rules', 'Try It'],
+    overview: `
+      <div class="teach-block">
+        <div class="teach-tag">Definition</div>
+        <div class="teach-title">Graph G = (V, E)</div>
+        <div class="teach-formal">G = (V, E) where V is a finite set of vertices and E ⊆ V × V is a set of edges (pairs of vertices).</div>
+        <div class="teach-body">A graph is a mathematical structure that captures <em>relationships</em> between objects. The objects are vertices (nodes); the relationships are edges (links). Crucially, a graph says nothing about geometry — only which things are connected to which.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Intuition</div>
+        <div class="teach-body">Think of a graph as a map of connections: airports connected by routes, people connected by friendships, web pages connected by hyperlinks. The shape drawn on screen is arbitrary — only the connection structure (the topology) matters.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Insight</div>
+        <div class="teach-insight">Graphs are universal. Social networks, compilers (control-flow graphs), neural networks, GPS routing, version control (DAGs), circuit design, and biological pathways are all graphs in disguise.</div>
+      </div>`,
+    rules: `
+      <div class="teach-block">
+        <div class="teach-tag">Key Notation</div>
+        <div class="teach-theorem"><span class="thm-label">Notation</span>|V| = number of vertices (order of graph)<br>|E| = number of edges (size of graph)<br>n = |V|, m = |E|</div>
+        <div class="teach-theorem"><span class="thm-label">Simple Graph</span>No self-loops (edge v→v) and no multi-edges (at most one edge between any pair). This SPA models simple graphs only.</div>
+        <div class="teach-theorem"><span class="thm-label">Handshaking Lemma</span>The sum of all vertex degrees = 2|E|. Every edge contributes exactly 2 to the degree total — one for each endpoint.</div>
+      </div>`,
+    tryIt: [
+      'Click "+ Node" in the header and place 4 nodes on the canvas',
+      'Switch to "+ Edge" and connect them arbitrarily',
+      'Watch V and E counters update in the top-right of the canvas',
+      'Note: the canvas position of nodes does not affect graph structure — only connections matter'
+    ]
+  },
+
+  vertices: {
+    title: 'Vertices',
+    tabs: ['Overview', 'Rules', 'Try It'],
+    overview: `
+      <div class="teach-block">
+        <div class="teach-tag">Definition</div>
+        <div class="teach-title">Vertex (Node)</div>
+        <div class="teach-formal">A vertex v ∈ V is an element of the vertex set. The degree of v, written deg(v), is the number of edges incident to v.</div>
+        <div class="teach-body">Vertices are the atomic units of a graph — the "things" being related. They carry no intrinsic structure; their entire meaning comes from the edges connecting them. An <strong>isolated vertex</strong> has degree 0 and belongs to no edge.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Intuition</div>
+        <div class="teach-body">In a social network each person is a vertex. In a road map each city is a vertex. In a compiler each variable or instruction is a vertex. The vertex abstracts away all details except identity and connectivity.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Insight</div>
+        <div class="teach-insight">Degree is the most local property of a vertex and underpins major theorems: Eulerian circuits, Dirac's theorem for Hamiltonicity, and the degree sequence uniquely constrains which graphs can exist.</div>
+      </div>`,
+    rules: `
+      <div class="teach-block">
+        <div class="teach-tag">Theorems</div>
+        <div class="teach-theorem"><span class="thm-label">Handshaking Lemma</span>Σ deg(v) = 2|E|<br>Corollary: the number of odd-degree vertices is always even.</div>
+        <div class="teach-theorem"><span class="thm-label">Degree Sequence</span>The degree sequence is the sorted list of degrees. It characterizes the "shape" of the degree distribution but does not uniquely identify a graph.</div>
+        <div class="teach-theorem"><span class="thm-label">Maximum degree</span>In a simple graph on n vertices, deg(v) ≤ n − 1 for all v. A vertex connected to every other vertex is called universal.</div>
+      </div>`,
+    tryIt: [
+      'The canvas shows 4 isolated vertices — each has degree 0',
+      'Add edges between them and observe degrees in the log',
+      'In "Delete" mode, remove a vertex — notice all its edges vanish',
+      'Try creating a vertex with degree equal to n−1 (connected to all others)'
+    ]
+  },
+
+  edges: {
+    title: 'Edges',
+    tabs: ['Overview', 'Rules', 'Try It'],
+    overview: `
+      <div class="teach-block">
+        <div class="teach-tag">Definition</div>
+        <div class="teach-title">Edge (Arc)</div>
+        <div class="teach-formal">Undirected edge: e = {u, v} — an unordered pair.<br>Directed edge: e = (u, v) — an ordered pair from u to v.<br>A directed graph (digraph) uses ordered pairs exclusively.</div>
+        <div class="teach-body">An edge encodes a binary relationship between two vertices. In an <strong>undirected graph</strong> the relationship is symmetric: if u is connected to v, then v is connected to u. In a <strong>directed graph (digraph)</strong> the relationship has direction — friendship vs. a one-way road.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Intuition</div>
+        <div class="teach-body">Every edge is a constraint or a channel. It is the minimum unit of structure. Two vertices sharing no edge are structurally invisible to each other — they exist in isolation from one another's perspective.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Insight</div>
+        <div class="teach-insight">The choice of directed vs. undirected is a modeling decision. Web hyperlinks are directed (A links to B doesn't mean B links to A). Friendships are typically undirected. Getting this choice right determines whether your algorithm gives correct results.</div>
+      </div>`,
+    rules: `
+      <div class="teach-block">
+        <div class="teach-tag">Edge Types</div>
+        <div class="teach-theorem"><span class="thm-label">In a digraph</span>in-degree(v) = edges pointing INTO v<br>out-degree(v) = edges pointing OUT of v<br>Σ in-deg = Σ out-deg = |E|</div>
+        <div class="teach-theorem"><span class="thm-label">Complete Graph Kₙ</span>Every pair of vertices is connected. |E| = n(n−1)/2. This is the densest possible simple undirected graph.</div>
+        <div class="teach-theorem"><span class="thm-label">Density</span>density = |E| / (n(n−1)/2) for undirected graphs. Values near 0 = sparse; near 1 = dense.</div>
+      </div>`,
+    tryIt: [
+      'Enable "Directed" in the right panel and add a few edges',
+      'Notice arrows on directed edges — direction is visible',
+      'Try making an edge A→B and another B→A — two different directed edges',
+      'Disable directed and observe how the graph becomes symmetric'
+    ]
+  },
+
+  weighted: {
+    title: 'Weighted Graphs',
+    tabs: ['Overview', 'Rules', 'Try It'],
+    overview: `
+      <div class="teach-block">
+        <div class="teach-tag">Definition</div>
+        <div class="teach-title">Weight Function</div>
+        <div class="teach-formal">A weighted graph G = (V, E, w) includes a weight function w: E → ℝ assigning a real number to each edge.</div>
+        <div class="teach-body">Weights give edges a magnitude beyond mere existence. The weight typically represents cost, distance, time, capacity, or probability. Shortest-path algorithms like Dijkstra's and Bellman-Ford operate specifically on weighted graphs to minimize total path cost.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Intuition</div>
+        <div class="teach-body">Unweighted graphs answer "is there a connection?" Weighted graphs answer "how costly is this connection?" A road network where edge weights are distances, or a flight network where weights are fares, are classic weighted graph models.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Insight</div>
+        <div class="teach-insight">Dijkstra's algorithm requires non-negative weights. Negative edges break its greedy assumption. Bellman-Ford handles negative weights in O(VE). Negative-weight cycles make shortest paths undefined — the path could loop infinitely for decreasing cost.</div>
+      </div>`,
+    rules: `
+      <div class="teach-block">
+        <div class="teach-tag">Properties</div>
+        <div class="teach-theorem"><span class="thm-label">Path weight</span>The weight of a path is the sum of its edge weights: w(p) = Σ w(eᵢ) for edges eᵢ on path p.</div>
+        <div class="teach-theorem"><span class="thm-label">Dijkstra complexity</span>O((V + E) log V) with a binary heap. For dense graphs this is O(V² log V); for sparse graphs it is nearly O(E log V).</div>
+        <div class="teach-theorem"><span class="thm-label">MST</span>A minimum spanning tree (Kruskal/Prim) finds the set of n−1 edges with minimum total weight that keeps the graph connected. Only defined for connected undirected weighted graphs.</div>
+      </div>`,
+    tryIt: [
+      'Enable "Weighted" in the right panel',
+      'Add edges — a popup will request a weight for each',
+      'Assign small weights on short routes and large weights on long ones',
+      'Navigate to the Paths chapter to run BFS — note it finds fewest-hops, not lowest weight'
+    ]
+  },
+
+  paths: {
+    title: 'Paths & Connectivity',
+    tabs: ['Overview', 'Rules', 'Try It'],
+    overview: `
+      <div class="teach-block">
+        <div class="teach-tag">Definition</div>
+        <div class="teach-title">Path, Walk, Cycle</div>
+        <div class="teach-formal">Walk: a sequence v₀, e₁, v₁, ..., eₖ, vₖ where each eᵢ = {vᵢ₋₁, vᵢ}.<br>Path: a walk where all vertices are distinct.<br>Cycle: a closed path — v₀ = vₖ with all internal vertices distinct.</div>
+        <div class="teach-body">A <strong>path</strong> is the fundamental connectivity primitive. A graph is <strong>connected</strong> if there exists a path between every pair of vertices. BFS finds shortest paths (by edge count) in unweighted graphs; Dijkstra finds them in weighted graphs.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Intuition</div>
+        <div class="teach-body">Think of a path as a sequence of moves on the graph where you never revisit a vertex. The shortest path is the route with the fewest steps (or lowest total weight). BFS guarantees optimality for unweighted graphs by exploring layer by layer, never skipping levels.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Insight</div>
+        <div class="teach-insight">Six Degrees of Separation — the idea that any two people on Earth are connected by at most 6 friendship links — is a claim about average path length in the social network graph. Facebook's analysis found the actual number is closer to 3.5.</div>
+      </div>`,
+    rules: `
+      <div class="teach-block">
+        <div class="teach-tag">Theorems</div>
+        <div class="teach-theorem"><span class="thm-label">BFS Correctness</span>BFS from source s visits vertices in non-decreasing order of distance d(s,v). When a vertex is first reached, the path taken is a shortest path.</div>
+        <div class="teach-theorem"><span class="thm-label">Connectivity</span>An undirected graph is connected iff BFS from any vertex visits all n vertices. If not, BFS reveals connected components.</div>
+        <div class="teach-theorem"><span class="thm-label">Tree structure</span>A connected acyclic graph (tree) on n vertices has exactly n−1 edges and a unique path between every pair of vertices.</div>
+      </div>`,
+    tryIt: [
+      'Enter two node labels (e.g. A and D) in the Find Path inputs',
+      'Click "Find Path (BFS)" — watch the traversal animate',
+      'The white path shows the shortest route by edge count',
+      'Try disconnected graphs — BFS correctly reports "no path"'
+    ]
+  },
+
+  'adj-list': {
+    title: 'Adjacency List',
+    tabs: ['Overview', 'Rules', 'Data'],
+    overview: `
+      <div class="teach-block">
+        <div class="teach-tag">Definition</div>
+        <div class="teach-title">Adjacency List</div>
+        <div class="teach-formal">For each vertex v ∈ V, store a list Adj[v] of all neighbors u such that edge {v,u} ∈ E.<br>Space: Θ(V + E)</div>
+        <div class="teach-body">An adjacency list is an array (or hash map) of length |V|, where each entry points to a linked list (or dynamic array) of that vertex's neighbors. It is the standard representation for algorithms that iterate over neighbors of each vertex.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Intuition</div>
+        <div class="teach-body">Imagine a contacts list: each person has their own page listing who they know directly. You can scan all of Bob's friends quickly, but checking if a specific pair are friends requires scanning Bob's entire list — not instant.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Insight</div>
+        <div class="teach-insight">Most real-world graphs are sparse: social networks (avg ~200 friends vs billions of users), the web (avg ~10 links per page), road networks. Storing a sparse graph as a V×V matrix wastes O(V²) memory. Adjacency lists store only what exists.</div>
+      </div>`,
+    rules: `
+      <div class="teach-block">
+        <div class="teach-tag">Complexity</div>
+        <div class="teach-theorem"><span class="thm-label">Space</span>O(V + E) — one slot per vertex plus one entry per edge endpoint. For an undirected graph, each edge {u,v} appears in both Adj[u] and Adj[v].</div>
+        <div class="teach-theorem"><span class="thm-label">Neighbor iteration</span>O(deg(v)) to iterate all neighbors of v — faster than matrix row scan for sparse graphs where deg(v) ≪ n.</div>
+        <div class="teach-theorem"><span class="thm-label">Edge lookup</span>O(deg(v)) to check if edge {u,v} exists — requires scanning Adj[u]. This is the cost paid for space efficiency vs. the matrix's O(1) lookup.</div>
+        <div class="teach-theorem"><span class="thm-label">BFS / DFS</span>Both run in O(V + E) with adjacency lists. The same algorithms on a matrix run in O(V²) — wasteful when E ≪ V².</div>
+      </div>`,
+    tryIt: [
+      'Add nodes and edges — the list in the Data tab updates live',
+      'Add more edges from one node and observe its row grow',
+      'Compare a sparse graph (few edges) to a dense one',
+      'Toggle directed — note each directed edge appears only once'
+    ]
+  },
+
+  'adj-matrix': {
+    title: 'Adjacency Matrix',
+    tabs: ['Overview', 'Rules', 'Data'],
+    overview: `
+      <div class="teach-block">
+        <div class="teach-tag">Definition</div>
+        <div class="teach-title">Adjacency Matrix</div>
+        <div class="teach-formal">A is a V×V matrix where A[i][j] = w(i,j) if edge {i,j} ∈ E, else 0.<br>For unweighted graphs: A[i][j] ∈ {0, 1}.<br>Space: Θ(V²)</div>
+        <div class="teach-body">The adjacency matrix stores the complete edge relationship as a 2-dimensional array. Cell A[i][j] = 1 means vertex i is connected to vertex j. For weighted graphs, A[i][j] holds the edge weight. For an <strong>undirected graph</strong>, A is always symmetric: A[i][j] = A[j][i].</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Intuition</div>
+        <div class="teach-body">Think of a spreadsheet: rows and columns are vertices. A "1" at row i, column j means those two cities have a direct flight. You can answer "do A and B connect?" in O(1) — just look up cell A[row_A][col_B].</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Insight</div>
+        <div class="teach-insight">Raising the adjacency matrix to the k-th power (Aᵏ) gives the number of walks of length exactly k between each pair of vertices. This algebraic connection links graph structure to linear algebra — used in network analysis, chemistry, and PageRank.</div>
+      </div>`,
+    rules: `
+      <div class="teach-block">
+        <div class="teach-tag">Complexity</div>
+        <div class="teach-theorem"><span class="thm-label">Space</span>O(V²) regardless of edge count. For 1000 nodes: 1,000,000 cells. For 10,000 nodes: 100,000,000 cells. Prohibitive for large sparse graphs.</div>
+        <div class="teach-theorem"><span class="thm-label">Edge lookup</span>O(1) — access A[i][j] directly by index. This is the matrix's decisive advantage over the adjacency list.</div>
+        <div class="teach-theorem"><span class="thm-label">Symmetry</span>For undirected graphs: A[i][j] = A[j][i] always. Only the upper or lower triangle need be stored (triangular matrix = V²/2 space).</div>
+        <div class="teach-theorem"><span class="thm-label">Degree from matrix</span>deg(v) = sum of row v = sum of column v (undirected). For digraphs, row sum = out-degree; column sum = in-degree.</div>
+      </div>`,
+    tryIt: [
+      'Open the Data tab to see the live matrix',
+      'Add an edge A→B and find which cell changes to 1',
+      'In undirected mode: verify the matrix is symmetric (A[i][j] = A[j][i])',
+      'Toggle directed — add A→B but not B→A — matrix becomes asymmetric'
+    ]
+  },
+
+  eulerian: {
+    title: 'Eulerian Graphs',
+    tabs: ['Overview', 'Rules', 'Data'],
+    overview: `
+      <div class="teach-block">
+        <div class="teach-tag">Definition</div>
+        <div class="teach-title">Eulerian Circuit & Path</div>
+        <div class="teach-formal">Eulerian Circuit: a closed walk that traverses every edge exactly once.<br>Eulerian Path: an open walk that traverses every edge exactly once (different start and end).</div>
+        <div class="teach-body">An Eulerian circuit visits every edge of the graph exactly once and returns to the starting vertex. An Eulerian path does the same but is allowed to start and end at different vertices. These are named after Leonhard Euler who solved the <strong>Königsberg Bridge Problem</strong> in 1736 — the origin of graph theory itself.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Intuition — Why Degree?</div>
+        <div class="teach-body">Each time you enter a vertex via one edge, you must leave via a different edge. This enter/exit pairing means each vertex needs an equal number of "in" and "out" edges — i.e., even degree. At the start and end of an Eulerian <em>path</em> (not circuit), one vertex only exits (odd degree) and one only enters (odd degree) — exactly 2 odd-degree vertices are allowed.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Insight</div>
+        <div class="teach-insight">The Königsberg graph had 4 vertices all with odd degree — Euler proved the walk was impossible. Today Eulerian path algorithms (Hierholzer's, O(E)) drive route optimization in snowplowing, DNA sequencing (de Bruijn graphs), and postal delivery.</div>
+      </div>`,
+    rules: `
+      <div class="teach-block">
+        <div class="teach-tag">Theorems</div>
+        <div class="teach-theorem"><span class="thm-label">Eulerian Circuit Theorem (Euler, 1736)</span>An undirected connected graph G has an Eulerian circuit ⟺ every vertex has even degree.<br><br>Proof sketch: necessity — each visit to a vertex uses one entry and one exit edge. Sufficiency — Hierholzer's algorithm constructs the circuit.</div>
+        <div class="teach-theorem"><span class="thm-label">Eulerian Path Theorem</span>G has an Eulerian path (not circuit) ⟺ G is connected AND exactly 2 vertices have odd degree. Those 2 vertices are the start and end of the path.</div>
+        <div class="teach-theorem"><span class="thm-label">Hierholzer's Algorithm</span>Finds Eulerian circuit in O(E). Uses a stack: follow any unvisited edge from the current vertex until stuck, then backtrack to insert sub-circuits. Result: a complete Eulerian circuit.</div>
+      </div>`,
+    tryIt: [
+      'Load the example — all vertices have even degree → circuit exists',
+      'Check the Data tab to see live degree analysis with even/odd tagging',
+      'Add one edge to create an odd-degree vertex — watch status change',
+      'Try to make exactly 2 odd-degree vertices — Eulerian Path becomes possible',
+      'Click "Find Eulerian Circuit" when the status shows YES'
+    ]
+  },
+
+  hamiltonian: {
+    title: 'Hamiltonian Graphs',
+    tabs: ['Overview', 'Rules', 'Data'],
+    overview: `
+      <div class="teach-block">
+        <div class="teach-tag">Definition</div>
+        <div class="teach-title">Hamiltonian Cycle & Path</div>
+        <div class="teach-formal">Hamiltonian Path: visits every vertex exactly once.<br>Hamiltonian Cycle: visits every vertex exactly once and returns to the start.<br>Deciding existence is NP-complete.</div>
+        <div class="teach-body">A Hamiltonian cycle is the "vertex version" of an Eulerian circuit — but constrained to vertices, not edges. Unlike Eulerian graphs (clean O(E) check), determining whether a Hamiltonian cycle exists is <strong>NP-complete</strong>: no polynomial-time algorithm is known, and we can't even check all candidates efficiently without exponential time in the worst case.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Intuition — Why Harder?</div>
+        <div class="teach-body">Eulerian circuits have a local condition (degree parity) that is easy to verify globally. Hamiltonian cycles have no such local condition — whether a cycle exists depends on the global structure in a complex way. You must, in the worst case, search exponentially many candidate sequences of vertices.</div>
+      </div>
+      <div class="teach-block">
+        <div class="teach-tag">Insight</div>
+        <div class="teach-insight">The Travelling Salesman Problem (TSP) asks for the minimum-weight Hamiltonian cycle. It is NP-hard. No polynomial algorithm is known — but approximation algorithms (Christofides: 1.5×optimal) and heuristics handle real-world instances with millions of cities.</div>
+      </div>`,
+    rules: `
+      <div class="teach-block">
+        <div class="teach-tag">Theorems</div>
+        <div class="teach-theorem"><span class="thm-label">Dirac's Theorem (1952)</span>SUFFICIENT condition: If G is a simple graph on n ≥ 3 vertices and every vertex has degree ≥ n/2, then G has a Hamiltonian cycle.<br><br>This is a sufficient, NOT necessary condition. A graph may be Hamiltonian even if some vertices have degree < n/2.</div>
+        <div class="teach-theorem"><span class="thm-label">Ore's Theorem (1960)</span>If for every non-adjacent pair u,v: deg(u) + deg(v) ≥ n, then G has a Hamiltonian cycle. This is a weaker (more general) sufficient condition than Dirac's.</div>
+        <div class="teach-theorem"><span class="thm-label">Complexity</span>Deciding Hamiltonian cycle: NP-complete (Karp, 1972). The backtracking algorithm used here is O(n!) worst-case — exponential. For n=15 that's 1.3 trillion operations.</div>
+      </div>`,
+    tryIt: [
+      'Load the example — 5-node graph with Hamiltonian cycle',
+      'Click "Find Hamiltonian Cycle" and watch backtracking animate',
+      'Check the Data tab — see Dirac\'s condition evaluation per vertex',
+      'Add more nodes and edges — observe search gets exponentially slower',
+      'Remove edges until the algorithm reports no cycle found'
+    ]
+  }
+};
+
+/* ─── Render chapter content ─── */
+let activeTabState = {}; // track active tab per chapter
+
+function renderChapterContent(id) {
+  const data = chapterData[id] || chapterData.intro;
+  const ch = CHAPTERS.find(c => c.id === id);
+  const content = document.getElementById('chapter-content');
+  const activeTab = activeTabState[id] || 0;
+
+  const tabsHtml = data.tabs.map((t, i) =>
+    `<button class="tab-btn${i === activeTab ? ' active' : ''}" onclick="switchTab('${id}',${i})" data-tab="${i}">${t}</button>`
+  ).join('');
+
+  // Build tab panels
+  const panels = data.tabs.map((tabName, i) => {
+    let panelHtml = '';
+    const tabKey = tabName.toLowerCase().replace(/[^a-z]/g, '');
+
+    if (tabKey === 'overview') {
+      panelHtml = data.overview || '';
+    } else if (tabKey === 'rules') {
+      panelHtml = data.rules || '';
+    } else if (tabKey === 'tryit') {
+      const steps = data.tryIt || [];
+      panelHtml = `<div class="teach-block">
+        <div class="teach-tag">Interactive Exercise</div>
+        ${steps.map((s, si) => `
+          <div class="try-step">
+            <span class="try-num">${String(si+1).padStart(2,'0')}</span>
+            <span class="try-text">${s}</span>
+          </div>`).join('')}
+      </div>`;
+    } else if (tabKey === 'data') {
+      panelHtml = `<div class="teach-block" id="dynamic-data-panel">(loading…)</div>`;
+    }
+
+    return `<div class="tab-panel${i === activeTab ? ' active' : ''}" data-panel="${i}">${panelHtml}</div>`;
+  }).join('');
+
+  content.innerHTML = `
+    <div class="page-enter">
+      <div class="teach-block" style="padding-bottom:12px;">
+        <div class="teach-tag">Chapter ${ch?.num || '—'}</div>
+        <div class="teach-title" style="font-size:18px;">${data.title}</div>
+      </div>
+      <div class="tab-bar">${tabsHtml}</div>
+      <div id="tab-panels-container">${panels}</div>
+    </div>
+  `;
+
+  renderChapterTools(id);
+  updateChapterDynamic();
+}
+
+function switchTab(id, idx) {
+  activeTabState[id] = idx;
+  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+  document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+  // If switching to "Data" tab, refresh dynamic content
+  updateChapterDynamic();
+}
+
+function renderChapterTools(id) {
+  const tools = document.getElementById('chapter-tools');
+  tools.innerHTML = '';
+
+  if (id === 'paths') {
+    tools.innerHTML = `
+      <div class="rp-section">
+        <div class="rp-label">Find Path (BFS)</div>
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <input id="path-from" placeholder="From (e.g. A)" style="flex:1;background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:var(--font-mono);font-size:12px;padding:5px 8px;border-radius:2px;outline:none;">
+          <input id="path-to" placeholder="To (e.g. D)" style="flex:1;background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:var(--font-mono);font-size:12px;padding:5px 8px;border-radius:2px;outline:none;">
+        </div>
+        <button class="ct-btn" style="width:100%;border-color:var(--text-mid);color:var(--text);" onclick="findPath()">Find Path (BFS)</button>
+      </div>
+    `;
+  }
+
+  if (id === 'adj-list') {
+    tools.innerHTML = `
+      <div class="rp-section">
+        <div class="rp-label">Live Adjacency List</div>
+        <div id="adj-list-display" class="data-display"></div>
+        <div style="margin-top:8px;font-family:var(--font-mono);font-size:9px;color:var(--text-dim);line-height:1.7;" id="adj-list-complexity"></div>
+      </div>
+    `;
+  }
+
+  if (id === 'adj-matrix') {
+    tools.innerHTML = `
+      <div class="rp-section">
+        <div class="rp-label">Live Adjacency Matrix</div>
+        <div id="adj-matrix-display" class="data-display"></div>
+        <div style="margin-top:8px;font-family:var(--font-mono);font-size:9px;color:var(--text-dim);line-height:1.7;" id="adj-matrix-complexity"></div>
+      </div>
+    `;
+  }
+
+  if (id === 'eulerian') {
+    tools.innerHTML = `
+      <div class="rp-section">
+        <div class="rp-label">Eulerian Analysis</div>
+        <div id="euler-status" style="margin-bottom:10px;"></div>
+        <div class="rp-label" style="margin-top:8px;">Degree Table</div>
+        <div id="degree-list" class="data-display" style="max-height:120px;"></div>
+        <button class="ct-btn" style="width:100%;margin-top:8px;border-color:var(--text-mid);color:var(--text);" onclick="findEulerianCircuit()">Find Eulerian Circuit</button>
+      </div>
+    `;
+  }
+
+  if (id === 'hamiltonian') {
+    tools.innerHTML = `
+      <div class="rp-section">
+        <div class="rp-label">Hamiltonian Search</div>
+        <div id="ham-status" style="margin-bottom:8px;font-family:var(--font-mono);font-size:11px;color:var(--text-dim);">Press the button to search.</div>
+        <button class="ct-btn" style="width:100%;border-color:var(--text-mid);color:var(--text);" onclick="findHamiltonianCycle()">Find Hamiltonian Cycle</button>
+        <div class="rp-label" style="margin-top:14px;">Dirac Condition (deg ≥ n/2)</div>
+        <div id="dirac-table" style="margin-top:4px;"></div>
+      </div>
+    `;
+  }
+}
+
+/* ─── Dynamic updates per chapter ─── */
+function updateChapterDynamic() {
+  if (currentChapter === 'adj-list') updateAdjList();
+  if (currentChapter === 'adj-matrix') updateAdjMatrix();
+  if (currentChapter === 'eulerian') updateEulerianInfo();
+  if (currentChapter === 'hamiltonian') updateHamiltonianInfo();
+}
+
+function updateAdjList() {
+  const el = document.getElementById('adj-list-display');
+  const comp = document.getElementById('adj-list-complexity');
+  if (!el) return;
+  const n = vertices.length, m = edges.length;
+  if (n === 0) { el.textContent = '(empty graph)'; if(comp) comp.textContent=''; return; }
+  let text = '';
+  vertices.forEach((v,i) => {
+    const nbrs = [];
+    edges.forEach(e => {
+      if (e.from===i) nbrs.push(vertices[e.to]?.label);
+      else if (!directed && e.to===i) nbrs.push(vertices[e.from]?.label);
+    });
+    text += `${v.label}  →  [${nbrs.length ? nbrs.join(', ') : '∅'}]\n`;
+  });
+  el.textContent = text.trim();
+  if (comp) comp.innerHTML =
+    `Space: O(V + E) = O(${n} + ${m}) = O(${n+m}) cells<br>` +
+    `Edge lookup: O(deg(v)) per query<br>` +
+    `Max edges possible: ${n*(n-1)/2} &nbsp;|&nbsp; Density: ${n>1 ? (m/(n*(n-1)/2)*100).toFixed(1)+'%' : 'N/A'}`;
+}
+
+function updateAdjMatrix() {
+  const el = document.getElementById('adj-matrix-display');
+  const comp = document.getElementById('adj-matrix-complexity');
+  if (!el) return;
+  const n = vertices.length;
+  if (n === 0) { el.textContent = '(empty graph)'; if(comp) comp.textContent=''; return; }
+  const mat = Array.from({length:n}, ()=> new Array(n).fill(0));
+  edges.forEach(e => {
+    mat[e.from][e.to] = weighted ? (e.weight||1) : 1;
+    if (!directed) mat[e.to][e.from] = weighted ? (e.weight||1) : 1;
+  });
+  const labels = vertices.map(v=>v.label);
+  // header
+  const colW = 3;
+  let text = '   ' + labels.map(l => l.padStart(colW)).join(' ') + '\n';
+  mat.forEach((row,i) => {
+    text += `${labels[i].padEnd(2)} [${row.map(v=>String(v).padStart(colW)).join(' ')}]\n`;
+  });
+  el.textContent = text.trim();
+  const sym = !directed ? '✓ Symmetric (undirected)' : '✗ Asymmetric (directed)';
+  if (comp) comp.innerHTML =
+    `Space: O(V²) = O(${n}²) = ${n*n} cells<br>` +
+    `Edge lookup: O(1) — direct index access<br>` +
+    `Symmetry: ${sym}`;
+}
+
+function updateEulerianInfo() {
+  const statusEl = document.getElementById('euler-status');
+  const degEl = document.getElementById('degree-list');
+  if (!statusEl || !degEl) return;
+
+  const n = vertices.length;
+  if (n === 0) { statusEl.innerHTML=''; degEl.textContent='(empty graph)'; return; }
+
+  const deg = new Array(n).fill(0);
+  edges.forEach(e => {
+    deg[e.from]++;
+    if (!directed) deg[e.to]++;
+  });
+
+  const oddCount = deg.filter(d => d % 2 !== 0).length;
+  const hasEulerCircuit = oddCount === 0;
+  const hasEulerPath = oddCount === 2;
+
+  let badges = '';
+  if (hasEulerCircuit) {
+    badges = `<span class="live-badge yes"><span class="live-dot"></span>Eulerian Circuit: YES</span>`;
+    badges += `<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:6px;">All ${n} vertices have even degree. Hierholzer's algorithm can find the circuit.</div>`;
+  } else if (hasEulerPath) {
+    badges = `<span class="live-badge warn"><span class="live-dot"></span>Eulerian Path: YES</span>`;
+    badges += `<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:6px;">Exactly 2 odd-degree vertices — those are the path endpoints.</div>`;
+  } else {
+    badges = `<span class="live-badge no"><span class="live-dot"></span>Eulerian: NO</span>`;
+    badges += `<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:6px;">${oddCount} odd-degree vertices. Need 0 (circuit) or 2 (path).</div>`;
+  }
+  statusEl.innerHTML = badges;
+
+  // Degree table as preformatted with parity coloring
+  let degHtml = '';
+  vertices.forEach((v,i) => {
+    const parity = deg[i] % 2 === 0 ? 'even' : 'odd';
+    const symbol = parity === 'even' ? '✓' : '✗';
+    degHtml += `${v.label.padEnd(2)}  deg=${String(deg[i]).padStart(2)}  [${parity}] ${symbol}\n`;
+  });
+  degEl.textContent = degHtml.trim();
+}
+
+function updateHamiltonianInfo() {
+  const diracEl = document.getElementById('dirac-table');
+  if (!diracEl) return;
+  const n = vertices.length;
+  if (n < 3) { diracEl.innerHTML = `<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);padding:8px 0;">Need ≥ 3 vertices for Dirac's theorem.</div>`; return; }
+
+  const deg = new Array(n).fill(0);
+  edges.forEach(e => { deg[e.from]++; if(!directed) deg[e.to]++; });
+  const threshold = n / 2;
+  const allMeet = deg.every(d => d >= threshold);
+
+  let html = `<div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:6px;">Threshold: deg ≥ n/2 = ${n}/2 = ${threshold}</div>`;
+  html += `<table class="degree-table">`;
+  vertices.forEach((v, i) => {
+    const meets = deg[i] >= threshold;
+    html += `<tr><td>${v.label}</td><td>deg = ${deg[i]}</td><td class="${meets ? 'dirac-ok' : 'dirac-no'}">${meets ? '≥ '+threshold+' ✓' : '< '+threshold+' ✗'}</td></tr>`;
+  });
+  html += `</table>`;
+
+  if (allMeet) {
+    html += `<div style="margin-top:8px;"><span class="live-badge yes"><span class="live-dot"></span>Dirac: SATISFIED → Hamiltonian cycle guaranteed</span></div>`;
+  } else {
+    const fails = deg.filter(d => d < threshold).length;
+    html += `<div style="margin-top:8px;"><span class="live-badge no"><span class="live-dot"></span>Dirac: NOT satisfied (${fails} vertex${fails>1?'es':''} below n/2)</span></div>`;
+    html += `<div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:5px;line-height:1.7;">Dirac not met ≠ no Hamiltonian cycle. Condition is sufficient, not necessary. Use the search to check.</div>`;
+  }
+  diracEl.innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ALGORITHMS
+═══════════════════════════════════════════════════════════ */
+async function findPath() {
+  if (animating) return;
+  const fromLabel = document.getElementById('path-from').value.trim().toUpperCase();
+  const toLabel   = document.getElementById('path-to').value.trim().toUpperCase();
+  const si = vertices.findIndex(v => v.label === fromLabel);
+  const ti = vertices.findIndex(v => v.label === toLabel);
+  if (si<0||ti<0) { logEntry('Enter valid node labels', 'warn'); return; }
+
+  resetColors(false);
+  logEntry(`BFS: ${fromLabel} → ${toLabel}`, 'info');
+
+  // BFS
+  const prev = new Array(vertices.length).fill(-1);
+  const visited = new Array(vertices.length).fill(false);
+  const queue = [si];
+  visited[si] = true;
+  const steps = [];
+  let found = false;
+
+  while (queue.length && !found) {
+    const cur = queue.shift();
+    const ci = cur;
+    steps.push(()=>{ vertices[ci].highlight='current'; draw(); });
+    if (cur === ti) { found = true; break; }
+    for (const {to, edge} of neighbors(cur)) {
+      if (!visited[to]) {
+        visited[to] = true;
+        prev[to] = cur;
+        const e=edge, tv=to;
+        steps.push(()=>{ e.highlight='trav'; vertices[tv].highlight='current'; draw(); });
+        queue.push(to);
+      }
+    }
+  }
+
+  if (found) {
+    const path = [];
+    let c = ti;
+    while (c !== -1) { path.unshift(c); c = prev[c]; }
+    steps.push(()=>{
+      resetColors(false);
+      path.forEach(pi => vertices[pi].highlight='path');
+      edges.forEach(e => {
+        for (let i=0;i<path.length-1;i++) {
+          if ((e.from===path[i]&&e.to===path[i+1])||(!directed&&e.from===path[i+1]&&e.to===path[i]))
+            e.highlight='path';
+        }
+      });
+      logEntry(`Path: ${path.map(i=>vertices[i].label).join(' → ')}`, 'path');
+      draw();
+    });
+  } else {
+    steps.push(()=>{ logEntry(`No path from ${fromLabel} to ${toLabel}`, 'warn'); });
+  }
+
+  await animSteps(steps, 300);
+}
+
+async function findEulerianCircuit() {
+  if (animating) return;
+  if (vertices.length === 0) { logEntry('Add nodes first', 'warn'); return; }
+
+  // Check Eulerian
+  const deg = new Array(vertices.length).fill(0);
+  edges.forEach(e => { deg[e.from]++; if(!directed) deg[e.to]++; });
+  const odd = deg.filter(d=>d%2!==0).length;
+  if (odd !== 0) { logEntry(`Not Eulerian — ${odd} odd-degree vertices`, 'warn'); return; }
+
+  // Hierholzer's algorithm
+  const adj = vertices.map((_,i) => edges.filter(e=>e.from===i||(!directed&&e.to===i)).map(e=>({...e})));
+  const usedEdges = new Set();
+  const circuit = [];
+  const stack = [0];
+
+  while (stack.length) {
+    const v = stack[stack.length-1];
+    const edge = edges.find((e,i) => {
+      if (usedEdges.has(i)) return false;
+      return e.from===v || (!directed&&e.to===v);
+    });
+    if (edge) {
+      const ei = edges.indexOf(edge);
+      usedEdges.add(ei);
+      const nv = edge.from===v ? edge.to : edge.from;
+      stack.push(nv);
+    } else {
+      circuit.push(stack.pop());
+    }
+  }
+
+  logEntry(`Circuit: ${circuit.map(i=>vertices[i]?.label||'?').join(' → ')}`, 'path');
+  const steps = [];
+  for (let i=0;i<circuit.length-1;i++) {
+    const a=circuit[i], b=circuit[i+1], ci=i;
+    steps.push(()=>{
+      resetColors(false);
+      // highlight path so far
+      for (let j=0;j<=ci;j++) vertices[circuit[j]].highlight='path';
+      edges.forEach(e=>{
+        for(let j=0;j<ci+1;j++){
+          if((e.from===circuit[j]&&e.to===circuit[j+1])||(!directed&&e.from===circuit[j+1]&&e.to===circuit[j]))
+            e.highlight='path';
+        }
+      });
+      draw();
+    });
+  }
+  await animSteps(steps, 400);
+}
+
+async function findHamiltonianCycle() {
+  if (animating) return;
+  const n = vertices.length;
+  if (n < 3) { logEntry('Need at least 3 nodes', 'warn'); return; }
+
+  const statusEl = document.getElementById('ham-status');
+  if(statusEl) statusEl.textContent = 'Searching…';
+
+  // Build adjacency
+  const adj = Array.from({length:n},()=>new Array(n).fill(false));
+  edges.forEach(e=>{
+    adj[e.from][e.to]=true;
+    if(!directed) adj[e.to][e.from]=true;
+  });
+
+  const path = [0];
+  const inPath = new Array(n).fill(false);
+  inPath[0] = true;
+  let found = false;
+  const steps = [];
+
+  function bt() {
+    if (found) return;
+    if (path.length === n) {
+      if (adj[path[n-1]][path[0]]) {
+        found = true;
+        const snap = [...path];
+        steps.push(()=>{
+          resetColors(false);
+          snap.forEach(i=>vertices[i].highlight='path');
+          for(let k=0;k<snap.length;k++){
+            const a=snap[k],b=snap[(k+1)%snap.length];
+            edges.forEach(e=>{
+              if((e.from===a&&e.to===b)||(!directed&&e.from===b&&e.to===a)) e.highlight='path';
+            });
+          }
+          if(statusEl) statusEl.textContent=`Found: ${snap.map(i=>vertices[i].label).join(' → ')} → ${vertices[snap[0]].label}`;
+          logEntry(`Hamiltonian cycle: ${snap.map(i=>vertices[i].label).join('→')}→${vertices[snap[0]].label}`, 'path');
+          draw();
+        });
+      }
+      return;
+    }
+    for (let v=0;v<n;v++) {
+      if (!inPath[v] && adj[path[path.length-1]][v]) {
+        path.push(v); inPath[v]=true;
+        bt();
+        if (found) return;
+        path.pop(); inPath[v]=false;
+      }
+    }
+  }
+  bt();
+
+  if (!found) {
+    logEntry('No Hamiltonian cycle found', 'warn');
+    if(statusEl) statusEl.textContent='No Hamiltonian cycle found.';
+  } else {
+    await animSteps(steps, 100);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR TOGGLE
+═══════════════════════════════════════════════════════════ */
+let sidebarOpen = true;
+
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  const sb = document.getElementById('sidebar');
+  const hb = document.getElementById('hamburger');
+  sb.classList.toggle('collapsed', !sidebarOpen);
+  hb.classList.toggle('open', !sidebarOpen);
+
+  // Update grid
+  const app = document.getElementById('app');
+  app.style.gridTemplateColumns = sidebarOpen
+    ? 'var(--sidebar-w) 1fr 4px var(--panel-w)'
+    : '0px 1fr 4px var(--panel-w)';
+  setTimeout(() => { resizeCanvas(); draw(); }, 310);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DRAG-TO-RESIZE RIGHT PANEL
+═══════════════════════════════════════════════════════════ */
+(function() {
+  const divider = document.getElementById('drag-divider');
+  const app = document.getElementById('app');
+  let draggingDivider = false;
+
+  divider.addEventListener('mousedown', e => {
+    draggingDivider = true;
+    divider.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!draggingDivider) return;
+    const rect = app.getBoundingClientRect();
+    const fromRight = rect.right - e.clientX;
+    const panelW = Math.max(300, Math.min(700, fromRight));
+    const sideW = sidebarOpen ? 'var(--sidebar-w)' : '0px';
+    app.style.gridTemplateColumns = `${sideW} 1fr 4px ${panelW}px`;
+    resizeCanvas();
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (draggingDivider) {
+      draggingDivider = false;
+      divider.classList.remove('dragging');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      resizeCanvas();
+      draw();
+    }
+  });
+})();
+
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+buildSidebar();
+navigateTo('intro');
+setMode('vertex');
+</script>
+</body>
+</html>

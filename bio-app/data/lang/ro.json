@@ -5,5 +5,10 @@
     "create_test": "Creează test",
     "authenticate": "Autentificare",
     "or-continue-with": "sau continua cu",
-    "my-account":"Contul meu"
+    "my-account":"Contul meu",
+    "log-out":"Deconectare",
+    "enter_new_name":"Introdu un nou nume:",
+    "choose_website": "Alege un site pe care vrei să îl vezi. Îl poți edita mai târziu în Contul meu > Website",
+    "website_french": "Franceză",
+    "website_biology": "Biologie"
 }

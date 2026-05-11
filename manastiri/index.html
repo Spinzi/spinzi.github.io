@@ -4,1923 +4,2502 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mănăstirile din Gorj – Patrimoniu Spiritual al Olteniei</title>
+<meta name="description" content="Descoperă mănăstirile din județul Gorj — ctitorii domneşti, schituri rupestre și locuri sacre de spiritualitate ortodoxă în inima Olteniei.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
-  /* =========================================
-     RESET & BASE
-  ========================================= */
-  *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+/* ============================================================
+   TOKENS & RESET
+   ============================================================ */
+:root {
+  --ink:        #1a1208;
+  --ink-soft:   #3d2b14;
+  --ink-muted:  #7a6040;
+  --parchment:  #f7f1e6;
+  --parchment2: #ede5d0;
+  --parchment3: #e2d8c2;
+  --gold:       #b8892a;
+  --gold-light: #d4a84b;
+  --gold-pale:  #eacf8a;
+  --gold-glow:  rgba(184,137,42,0.18);
+  --rust:       #8b3a1a;
+  --sage:       #4a5c3a;
+  --ivory:      #fdfaf3;
+  --white:      #fffef9;
 
-  :root {
-    --cream:        #fdf6e3;
-    --cream-dark:   #f5ead0;
-    --gold:         #c9973a;
-    --gold-light:   #e8c07a;
-    --gold-pale:    #f3dea0;
-    --amber:        #b07d2a;
-    --amber-dark:   #7a5518;
-    --brown:        #5a3a1a;
-    --brown-light:  #8b5e2a;
-    --warm-white:   #fffdf7;
-    --text-main:    #3a2810;
-    --text-muted:   #7a5c3a;
-    --text-light:   #a08060;
-    --border:       #dcc898;
-    --shadow-sm:    0 2px 8px rgba(90, 58, 26, 0.10);
-    --shadow-md:    0 6px 24px rgba(90, 58, 26, 0.14);
-    --shadow-lg:    0 12px 48px rgba(90, 58, 26, 0.18);
-    --radius-sm:    6px;
-    --radius-md:    14px;
-    --radius-lg:    22px;
-    --menu-width:   280px;
-    --font-title:   'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
-    --font-body:    Georgia, 'Times New Roman', serif;
-    --font-ui:      'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
+  --r-sm: 6px;
+  --r-md: 14px;
+  --r-lg: 24px;
+  --r-xl: 40px;
 
-  html {
-    scroll-behavior: smooth;
-    font-size: 16px;
-  }
+  --sh-card: 0 4px 32px rgba(26,18,8,0.10), 0 1px 4px rgba(26,18,8,0.06);
+  --sh-hover: 0 12px 48px rgba(26,18,8,0.16), 0 2px 8px rgba(26,18,8,0.08);
+  --sh-glow:  0 0 40px rgba(184,137,42,0.15);
 
-  body {
-    background-color: var(--cream);
-    color: var(--text-main);
-    font-family: var(--font-body);
-    line-height: 1.75;
-    overflow-x: hidden;
-  }
+  --nav-h: 64px;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-ui:      'Jost', system-ui, sans-serif;
+  --font-body:    'Cormorant Garamond', Georgia, serif;
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: var(--cream-dark); }
-  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--amber); }
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-  /* =========================================
-     MENU LATERAL (CSS-ONLY HAMBURGER)
-  ========================================= */
-  #menu-toggle {
-    display: none;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .menu-label {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
-    width: 44px;
-    height: 44px;
-    background: var(--gold);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--parchment2); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 5vw, 60px);
+  transition: background 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+}
+
+.nav.scrolled {
+  background: rgba(247,241,230,0.96);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 var(--parchment3), var(--sh-card);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-logo-cross {
+  font-size: 1.3rem;
+  color: var(--gold);
+  line-height: 1;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.nav-logo:hover .nav-logo-cross { transform: rotate(15deg) scale(1.1); }
+
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+/* Desktop nav links */
+.nav-links {
+  display: none;
+  list-style: none;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (min-width: 1100px) {
+  .nav-links { display: flex; gap: 24px; }
+}
+
+@media (min-width: 900px) and (max-width: 1099px) {
+  .nav-links { display: flex; gap: 14px; }
+}
+
+.nav-links a {
+  font-family: var(--font-ui);
+  font-size: clamp(0.67rem, 1vw, 0.78rem);
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+  white-space: nowrap;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width 0.3s var(--ease-out);
+}
+
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+
+/* Hamburger */
+.nav-burger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  border: none;
+  background: none;
+  z-index: 910;
+}
+
+@media (min-width: 900px) { .nav-burger { display: none; } }
+
+.nav-burger span {
+  display: block;
+  width: 22px; height: 1.5px;
+  background: var(--ink-soft);
+  transition: transform 0.3s, opacity 0.3s, background 0.3s;
+}
+
+.nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; }
+.nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Mobile drawer */
+.nav-drawer {
+  position: fixed;
+  top: 0; right: -100%;
+  width: min(320px, 85vw);
+  height: 100vh;
+  background: var(--ink);
+  z-index: 905;
+  padding: 100px 32px 40px;
+  transition: right 0.4s var(--ease-out);
+  overflow-y: auto;
+}
+
+.nav-drawer.open { right: 0; }
+
+.nav-drawer ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-drawer ul li a {
+  display: block;
+  padding: 12px 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--parchment);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(184,137,42,0.15);
+  transition: color 0.2s, padding-left 0.2s;
+}
+
+.nav-drawer ul li a:hover { color: var(--gold-pale); padding-left: 6px; }
+
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 904;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.nav-overlay.open { opacity: 1; pointer-events: all; }
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100svh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(40px, 10vw, 100px) clamp(24px, 6vw, 80px);
+  overflow: hidden;
+  background: var(--ink);
+}
+
+/* Decorative texture layer */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 60% 40%, rgba(184,137,42,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 80% at 20% 80%, rgba(139,58,26,0.10) 0%, transparent 50%);
+  z-index: 0;
+}
+
+/* Grain overlay */
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Large decorative cross */
+.hero-cross-deco {
+  position: absolute;
+  right: clamp(20px, 8vw, 100px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(120px, 25vw, 280px);
+  color: rgba(184,137,42,0.07);
+  line-height: 1;
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-ui);
+  font-size: clamp(0.65rem, 1.5vw, 0.72rem);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: clamp(16px, 3vw, 28px);
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s var(--ease-out) forwards;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 32px; height: 1px;
+  background: var(--gold);
+  opacity: 0.6;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 9vw, 7.5rem);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--parchment);
+  margin-bottom: clamp(20px, 3vw, 32px);
+  opacity: 0;
+  animation: fadeUp 0.9s 0.35s var(--ease-out) forwards;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold-pale);
+}
+
+.hero-line {
+  width: 48px; height: 1px;
+  background: var(--gold);
+  margin-bottom: clamp(16px, 2.5vw, 24px);
+  opacity: 0;
+  animation: fadeIn 0.8s 0.55s forwards;
+}
+
+.hero-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(247,241,230,0.65);
+  max-width: 540px;
+  line-height: 1.7;
+  margin-bottom: clamp(32px, 6vw, 56px);
+  opacity: 0;
+  animation: fadeUp 0.9s 0.5s var(--ease-out) forwards;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background 0.25s, transform 0.25s var(--ease-out), box-shadow 0.25s;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.7s var(--ease-out) forwards;
+}
+
+.hero-cta:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(184,137,42,0.35);
+}
+
+.hero-cta-arrow {
+  font-size: 1rem;
+  transition: transform 0.25s var(--ease-out);
+}
+
+.hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+
+/* Hero stats bar */
+.hero-stats {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 2;
+  display: flex;
+  border-top: 1px solid rgba(184,137,42,0.2);
+  opacity: 0;
+  animation: fadeIn 0.8s 1s forwards;
+}
+
+.hero-stat {
+  flex: 1;
+  padding: clamp(14px, 2.5vw, 22px) clamp(16px, 3vw, 32px);
+  border-right: 1px solid rgba(184,137,42,0.15);
+}
+
+.hero-stat:last-child { border-right: none; }
+
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  font-weight: 500;
+  color: var(--gold-pale);
+  line-height: 1.1;
+}
+
+.hero-stat-label {
+  font-family: var(--font-ui);
+  font-size: clamp(0.6rem, 1.2vw, 0.68rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(247,241,230,0.45);
+  margin-top: 2px;
+}
+
+/* Scroll indicator */
+.hero-scroll {
+  position: absolute;
+  left: clamp(24px, 6vw, 80px);
+  bottom: 120px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 1s 1.2s forwards;
+}
+
+@media (max-width: 600px) { .hero-scroll { display: none; } }
+
+.hero-scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2s infinite;
+}
+
+.hero-scroll-label {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(184,137,42,0.6);
+  writing-mode: vertical-rl;
+}
+
+
+/* ============================================================
+   INTRO BAND
+   ============================================================ */
+.intro {
+  background: var(--ivory);
+  padding: clamp(56px, 10vw, 100px) clamp(24px, 6vw, 80px);
+  position: relative;
+  overflow: hidden;
+}
+
+.intro::before {
+  content: '✦ ✦ ✦';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.8rem;
+  letter-spacing: 1em;
+  color: var(--gold);
+  background: var(--ivory);
+  padding: 0 16px;
+  white-space: nowrap;
+}
+
+.intro-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(32px, 6vw, 64px);
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .intro-inner { grid-template-columns: 1fr 1fr; }
+}
+
+.intro-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.15;
+  color: var(--ink-soft);
+}
+
+.intro-heading strong {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.intro-body p {
+  font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+  color: var(--ink-muted);
+  line-height: 1.85;
+  margin-bottom: 16px;
+}
+
+.intro-body p:last-child { margin-bottom: 0; }
+
+.intro-ornament {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--gold);
+  font-size: 0.75rem;
+  letter-spacing: 0.5em;
+}
+
+.intro-ornament::before,
+.intro-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to var(--dir, right), var(--gold-pale), transparent);
+}
+
+.intro-ornament::before { --dir: right; }
+.intro-ornament::after  { --dir: left; }
+
+
+/* ============================================================
+   MONASTERY GRID (INDEX)
+   ============================================================ */
+.grid-section {
+  padding: clamp(48px, 8vw, 80px) clamp(24px, 6vw, 80px);
+  background: var(--parchment);
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 40px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--gold-pale), transparent);
+}
+
+.monastery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: clamp(16px, 3vw, 28px);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   MONASTERY CARD (GRID)
+   ============================================================ */
+.m-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh-card);
+  border: 1px solid var(--parchment3);
+  transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.m-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--sh-hover);
+}
+
+.m-card-img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: var(--parchment2);
+  transition: transform 0.5s var(--ease-out);
+}
+
+.m-card:hover .m-card-img { transform: scale(1.04); }
+
+.m-card-img-wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+.m-card-badge {
+  position: absolute;
+  top: 14px; left: 14px;
+  padding: 4px 12px;
+  background: rgba(26,18,8,0.65);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  border: 1px solid rgba(184,137,42,0.3);
+}
+
+.m-card-body {
+  padding: clamp(18px, 3vw, 28px);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.m-card-meta {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.m-card-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 1.65rem);
+  font-weight: 500;
+  color: var(--ink-soft);
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.m-card-location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  margin-bottom: 14px;
+}
+
+.m-card-excerpt {
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  line-height: 1.75;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.m-card-footer {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--parchment2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.m-card-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.m-chip {
+  padding: 3px 10px;
+  background: var(--parchment);
+  border: 1px solid var(--parchment3);
+  border-radius: 20px;
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.05em;
+}
+
+.m-card-arrow {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--parchment);
+  border: 1px solid var(--parchment3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: var(--gold);
+  transition: background 0.2s, transform 0.25s var(--ease-out), color 0.2s;
+  flex-shrink: 0;
+}
+
+.m-card:hover .m-card-arrow {
+  background: var(--gold);
+  color: var(--white);
+  transform: translateX(3px);
+}
+
+
+/* ============================================================
+   GRID → DETAIL BRIDGE
+   ============================================================ */
+.grid-detail-bridge {
+  background: var(--parchment);
+  padding: clamp(32px, 5vw, 56px) clamp(24px, 6vw, 80px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid var(--parchment3);
+}
+
+.bridge-label {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+}
+
+.bridge-rule {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 600px;
+  color: var(--gold);
+  font-size: 0.65rem;
+  letter-spacing: 0.5em;
+}
+
+.bridge-rule::before,
+.bridge-rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to var(--d, right), var(--parchment3), transparent);
+}
+/* ============================================================
+   SCROLL PROGRESS BAR
+   ============================================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--gold), var(--gold-light));
+  z-index: 999;
+  width: 0%;
+  transition: width 0.1s linear;
+  transform-origin: left;
+}
+
+/* Active nav link */
+.nav-links a.is-active {
+  color: var(--gold);
+}
+.nav-links a.is-active::after {
+  width: 100%;
+}
+
+/* ============================================================
+   DETAIL SECTION STYLES
+   ============================================================ */
+
+/* Chapter progress pill */
+.detail-progress {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .detail-progress {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    gap: 6px;
+    margin-bottom: 24px;
     align-items: center;
-    gap: 5px;
-    box-shadow: var(--shadow-md);
+  }
+  .detail-progress-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--parchment3);
     transition: background 0.2s, transform 0.2s;
   }
+  .detail-progress-dot.is-current {
+    background: var(--gold);
+    transform: scale(1.4);
+  }
+}
+.detail-section {
+  scroll-margin-top: calc(var(--nav-h) + 24px);
+  padding: clamp(56px, 8vw, 96px) clamp(24px, 6vw, 80px);
+  position: relative;
+}
 
-  .menu-label:hover {
-    background: var(--amber);
-    transform: scale(1.06);
-  }
+.detail-section:nth-child(even) { background: var(--ivory); }
+.detail-section:nth-child(odd)  { background: var(--parchment); }
 
-  .menu-label span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: var(--warm-white);
-    border-radius: 2px;
-    transition: transform 0.3s, opacity 0.3s;
-  }
+/* Section top rule */
+.detail-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: clamp(24px, 6vw, 80px);
+  right: clamp(24px, 6vw, 80px);
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--parchment3), transparent);
+}
 
-  /* Hamburger → X animation */
-  #menu-toggle:checked + .menu-label span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-  #menu-toggle:checked + .menu-label span:nth-child(2) {
-    opacity: 0;
-  }
-  #menu-toggle:checked + .menu-label span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-  }
+.detail-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
 
-  /* Sidebar nav */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: calc(-1 * var(--menu-width));
-    width: var(--menu-width);
-    height: 100vh;
-    background: linear-gradient(160deg, #3a2810 0%, #5a3a1a 60%, #7a5518 100%);
-    z-index: 999;
+/* Detail header reading time + back-to-index link */
+.detail-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.detail-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+  transition: gap 0.2s var(--ease-out), opacity 0.2s;
+  opacity: 0.7;
+}
+.detail-back-link:hover { gap: 10px; opacity: 1; }
+
+.detail-read-time {
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  opacity: 0.6;
+}
+
+/* Monastery header */
+.detail-header {
+  margin-bottom: clamp(32px, 5vw, 52px);
+}
+
+.detail-num {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.detail-num::after {
+  content: '';
+  display: block;
+  width: 40px; height: 1px;
+  background: var(--gold);
+  opacity: 0.4;
+}
+
+.detail-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+
+.detail-title em { font-style: italic; color: var(--gold); }
+
+.detail-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+}
+
+/* Info chips row */
+.detail-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+  margin-bottom: 36px;
+}
+
+.detail-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 16px;
+  background: var(--white);
+  border: 1px solid var(--parchment3);
+  border-radius: var(--r-sm);
+  box-shadow: 0 1px 4px rgba(26,18,8,0.04);
+}
+
+.detail-chip-label {
+  font-family: var(--font-ui);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.detail-chip-value {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+/* Two-column layout */
+.detail-cols {
+  display: grid;
+  gap: clamp(28px, 5vw, 52px);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .detail-cols { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .detail-cols.cols-3-2 { grid-template-columns: 3fr 2fr; }
+  .detail-cols.cols-2-3 { grid-template-columns: 2fr 3fr; }
+}
+
+/* On mobile: always show aside (image + practical) AFTER main text */
+@media (max-width: 767px) {
+  .detail-cols > div  { order: 1; }
+  .detail-cols > aside { order: 2; }
+}
+
+/* Image in detail */
+.detail-img-wrap {
+  position: relative;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--sh-card);
+  /* Subtle entrance */
+  transition: box-shadow 0.3s var(--ease-out);
+}
+
+.detail-img-wrap:hover {
+  box-shadow: var(--sh-hover);
+}
+
+.detail-img-wrap img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease-out);
+  display: block;
+}
+
+.detail-img-wrap:hover img { transform: scale(1.04); }
+
+/* On mobile: detail images are collapsed by default to avoid duplication with card images */
+@media (max-width: 767px) {
+  .detail-img-wrap.is-duplicate {
+    display: none;
+  }
+}
+
+.detail-img-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 10px 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+  font-family: var(--font-ui);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+}
+
+/* Content typography */
+.content-block {
+  margin-bottom: clamp(24px, 4vw, 36px);
+}
+
+.content-block-label {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.content-block-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--parchment3), transparent);
+  max-width: 80px;
+}
+
+.content-block p {
+  font-size: clamp(1rem, 1.8vw, 1.08rem);
+  color: var(--ink-muted);
+  line-height: 1.9;
+  margin-bottom: 16px;
+  max-width: 68ch;
+}
+
+.content-block p:last-child { margin-bottom: 0; }
+
+/* Pull quote */
+.pull-quote {
+  margin: clamp(24px, 4vw, 36px) 0;
+  padding: clamp(18px, 3vw, 28px) clamp(20px, 4vw, 36px);
+  border-left: 3px solid var(--gold);
+  background: linear-gradient(135deg, var(--parchment2), var(--gold-pale) 200%);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+
+.pull-quote p {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* Practical info */
+.practical {
+  background: linear-gradient(135deg, var(--parchment2), var(--ivory));
+  border: 1px solid var(--parchment3);
+  border-radius: var(--r-md);
+  padding: clamp(20px, 3.5vw, 32px);
+}
+
+@media (min-width: 768px) {
+  .practical {
+    position: sticky;
+    top: calc(var(--nav-h) + 20px);
+    max-height: calc(100vh - var(--nav-h) - 40px);
     overflow-y: auto;
-    transition: left 0.35s cubic-bezier(0.4,0,0.2,1);
-    box-shadow: var(--shadow-lg);
-    padding: 80px 0 40px;
   }
-
-  #menu-toggle:checked ~ .sidebar {
-    left: 0;
-  }
-
-  .sidebar-header {
-    padding: 0 24px 20px;
-    border-bottom: 1px solid rgba(201,151,58,0.3);
-    margin-bottom: 12px;
-  }
-
-  .sidebar-header p {
-    font-family: var(--font-ui);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-    margin-bottom: 4px;
-  }
-
-  .sidebar-header h3 {
-    font-family: var(--font-title);
-    font-size: 1.1rem;
-    color: var(--gold-pale);
-    font-weight: normal;
-    font-style: italic;
-  }
-
-  .sidebar nav ul {
-    list-style: none;
-    padding: 0 0 0 0;
-  }
-
-  .sidebar nav ul li a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 24px;
-    color: #d9c090;
-    text-decoration: none;
-    font-family: var(--font-ui);
-    font-size: 0.88rem;
-    letter-spacing: 0.02em;
-    border-left: 3px solid transparent;
-    transition: color 0.2s, background 0.2s, border-color 0.2s, padding-left 0.2s;
-  }
-
-  .sidebar nav ul li a::before {
-    content: '✦';
-    font-size: 0.55rem;
-    color: var(--gold-light);
-    opacity: 0.6;
-    transition: opacity 0.2s;
-    flex-shrink: 0;
-  }
-
-  .sidebar nav ul li a:hover {
-    color: var(--gold-pale);
-    background: rgba(201,151,58,0.12);
-    border-left-color: var(--gold);
-    padding-left: 30px;
-  }
-
-  .sidebar nav ul li a:hover::before {
-    opacity: 1;
-  }
-
-  /* Overlay to close menu */
-  .menu-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 998;
-    background: rgba(0,0,0,0);
-  }
-
-  #menu-toggle:checked ~ .menu-overlay {
-    display: block;
-  }
-
-  /* =========================================
-     HEADER
-  ========================================= */
-  .site-header {
-    background: linear-gradient(135deg, #3a2810 0%, #5a3a1a 40%, #7a5518 70%, #c9973a 100%);
-    color: var(--warm-white);
-    padding: 80px 60px 60px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .site-header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 40% at 70% 50%, rgba(201,151,58,0.18) 0%, transparent 70%),
-      repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 20px,
-        rgba(255,255,255,0.015) 20px,
-        rgba(255,255,255,0.015) 21px
-      );
-    pointer-events: none;
-  }
-
-  .site-header::after {
-    content: '☦';
-    position: absolute;
-    right: 60px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 9rem;
-    color: rgba(201,151,58,0.12);
-    pointer-events: none;
-    line-height: 1;
-  }
-
-  .header-inner {
-    max-width: 900px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .header-eyebrow {
-    font-family: var(--font-ui);
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .header-eyebrow::after {
-    content: '';
-    display: block;
-    height: 1px;
-    width: 60px;
-    background: var(--gold-light);
-    opacity: 0.5;
-  }
-
-  .site-header h1 {
-    font-family: var(--font-title);
-    font-size: clamp(2.4rem, 5vw, 3.8rem);
-    font-weight: normal;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    color: var(--gold-pale);
-    margin-bottom: 20px;
-  }
-
-  .site-header h1 em {
-    color: var(--gold-light);
-    font-style: italic;
-  }
-
-  .header-subtitle {
-    font-family: var(--font-body);
-    font-size: 1.08rem;
-    color: rgba(253,246,227,0.82);
-    max-width: 620px;
-    line-height: 1.8;
-    margin-bottom: 48px;
-    font-style: italic;
-  }
-
-  /* Overview cards */
-  .overview-grid {
-    display: grid;
-    grid-template-columns: auto 1fr 1fr;
-    gap: 24px;
-    align-items: start;
-  }
-
-  .overview-stat {
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(201,151,58,0.3);
-    border-radius: var(--radius-md);
-    padding: 24px 28px;
-    text-align: center;
-    backdrop-filter: blur(4px);
-  }
-
-  .overview-stat .num {
-    font-family: var(--font-title);
-    font-size: 2.8rem;
-    color: var(--gold-light);
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-
-  .overview-stat .label {
-    font-family: var(--font-ui);
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(253,246,227,0.6);
-  }
-
-  .overview-desc {
-    background: rgba(0,0,0,0.2);
-    border: 1px solid rgba(201,151,58,0.25);
-    border-radius: var(--radius-md);
-    padding: 20px 24px;
-    backdrop-filter: blur(4px);
-  }
-
-  .overview-desc p {
-    font-size: 0.92rem;
-    color: rgba(253,246,227,0.8);
-    line-height: 1.7;
-  }
-
-  .overview-list {
-    background: rgba(0,0,0,0.2);
-    border: 1px solid rgba(201,151,58,0.25);
-    border-radius: var(--radius-md);
-    padding: 20px 24px;
-    backdrop-filter: blur(4px);
-  }
-
-  .overview-list p {
-    font-family: var(--font-ui);
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-    margin-bottom: 12px;
-  }
-
-  .overview-list ul {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .overview-list ul li a {
-    display: inline-block;
-    padding: 4px 12px;
-    background: rgba(201,151,58,0.18);
-    border: 1px solid rgba(201,151,58,0.35);
-    border-radius: 20px;
-    color: var(--gold-pale);
-    font-family: var(--font-ui);
-    font-size: 0.78rem;
-    text-decoration: none;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  .overview-list ul li a:hover {
-    background: var(--gold);
-    color: var(--warm-white);
-  }
-
-  /* =========================================
-     MAIN LAYOUT
-  ========================================= */
-  .page-body {
-    display: flex;
-    min-height: calc(100vh - 60px);
-  }
-
-  .content-area {
-    flex: 1;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 60px 60px 100px;
-  }
-
-  /* =========================================
-     DECORATIVE DIVIDER
-  ========================================= */
-  .section-divider {
-    text-align: center;
-    margin: 12px 0 52px;
-    position: relative;
-    color: var(--gold);
-    font-size: 1.2rem;
-    letter-spacing: 0.3em;
-  }
-
-  .section-divider::before,
-  .section-divider::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: calc(50% - 60px);
-    height: 1px;
-    background: linear-gradient(to var(--dir, right), transparent, var(--border));
-  }
-
-  .section-divider::before { left: 0; --dir: right; }
-  .section-divider::after  { right: 0; --dir: left; }
-
-  /* =========================================
-     MONASTERY SECTIONS
-  ========================================= */
-  .monastery-section {
-    margin-bottom: 72px;
-    scroll-margin-top: 24px;
-  }
-
-  .monastery-card {
-    background: var(--warm-white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    overflow: hidden;
-    border: 1px solid var(--border);
-    transition: box-shadow 0.3s, transform 0.3s;
-  }
-
-  .monastery-card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
-  }
-
-  /* Card header bar */
-  .card-header {
-    background: linear-gradient(100deg, var(--brown) 0%, var(--amber-dark) 50%, var(--amber) 100%);
-    padding: 32px 40px 28px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(to right, var(--gold-light), var(--gold), var(--gold-light));
-  }
-
-  .card-header::before {
-    content: attr(data-symbol);
-    position: absolute;
-    right: 36px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 4rem;
-    color: rgba(255,255,255,0.07);
-    pointer-events: none;
-    line-height: 1;
-  }
-
-  .monastery-number {
-    font-family: var(--font-ui);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .monastery-number::after {
-    content: '';
-    display: block;
-    height: 1px;
-    width: 40px;
-    background: var(--gold-light);
-    opacity: 0.4;
-  }
-
-  .card-header h2 {
-    font-family: var(--font-title);
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-    font-weight: normal;
-    color: var(--gold-pale);
-    line-height: 1.2;
-    margin-bottom: 10px;
-  }
-
-  .location-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(0,0,0,0.2);
-    border: 1px solid rgba(201,151,58,0.3);
-    border-radius: 20px;
-    padding: 4px 14px;
-    font-family: var(--font-ui);
-    font-size: 0.78rem;
-    color: rgba(253,246,227,0.8);
-    letter-spacing: 0.03em;
-  }
-
-  .location-badge::before {
-    content: '📍';
-    font-size: 0.75rem;
-  }
-
-  /* Card body */
-  .card-body {
-    padding: 36px 40px;
-  }
-
-  /* Info row */
-  .info-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-
-  .info-chip {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    background: var(--cream-dark);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 6px 14px;
-    font-family: var(--font-ui);
-    font-size: 0.78rem;
-    color: var(--text-muted);
-  }
-
-  .info-chip .chip-label {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-light);
-    margin-right: 2px;
-  }
-
-  .info-chip .chip-value {
-    color: var(--text-main);
-    font-weight: 500;
-  }
-
-  /* Content blocks */
-  .content-block {
-    margin-bottom: 28px;
-  }
-
-  .content-block h3 {
-    font-family: var(--font-ui);
-    font-size: 0.68rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--amber);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .content-block h3::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, var(--border), transparent);
-  }
-
-  .content-block p {
-    font-size: 0.96rem;
-    color: var(--text-main);
-    line-height: 1.85;
-    margin-bottom: 14px;
-  }
-
-  .content-block p:last-child {
-    margin-bottom: 0;
-  }
-
-  /* Highlight quote */
-  .highlight-quote {
-    background: linear-gradient(135deg, var(--cream-dark), var(--gold-pale));
-    border-left: 4px solid var(--gold);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    padding: 16px 20px;
-    margin: 20px 0;
-    font-style: italic;
-    color: var(--text-muted);
-    font-size: 0.94rem;
-    line-height: 1.75;
-  }
-
-  /* Practical info box */
-  .practical-box {
-    background: linear-gradient(135deg, #fdf0d8, #faeac8);
-    border: 1px solid var(--gold-pale);
-    border-radius: var(--radius-md);
-    padding: 22px 26px;
-    margin-top: 8px;
-  }
-
-  .practical-box h4 {
-    font-family: var(--font-ui);
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--amber);
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .practical-box h4::before {
-    content: '✦';
-    color: var(--gold);
-  }
-
-  .practical-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 24px;
-  }
-
-  .practical-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .practical-item .pi-label {
-    font-family: var(--font-ui);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-light);
-  }
-
-  .practical-item .pi-value {
-    font-size: 0.88rem;
-    color: var(--text-main);
-  }
-
-  /* Two-column layout for some sections */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-    margin-bottom: 28px;
-  }
-
-  /* =========================================
-     FOOTER
-  ========================================= */
-  .site-footer {
-    background: linear-gradient(135deg, #3a2810, #5a3a1a);
-    color: rgba(253,246,227,0.7);
-    text-align: center;
-    padding: 48px 40px;
-    font-family: var(--font-ui);
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    line-height: 1.8;
-  }
-
-  .site-footer .footer-cross {
-    font-size: 1.8rem;
-    color: var(--gold);
-    display: block;
-    margin-bottom: 16px;
-  }
-
-  .site-footer a {
-    color: var(--gold-light);
-    text-decoration: none;
-  }
-
-  /* =========================================
-     BACK TO TOP
-  ========================================= */
-  .back-to-top {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    width: 44px;
-    height: 44px;
-    background: var(--gold);
-    color: var(--warm-white);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    font-size: 1.1rem;
-    box-shadow: var(--shadow-md);
-    transition: background 0.2s, transform 0.2s;
-    z-index: 500;
-    line-height: 1;
-  }
-
-  .back-to-top:hover {
-    background: var(--amber);
-    transform: translateY(-3px);
-  }
-
-  /* =========================================
-     INTRO SECTION
-  ========================================= */
-  .intro-section {
-    text-align: center;
-    padding: 56px 0 40px;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  .intro-section h2 {
-    font-family: var(--font-title);
-    font-size: 1.8rem;
-    font-weight: normal;
-    color: var(--brown);
-    margin-bottom: 16px;
-    font-style: italic;
-  }
-
-  .intro-section p {
-    color: var(--text-muted);
-    font-size: 0.96rem;
-    line-height: 1.85;
-    margin-bottom: 16px;
-  }
-
-  .ornament {
-    color: var(--gold);
-    font-size: 1.4rem;
-    letter-spacing: 0.5em;
-    margin: 24px 0;
-    display: block;
-  }
-
-  /* =========================================
-     IMAGINE MĂNĂSTIRE
-  ========================================= */
-  .card-image-wrap {
-    float: right;
-    margin: 0 0 24px 32px;
-    width: 300px;
-    flex-shrink: 0;
-  }
-
-  .card-image-wrap img {
-    display: block;
-    width: 100%;
-    height: 210px;
-    object-fit: cover;
-    border-radius: var(--radius-md);
-    border: 3px solid var(--border);
-    box-shadow: var(--shadow-md);
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
-  }
-
-  .card-image-wrap img:hover {
-    transform: scale(1.025);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .card-image-caption {
-    margin-top: 8px;
-    font-family: var(--font-ui);
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
-    color: var(--text-light);
-    text-align: center;
-    font-style: italic;
-  }
-
-  /* clearfix după float */
-  .card-body-inner::after {
-    content: '';
-    display: table;
-    clear: both;
-  }
-
-  /* =========================================
-     FOOTER ECHIPĂ
-  ========================================= */
-  .footer-team {
-    background: linear-gradient(135deg, #2a1a08 0%, #3a2810 40%, #5a3a1a 100%);
-    color: var(--cream);
-    padding: 56px 40px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .footer-team::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 24px,
-      rgba(201,151,58,0.04) 24px,
-      rgba(201,151,58,0.04) 25px
-    );
-    pointer-events: none;
-  }
-
-  .footer-team-inner {
-    position: relative;
-    z-index: 1;
-    max-width: 860px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 40px;
-  }
-
-  .footer-divider-vert {
-    width: 1px;
-    height: 80px;
-    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
-    margin: 0 auto;
-  }
-
-  .footer-school {
-    text-align: center;
-  }
-
-  .footer-school-name {
-    font-family: var(--font-title);
-    font-size: 1.15rem;
-    color: var(--gold-pale);
-    font-style: italic;
-    margin-bottom: 6px;
-  }
-
-  .footer-school-class {
-    font-family: var(--font-ui);
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-  }
-
-  .footer-members {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .footer-member {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .footer-member-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), var(--amber-dark));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-title);
-    font-size: 1rem;
-    color: var(--warm-white);
-    flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-
-  .footer-member-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-
-  .footer-member-name {
-    font-family: var(--font-ui);
-    font-size: 0.88rem;
-    color: var(--cream);
-    font-weight: 600;
-    letter-spacing: 0.02em;
-  }
-
-  .footer-member-role {
-    font-family: var(--font-ui);
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-  }
-
-  .footer-members-right {
-    align-items: flex-end;
-  }
-
-  .footer-members-right .footer-member {
-    flex-direction: row-reverse;
-  }
-
-  .footer-bottom-bar {
-    position: relative;
-    z-index: 1;
-    max-width: 860px;
-    margin: 32px auto 0;
-    padding-top: 24px;
-    border-top: 1px solid rgba(201,151,58,0.2);
-    text-align: center;
-    font-family: var(--font-ui);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    color: rgba(253,246,227,0.4);
-  }
-
-  .footer-gold-line {
-    height: 3px;
-    background: linear-gradient(to right, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent);
-  }
-
+}
+
+.practical-heading {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--parchment3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.practical-heading::before { content: '✦'; font-size: 0.5rem; }
+
+.practical-items { display: flex; flex-direction: column; gap: 14px; }
+
+.practical-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.practical-item-icon {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1px solid var(--parchment3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.practical-item-info { display: flex; flex-direction: column; gap: 2px; }
+
+.practical-item-label {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.practical-item-value {
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+   CLOSING BAND
+   ============================================================ */
+.closing {
+  background: var(--ink);
+  padding: clamp(64px, 12vw, 120px) clamp(24px, 6vw, 80px);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.closing::before {
+  content: '☦';
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(200px, 40vw, 400px);
+  color: rgba(184,137,42,0.04);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.closing-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.closing-cross {
+  font-size: 1.8rem;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 24px;
+}
+
+.closing-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--parchment);
+  line-height: 1.25;
+  margin-bottom: 20px;
+}
+
+.closing-text {
+  font-size: clamp(0.92rem, 2vw, 1rem);
+  color: rgba(247,241,230,0.55);
+  line-height: 1.85;
+  margin-bottom: 36px;
+}
+
+.closing-ornament {
+  color: rgba(184,137,42,0.4);
+  font-size: 0.75rem;
+  letter-spacing: 0.8em;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: #120d05;
+  padding: clamp(40px, 7vw, 64px) clamp(24px, 6vw, 80px);
+}
+
+.footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 640px) {
+  .footer-inner { grid-template-columns: 1fr auto 1fr; align-items: center; }
+}
+
+.footer-school-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--gold-pale);
+  margin-bottom: 4px;
+}
+
+.footer-school-sub {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(247,241,230,0.35);
+}
+
+.footer-divider {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(184,137,42,0.4), transparent);
+  margin: 0 auto;
+  display: none;
+}
+
+@media (min-width: 640px) { .footer-divider { display: block; } }
+
+.footer-team {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-member {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-member-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), #7a5518);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ivory);
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.footer-member-name {
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  color: rgba(247,241,230,0.7);
+}
+
+.footer-bar {
+  max-width: 900px;
+  margin: 24px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(184,137,42,0.12);
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  color: rgba(247,241,230,0.2);
+  text-align: center;
+}
+
+
+/* ============================================================
+   BACK TO TOP
+   ============================================================ */
+.back-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  z-index: 500;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1rem;
+  box-shadow: var(--sh-card);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s var(--ease-out), background 0.2s;
+}
+
+.back-top.visible { opacity: 1; pointer-events: all; }
+.back-top:hover { background: var(--gold-light); transform: translateY(-3px); }
+
+
+/* ============================================================
+   DIVIDER ORNAMENT
+   ============================================================ */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(8px, 2vw, 16px) clamp(24px, 6vw, 80px);
+  color: var(--gold);
+  font-size: 0.7rem;
+  letter-spacing: 0.6em;
+}
+
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to var(--d, right), var(--parchment3), transparent);
+}
+
+.ornament-divider::before { --d: right; }
+.ornament-divider::after  { --d: left; }
+
+
+/* ============================================================
+   SCROLL-IN ANIMATION
+   ============================================================ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger children */
+.fade-in-group > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.fade-in-group.visible > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0s; }
+.fade-in-group.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.1s; }
+.fade-in-group.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.2s; }
+.fade-in-group.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.3s; }
+.fade-in-group.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.4s; }
+.fade-in-group.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 0.5s; }
+.fade-in-group.visible > *:nth-child(7) { opacity: 1; transform: none; transition-delay: 0.6s; }
+.fade-in-group.visible > *:nth-child(8) { opacity: 1; transform: none; transition-delay: 0.7s; }
+
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 0.6; }
+  50%       { transform: scaleY(0.5); opacity: 0.2; }
+}
+
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
+}
 </style>
 </head>
+
 <body id="top">
 
-<!-- ======== CSS-ONLY HAMBURGER MENU ======== -->
-<input type="checkbox" id="menu-toggle">
-<label class="menu-label" for="menu-toggle" aria-label="Deschide meniul">
-  <span></span>
-  <span></span>
-  <span></span>
-</label>
+<!-- Scroll progress indicator -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-<label class="menu-overlay" for="menu-toggle"></label>
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav class="nav" id="nav" role="navigation" aria-label="Navigare principală">
+  <a href="#top" class="nav-logo" aria-label="Acasă">
+    <span class="nav-logo-cross">☦</span>
+    <span class="nav-logo-text">Mănăstirile din Gorj</span>
+  </a>
 
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <p>Navigare</p>
-    <h3>Mănăstirile din Gorj</h3>
-  </div>
-  <nav>
-    <ul>
-      <li><a href="#tismana">Mănăstirea Tismana</a></li>
-      <li><a href="#lainici">Mănăstirea Lainici</a></li>
-      <li><a href="#polovragi">Mănăstirea Polovragi</a></li>
-      <li><a href="#crasna">Mănăstirea Crasna</a></li>
-      <li><a href="#icoana">Mănăstirea Icoana</a></li>
-      <li><a href="#gura-motrului">Mănăstirea Gura Motrului</a></li>
-      <li><a href="#visinaStramt">Mănăstirea Vișina–Strâmt</a></li>
-      <li><a href="#barnova">Schitul Locurele</a></li>
-    </ul>
-  </nav>
-</aside>
+  <ul class="nav-links" role="list">
+    <li><a href="#tismana">Tismana</a></li>
+    <li><a href="#lainici">Lainici</a></li>
+    <li><a href="#polovragi">Polovragi</a></li>
+    <li><a href="#crasna">Crasna</a></li>
+    <li><a href="#icoana">Icoana</a></li>
+    <li><a href="#gura-motrului">Gura Motrului</a></li>
+    <li><a href="#visinaStramt">Vișina–Strâmt</a></li>
+    <li><a href="#locurele">Locurele</a></li>
+  </ul>
 
-<!-- ======== HEADER ======== -->
-<header class="site-header">
-  <div class="header-inner">
-    <div class="header-eyebrow">Județul Gorj · Oltenia · România</div>
-    <h1>Mănăstirile din <em>Gorj</em></h1>
-    <p class="header-subtitle">
+  <button class="nav-burger" id="navBurger" aria-label="Deschide meniu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-drawer" id="navDrawer" role="dialog" aria-label="Meniu mobil">
+  <ul role="list">
+    <li><a href="#tismana"   class="drawer-link">Mănăstirea Tismana</a></li>
+    <li><a href="#lainici"   class="drawer-link">Mănăstirea Lainici</a></li>
+    <li><a href="#polovragi" class="drawer-link">Mănăstirea Polovragi</a></li>
+    <li><a href="#crasna"    class="drawer-link">Mănăstirea Crasna</a></li>
+    <li><a href="#icoana"    class="drawer-link">Mănăstirea Icoana</a></li>
+    <li><a href="#gura-motrului" class="drawer-link">Mănăstirea Gura Motrului</a></li>
+    <li><a href="#visinaStramt"  class="drawer-link">Mănăstirea Vișina–Strâmt</a></li>
+    <li><a href="#locurele"  class="drawer-link">Schitul Locurele</a></li>
+  </ul>
+</div>
+
+<div class="nav-overlay" id="navOverlay"></div>
+
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<header class="hero" role="banner">
+  <div class="hero-bg"></div>
+  <div class="hero-cross-deco" aria-hidden="true">☦</div>
+
+  
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Județul Gorj · Oltenia · România</div>
+    <h1>Mănăstirile<br>din <em>Gorj</em></h1>
+    <div class="hero-line"></div>
+    <p class="hero-subtitle">
       Credință, tradiție și spiritualitate în inima Olteniei — acolo unde muntele și sufletul se întâlnesc de veacuri sub binecuvântarea Crucii.
     </p>
+    <a href="#intro" class="hero-cta">
+      Descoperă <span class="hero-cta-arrow">→</span>
+    </a>
+  </div>
 
-    <div class="overview-grid">
-      <div class="overview-stat">
-        <div class="num">20+</div>
-        <div class="label">Mănăstiri &amp; schituri</div>
-      </div>
-      <div class="overview-desc">
-        <p>
-          Județul Gorj adăpostește unele dintre cele mai vechi și mai valoroase lăcașuri de cult ortodox din România. 
-          De la ctitorii domneşti din veacul al XIV-lea până la schituri rupestre sălbatice ascunse în cheile Olteţului, 
-          Gorjul rămâne un tezaur viu al credinţei şi al artei medievale.
-        </p>
-      </div>
-      <div class="overview-list">
-        <p>Mănăstiri prezentate</p>
-        <ul>
-          <li><a href="#tismana">Tismana</a></li>
-          <li><a href="#lainici">Lainici</a></li>
-          <li><a href="#polovragi">Polovragi</a></li>
-          <li><a href="#crasna">Crasna</a></li>
-          <li><a href="#icoana">Icoana</a></li>
-          <li><a href="#gura-motrului">Gura Motrului</a></li>
-          <li><a href="#visinaStramt">Vișina–Strâmt</a></li>
-          <li><a href="#barnova">Locurele</a></li>
-        </ul>
-      </div>
+  <div class="hero-stats" role="list">
+    <div class="hero-stat" role="listitem">
+      <div class="hero-stat-num">20+</div>
+      <div class="hero-stat-label">Mănăstiri &amp; schituri</div>
+    </div>
+    <div class="hero-stat" role="listitem">
+      <div class="hero-stat-num">XIV</div>
+      <div class="hero-stat-label">Sec. fondare Tismana</div>
+    </div>
+    <div class="hero-stat" role="listitem">
+      <div class="hero-stat-num">8</div>
+      <div class="hero-stat-label">Ctitorii prezentate</div>
     </div>
   </div>
 </header>
 
-<!-- ======== MAIN CONTENT ======== -->
-<div class="page-body">
-  <main class="content-area">
 
-    <div class="intro-section">
-      <span class="ornament">✦ ✦ ✦</span>
-      <h2>O Moștenire Spirituală Vie</h2>
+<!-- ============================================================
+     INTRO
+     ============================================================ -->
+<section class="intro" id="intro" aria-labelledby="intro-heading">
+  <div class="intro-inner">
+    <h2 class="intro-heading fade-in" id="intro-heading">
+      O Moștenire<br><strong>Spirituală</strong><br>Vie
+    </h2>
+    <div class="intro-body fade-in">
       <p>
-        Mănăstirile gorjene nu sunt simple clădiri de piatră — sunt mărturii vii ale credinţei unui popor 
-        care a găsit în rugăciune şi în munca mâinilor sale un sens adânc al existenţei. Fiecare ctitorie 
-        poartă amprenta unui domnitor, a unui sfânt sau a unei comunităţi care a ales să se consacre lui Dumnezeu.
+        Mănăstirile gorjene nu sunt simple clădiri de piatră — sunt mărturii vii ale credinței unui popor care a găsit în rugăciune și în munca mâinilor sale un sens adânc al existenței. Fiecare ctitorie poartă amprenta unui domnitor, a unui sfânt sau a unei comunități care a ales să se consacre lui Dumnezeu.
       </p>
       <p>
-        Descoperind aceste lăcașuri, călătorești deopotrivă prin timp și prin geografie — de la cheile 
-        sălbatice ale Olteţului până la poienile de munte unde glasul clopotului răsună mai presus de orice zgomot lumesc.
+        Descoperind aceste lăcașuri, călătorești deopotrivă prin timp și prin geografie — de la cheile sălbatice ale Olteţului până la poienile de munte unde glasul clopotului răsună mai presus de orice zgomot lumesc.
       </p>
-      <span class="ornament">☦</span>
     </div>
+    <div class="intro-ornament fade-in">✦ ✦ ✦</div>
+  </div>
+</section>
 
-    <!-- ======== TISMANA ======== -->
-    <article class="monastery-section" id="tismana">
-      <div class="monastery-card">
-        <div class="card-header" data-symbol="☦">
-          <div class="monastery-number">Mănăstire nr. 01</div>
-          <h2>Mănăstirea Tismana</h2>
-          <span class="location-badge">Tismana, Gorj, pe malul râului Tismana</span>
-        </div>
-        <div class="card-body">
 
-          <div class="info-row">
-            <div class="info-chip">
-              <span class="chip-label">Fondată</span>
-              <span class="chip-value">cca. 1375–1378</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Ctitor</span>
-              <span class="chip-value">Sf. Nicodim de la Tismana</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Tip</span>
-              <span class="chip-value">Mănăstire de maici</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Stil arhitectural</span>
-              <span class="chip-value">Byzantine-brâncovenesc</span>
-            </div>
+<!-- ============================================================
+     MONASTERY GRID (quick-nav cards)
+     ============================================================ -->
+<section class="grid-section" aria-labelledby="grid-label">
+  <div class="section-label" id="grid-label">Mănăstirile prezentate</div>
+  <div class="monastery-grid fade-in-group">
+
+    <!-- 1 Tismana -->
+    <a href="#tismana" class="m-card" aria-label="Mănăstirea Tismana">
+      <div class="m-card-img-wrap">
+        <img class="m-card-img"
+             src="https://stirileprotv.ro/img/2024/11/26/220000/62501402.jpg?fm=jpg&q=80&fit=crop&crop=2048,1152,0,442&w=800"
+             alt="Mănăstirea Tismana"
+             loading="lazy">
+        <span class="m-card-badge">Sec. XIV · Cea mai veche</span>
+      </div>
+      <div class="m-card-body">
+        <div class="m-card-meta">Nr. 01</div>
+        <h3 class="m-card-title">Mănăstirea Tismana</h3>
+        <div class="m-card-location">📍 Tismana, pe malul râului Tismana</div>
+        <p class="m-card-excerpt">Cel mai vechi lăcaș de cult ortodox documentat din Ţara Românească, ctitorit de Sfântul Nicodim în 1375–1378.</p>
+        <div class="m-card-footer">
+          <div class="m-card-chips">
+            <span class="m-chip">Byzantine-Brâncovenesc</span>
+            <span class="m-chip">Maici</span>
           </div>
-
-          <div class="card-body-inner">
-          <div class="card-image-wrap">
-            <img src="https://stirileprotv.ro/img/2024/11/26/220000/62501402.jpg?fm=jpg&q=80&fit=crop&crop=2048%2C1152%2C0%2C442&w=1920" alt="Mănăstirea Tismana">
-            <div class="card-image-caption">Mănăstirea Tismana — vedere generală</div>
-          </div>
-
-          <div class="content-block">
-            <h3>Scurt Istoric</h3>
-            <p>
-              Mănăstirea Tismana este cel mai vechi lăcaș de cult ortodox cu existență documentată din Ţara Românească, 
-              înainte chiar de întemeierea acesteia ca stat. Fondată de monahul Nicodim, originar din Macedonia, 
-              aşezămantul a beneficiat de sprijinul voievozilor Vladislav I şi Radu I, care au oferit importante danii şi privilegii.
-            </p>
-            <p>
-              Sfântul Nicodim a ales cu înţelepciune locul: un masiv stâncos ce se înalţă abrupt deasupra văii râului 
-              Tismana, un loc apărat în mod natural şi izolat de zgomotul lumii. Mănăstirea a devenit repede un centru 
-              spiritual şi cultural de primă importanţă în Ţara Românească, adăpostind o valoroasă bibliotecă şi o 
-              şcoală de caligrafie şi miniatură.
-            </p>
-            <p>
-              De-a lungul veacurilor, Tismana a trecut prin numeroase refaceri şi incendii, dar şi-a păstrat 
-              substanţa spirituală intactă. Mircea cel Bătrân, Vladislav al II-lea şi mai târziu Constantin Brâncoveanu 
-              au contribuit cu donaţii şi lucrări de renovare care i-au conferit înfăţişarea actuală.
-            </p>
-            <p>
-              Racla cu moaştele Sfântului Nicodim, aduse de la Mănăstirea Topolniţa în 1955, reprezintă cel 
-              mai preţios odor spiritual al aşezămantului. Totodată, biserica păstrează picturi murale de o 
-              remarcabilă valoare artistică şi o bogată colecţie de obiecte liturgice medievale.
-            </p>
-          </div>
-
-          <div class="highlight-quote">
-            „Sfântul Nicodim a construit mănăstirea nu pentru a scăpa de lume, ci pentru a face din singurătate 
-            o poartă spre lumea lui Dumnezeu."
-          </div>
-
-          <div class="two-col">
-            <div class="content-block">
-              <h3>Arhitectură</h3>
-              <p>
-                Construcţia din piatră, dispusă pe mai multe niveluri, este ancorată în stânca muntelui. 
-                Turnul-clopotniţă, de factură medieval-balcanică, datează parţial din veacul al XIV-lea. 
-                Bolniţa şi paraclisele ridicate în epocile ulterioară adaugă influenţe renascentiste şi 
-                brâncoveneşti, cu arcade bogat sculptate şi pridvor cu coloane.
-              </p>
-              <p>
-                Interiorul bisericii principale impresionează prin frescele din 1732, restaurate în secolul XX. 
-                Catapeteasma sculptată şi aurită reflectă cu fidelitate estetica brâncovenească, cu rozete 
-                şi vegetal ornamental specifice.
-              </p>
-            </div>
-            <div class="content-block">
-              <h3>Importanţă Spirituală</h3>
-              <p>
-                Tismana este locul de canonizare al Sfântului Nicodim, prăznuit la 26 decembrie. 
-                Mănăstirea a constituit o şcoală de viaţă duhovnicească pentru zeci de generaţii 
-                de monahi şi pustnici care s-au retras în peşterile din împrejurimi.
-              </p>
-              <p>
-                Anual, de Sfintele Paşti şi de hramul mănăstirii, mii de pelerini urcă pe drumul 
-                abrupt pentru a se atinge de moaştele sfântului şi a participa la slujbele de noapte 
-                însoţite de torţe şi cântec psaltic.
-              </p>
-            </div>
-          </div>
-
-          </div><!-- /.card-body-inner -->
-
-          <div class="content-block">
-            <div class="practical-box">
-              <h4>Informaţii Utile pentru Vizitatori</h4>
-              <div class="practical-grid">
-                <div class="practical-item">
-                  <span class="pi-label">Acces</span>
-                  <span class="pi-value">DN67D, la 25 km vest de Târgu-Jiu; drum asfaltat</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Program vizitare</span>
-                  <span class="pi-value">Zilnic, ora 7:00–20:00</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Hram</span>
-                  <span class="pi-value">Adormirea Maicii Domnului (15 august)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Cazare</span>
-                  <span class="pi-value">Disponibilă la stăreţie şi în pensiunile din localitate</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <span class="m-card-arrow" aria-hidden="true">→</span>
         </div>
       </div>
-    </article>
+    </a>
 
-    <div class="section-divider">✦ ✦ ✦</div>
-
-    <!-- ======== LAINICI ======== -->
-    <article class="monastery-section" id="lainici">
-      <div class="monastery-card">
-        <div class="card-header" data-symbol="⛪">
-          <div class="monastery-number">Mănăstire nr. 02</div>
-          <h2>Mănăstirea Lainici</h2>
-          <span class="location-badge">Brăneşti, Gorj, Defileul Jiului</span>
-        </div>
-        <div class="card-body">
-
-          <div class="info-row">
-            <div class="info-chip">
-              <span class="chip-label">Fondată</span>
-              <span class="chip-value">sec. XVII (atestată 1812)</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Tip</span>
-              <span class="chip-value">Mănăstire de călugări</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Amplasament</span>
-              <span class="chip-value">Defileul Jiului, stâncă</span>
-            </div>
+    <!-- 2 Lainici -->
+    <a href="#lainici" class="m-card" aria-label="Mănăstirea Lainici">
+      <div class="m-card-img-wrap">
+        <img class="m-card-img"
+             src="https://upload.wikimedia.org/wikipedia/commons/b/b6/M%C4%83n%C4%83stirea_Lainici%2C_Biserica_Veche.JPG"
+             alt="Mănăstirea Lainici"
+             loading="lazy">
+        <span class="m-card-badge">Sec. XVII · Defileul Jiului</span>
+      </div>
+      <div class="m-card-body">
+        <div class="m-card-meta">Nr. 02</div>
+        <h3 class="m-card-title">Mănăstirea Lainici</h3>
+        <div class="m-card-location">📍 Brănești — Defileul Jiului</div>
+        <p class="m-card-excerpt">Așezată spectaculos pe o terasă stâncoasă în Defileul Jiului, cu o tradiție isihastă profundă și peșteri de pustnici.</p>
+        <div class="m-card-footer">
+          <div class="m-card-chips">
+            <span class="m-chip">Neobizantin</span>
+            <span class="m-chip">Călugări</span>
           </div>
-
-          <div class="card-body-inner">
-          <div class="card-image-wrap">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b6/M%C4%83n%C4%83stirea_Lainici%2C_Biserica_Veche.JPG" alt="Mănăstirea Lainici">
-            <div class="card-image-caption">Mănăstirea Lainici — Defileul Jiului</div>
-          </div>
-
-          <div class="content-block">
-            <h3>Scurt Istoric</h3>
-            <p>
-              Aşezată spectaculos pe o terasă stâncoasă în Defileul Jiului, Mănăstirea Lainici este una 
-              dintre ctitoriile cu cea mai dramatică localizare din întreaga Olteniei. Primele menţiuni 
-              documentare datează din 1812, dar tradiţia orală şi anumite urme materiale sugerează existenţa 
-              unui schit în locul acesta încă din veacul al XVII-lea.
-            </p>
-            <p>
-              Originile locului sunt legate de un monah ermit care a ales peşterile din stânca Jiului drept 
-              locuinţă de rugăciune. Treptat, în jurul acestuia s-a format o mică obşte, iar pe ruinele 
-              schitului primar s-a ridicat actuala biserică din piatră, sfinţită în prima jumătate a secolului XIX.
-            </p>
-            <p>
-              Mănăstirea a suferit serios din cauza construirii căii ferate prin defileu la sfârşitul 
-              veacului al XIX-lea şi a inundaţiilor frecvente ale Jiului. Mutată şi reconstruită de mai 
-              multe ori, a primit forma actuală în urma unui amplu program de restaurare din a doua jumătate 
-              a secolului XX şi lucrărilor recente de extindere.
-            </p>
-            <p>
-              Astăzi, mănăstirea este condusă de o obşte de călugări, cu o viaţă liturgică intensă şi un 
-              program duhovnicesc de tip athonit, inspirat de tradiţia rugăciunii isihaste. Locul a atras 
-              numeroşi duhovnici cu faimă şi pelerini din întreaga ţară.
-            </p>
-          </div>
-
-          <div class="two-col">
-            <div class="content-block">
-              <h3>Arhitectură</h3>
-              <p>
-                Complexul monahal se sprijină literalmente pe stâncile defileului, cu câteva construcţii 
-                suprapuse pe terase orizontale sculptate în munte. Biserica principală din sec. XIX îmbină 
-                tradiţia munteneascǎ cu elemente neobizantine. Un pasaj boltit sapă prin stâncă leagă 
-                incinta de paraclisul rupestru, una dintre rarităţile arhitecturii monastice gorjene.
-              </p>
-            </div>
-            <div class="content-block">
-              <h3>Importanţă Spirituală</h3>
-              <p>
-                Lainici este renumit ca loc de nevoință şi de isihasm. Duhovnicii mănăstirii au exercitat 
-                o influenţă profundă asupra vieţii religioase din sudul ţării. Peşterile din preajma 
-                mănăstirii, unde s-au retras pustnici, pot fi vizitate şi astăzi, constituind un circuit 
-                pelerinaj foarte popular.
-              </p>
-            </div>
-          </div>
-
-          </div><!-- /.card-body-inner -->
-
-          <div class="content-block">
-            <div class="practical-box">
-              <h4>Informaţii Utile pentru Vizitatori</h4>
-              <div class="practical-grid">
-                <div class="practical-item">
-                  <span class="pi-label">Acces</span>
-                  <span class="pi-value">E79 (Târgu-Jiu–Petroşani), km 36; parcare la intrare</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Program vizitare</span>
-                  <span class="pi-value">Zilnic, ora 6:00–21:00</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Hram</span>
-                  <span class="pi-value">Naşterea Sf. Ioan Botezătorul (24 iunie)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Atracţii</span>
-                  <span class="pi-value">Peşterile pustnicilor, panorama defileului</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <span class="m-card-arrow" aria-hidden="true">→</span>
         </div>
       </div>
-    </article>
+    </a>
 
-    <div class="section-divider">✦ ✦ ✦</div>
-
-    <!-- ======== POLOVRAGI ======== -->
-    <article class="monastery-section" id="polovragi">
-      <div class="monastery-card">
-        <div class="card-header" data-symbol="🏔">
-          <div class="monastery-number">Mănăstire nr. 03</div>
-          <h2>Mănăstirea Polovragi</h2>
-          <span class="location-badge">Polovragi, Gorj, Cheile Olteţului</span>
-        </div>
-        <div class="card-body">
-
-          <div class="info-row">
-            <div class="info-chip">
-              <span class="chip-label">Fondată</span>
-              <span class="chip-value">sec. XVI–XVII</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Ctitor (refacere)</span>
-              <span class="chip-value">Constantin Brâncoveanu (1703)</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Tip</span>
-              <span class="chip-value">Mănăstire de călugări</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Stil</span>
-              <span class="chip-value">Brâncovenesc</span>
-            </div>
+    <!-- 3 Polovragi -->
+    <a href="#polovragi" class="m-card" aria-label="Mănăstirea Polovragi">
+      <div class="m-card-img-wrap">
+        <img class="m-card-img"
+             src="https://www.trinitas.tv/wp-content/uploads/2025/09/Manastirea-Polovragi-din-judetul-Gorj-%E2%80%93-o-poarta-intre-pamant-si-cer-pasiipelerinului.jpg"
+             alt="Mănăstirea Polovragi"
+             loading="lazy">
+        <span class="m-card-badge">1703 · Brâncovenesc</span>
+      </div>
+      <div class="m-card-body">
+        <div class="m-card-meta">Nr. 03</div>
+        <h3 class="m-card-title">Mănăstirea Polovragi</h3>
+        <div class="m-card-location">📍 Polovragi — Cheile Olteţului</div>
+        <p class="m-card-excerpt">Refăcută de Constantin Brâncoveanu în 1703, bijuterie a stilului brâncovenesc la intrarea în Cheile Olteţului.</p>
+        <div class="m-card-footer">
+          <div class="m-card-chips">
+            <span class="m-chip">Brâncovenesc</span>
+            <span class="m-chip">Călugări</span>
           </div>
-
-          <div class="card-body-inner">
-          <div class="card-image-wrap">
-            <img src="https://www.trinitas.tv/wp-content/uploads/2025/09/Manastirea-Polovragi-din-judetul-Gorj-%E2%80%93-o-poarta-intre-pamant-si-cer-pasiipelerinului.jpg" alt="Mănăstirea Polovragi">
-            <div class="card-image-caption">Mănăstirea Polovragi — Cheile Olteţului</div>
-          </div>
-
-          <div class="content-block">
-            <h3>Scurt Istoric</h3>
-            <p>
-              Mănăstirea Polovragi se ridică la intrarea în Cheile Olteţului, în preajma Peşterii Polovragi, 
-              formând împreună un ansamblu natural şi spiritual de o rară frumuseţe. Primele atestări documentare 
-              ale unui aşezământ monahal în această zonă datează din prima jumătate a veacului al XVII-lea.
-            </p>
-            <p>
-              Momentul de referinţă din istoria sa este refacerea completă din 1703, realizată din porunca 
-              domitorului Constantin Brâncoveanu. Acesta a dotat mănăstirea cu o nouă biserică în stil 
-              brâncovenesc, cu chilii, turn-clopotniţă şi ziduri de incintă, transformând-o într-un complex 
-              arhitectural armonios şi reprezentativ pentru arta voievodului-ctitor.
-            </p>
-            <p>
-              Ulterior, în perioada fanariotă şi în veacul al XIX-lea, mănăstirea a trecut prin perioade 
-              de declin şi de refacere. Închisă în 1864 prin legea secularizării, a redevenit activă după 
-              1918, găzduind şi un muzeu de artă ecleziastică cu obiecte de valoare excepţională.
-            </p>
-            <p>
-              La scurt timp după reactivare, obştea de călugări a revitalizat viaţa monahală, iar 
-              mănăstirea a intrat în circuitul pelerinajului gorjean alături de celelalte mari ctitorii 
-              ale judeţului.
-            </p>
-          </div>
-
-          <div class="highlight-quote">
-            „Lacul clar al Olteţului, stâncile suri ale cheilor şi turla mănăstirii compun împreună 
-            una dintre cele mai emoţionante imagini ale Gorjului."
-          </div>
-
-          <div class="two-col">
-            <div class="content-block">
-              <h3>Arhitectură</h3>
-              <p>
-                Edificiul central este o bijuterie a stilului brâncovenesc: pridvor cu arcade pe coloane 
-                zvelte, ancadramente bogat profilate, sculptură în piatră cu motive vegetale şi geometrice. 
-                Pisania din 1703 — păstrată în original — consemnează ctitorirea de către Brâncoveanu. 
-                Turnul-clopotniţă, remarcabil prin proporţii, domină intrarea în incintă.
-              </p>
-            </div>
-            <div class="content-block">
-              <h3>Importanţă Spirituală</h3>
-              <p>
-                Hramul mănăstirii, Adormirea Maicii Domnului (15 august), atrage anual mii de pelerini 
-                din întreaga Oltenie. Legătura spirituală cu Peştera Polovragi — unde, conform tradiţiei, 
-                un pustnic se nevoieşte de secole — conferă locului o dimensiune mistică aparte.
-              </p>
-            </div>
-          </div>
-
-          </div><!-- /.card-body-inner -->
-
-          <div class="content-block">
-            <div class="practical-box">
-              <h4>Informaţii Utile pentru Vizitatori</h4>
-              <div class="practical-grid">
-                <div class="practical-item">
-                  <span class="pi-label">Acces</span>
-                  <span class="pi-value">DN67, spre Rânca; la 40 km de Târgu-Jiu</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Program vizitare</span>
-                  <span class="pi-value">Zilnic, ora 8:00–19:00</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Hram</span>
-                  <span class="pi-value">Adormirea Maicii Domnului (15 august)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Combina cu</span>
-                  <span class="pi-value">Peştera Polovragi, Cheile Olteţului</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <span class="m-card-arrow" aria-hidden="true">→</span>
         </div>
       </div>
-    </article>
+    </a>
 
-    <div class="section-divider">✦ ✦ ✦</div>
-
-    <!-- ======== CRASNA ======== -->
-    <article class="monastery-section" id="crasna">
-      <div class="monastery-card">
-        <div class="card-header" data-symbol="🌿">
-          <div class="monastery-number">Mănăstire nr. 04</div>
-          <h2>Mănăstirea Crasna</h2>
-          <span class="location-badge">Crasna, Gorj, Valea Crasna</span>
-        </div>
-        <div class="card-body">
-
-          <div class="info-row">
-            <div class="info-chip">
-              <span class="chip-label">Fondată</span>
-              <span class="chip-value">sec. XVI (atestată 1636)</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Tip</span>
-              <span class="chip-value">Mănăstire de maici</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Amplasament</span>
-              <span class="chip-value">Munte, pădure de fag</span>
-            </div>
+    <!-- 4 Crasna -->
+    <a href="#crasna" class="m-card" aria-label="Mănăstirea Crasna">
+      <div class="m-card-img-wrap" style="background:var(--parchment2); aspect-ratio:16/10; display:flex; align-items:center; justify-content:center;">
+        <img class="m-card-img"
+             src="https://www.trinitas.tv/wp-content/uploads/2019/03/Pa%C8%99ii-Pelerinului.-M%C4%83n%C4%83stirea-Brebu-jude%C8%9Bul-Praohva-17-03-2019.jpg"
+             alt="Mănăstirea Polovragi"
+             loading="lazy">
+        <span style="font-size:3rem; opacity:0.18;">☦</span>
+      </div>
+      <div class="m-card-body">
+        <div class="m-card-meta">Nr. 04</div>
+        <h3 class="m-card-title">Mănăstirea Crasna</h3>
+        <div class="m-card-location">📍 Crasna — Valea Crasna</div>
+        <p class="m-card-excerpt">Pierdută în codrii gorjeni, Crasna este un loc de reculegere autentică, cu arhitectură rustică din piatră de munte și șindrilă.</p>
+        <div class="m-card-footer">
+          <div class="m-card-chips">
+            <span class="m-chip">Rustic Moldav</span>
+            <span class="m-chip">Maici</span>
           </div>
-
-          <div class="content-block">
-            <h3>Scurt Istoric</h3>
-            <p>
-              Pierdută în verdele dens al codrilor gorjeni, Mănăstirea Crasna este unul dintre acele 
-              aşezăminte care par să fi crescut din însuşi pămantul muntelui. Primele documente cunoscute 
-              despre un schit în Valea Crasna datează de pe la 1636, deşi tradiţia locală urcă originile 
-              mai sus în timp, legând întemeierea de un grup de monahi refugiaţi din sudul Dunării în faţa 
-              invaziilor otomane.
-            </p>
-            <p>
-              De-a lungul veacurilor, Crasna a rămas un loc mai retras şi mai puţin celebru decât Tismana 
-              sau Lainici, dar tocmai această discreţie i-a conservat farmecul autentic. Monahiile 
-              care vieuiesc astăzi acolo duc un trai de rugăciune şi muncă manuală inspirat din cel 
-              al monahismului primar: ţesut de covoare, cultivarea grădinii, apiculturǎ.
-            </p>
-            <p>
-              Actuala biserică din piatră a fost ridicată în secolele XVII–XVIII, cu adăugiri şi renovări 
-              succesive în veacul al XX-lea. O restaurare recentă a repus în valoare frescele interioare 
-              care prezentau o stare avansată de degradare.
-            </p>
-          </div>
-
-          <div class="two-col">
-            <div class="content-block">
-              <h3>Arhitectură</h3>
-              <p>
-                Mănăstirea Crasna nu uimeşte prin grandoare, ci printr-o armonie discretă cu mediul 
-                înconjurător. Zidurile din piatră de munte, acoperişurile înalte de şindrilă şi pridvorul 
-                simplu din lemn cioplit conferă ansamblului o autenticitate rustică rară. Turnul-clopotniţă 
-                de lemn, refăcut în 1970, este emblema vizuală a locului.
-              </p>
-            </div>
-            <div class="content-block">
-              <h3>Importanţă Spirituală</h3>
-              <p>
-                Crasna este un loc de pelerinaj mai intim, ales de cei care caută liniştea profundă 
-                mai mult decât marile manifestări de masă. Pădurea care înconjoară mănăstirea, cu fagii 
-                ei seculari, contribuie la atmosfera de rugăciune şi reculegere. 
-                Hramul mănăstirii în cinstea Sfântului Grigorie Decapolitul adună o comunitate locală fidelă.
-              </p>
-            </div>
-          </div>
-
-          <div class="content-block">
-            <div class="practical-box">
-              <h4>Informaţii Utile pentru Vizitatori</h4>
-              <div class="practical-grid">
-                <div class="practical-item">
-                  <span class="pi-label">Acces</span>
-                  <span class="pi-value">DJ 672C, spre Valea Crasna; 35 km de Târgu-Jiu</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Program vizitare</span>
-                  <span class="pi-value">Zilnic, ora 7:00–18:00</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Hram</span>
-                  <span class="pi-value">Sf. Grigorie Decapolitul (20 nov.)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Recomandare</span>
-                  <span class="pi-value">Iarnă şi primăvară — priveliştea e excepţională</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <span class="m-card-arrow" aria-hidden="true">→</span>
         </div>
       </div>
-    </article>
+    </a>
 
-    <div class="section-divider">✦ ✦ ✦</div>
-
-    <!-- ======== ICOANA ======== -->
-    <article class="monastery-section" id="icoana">
-      <div class="monastery-card">
-        <div class="card-header" data-symbol="✦">
-          <div class="monastery-number">Mănăstire nr. 05</div>
-          <h2>Mănăstirea Icoana</h2>
-          <span class="location-badge">Icoana, Gorj, Dealurile Gorjului</span>
-        </div>
-        <div class="card-body">
-
-          <div class="info-row">
-            <div class="info-chip">
-              <span class="chip-label">Fondată</span>
-              <span class="chip-value">sec. XVIII</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Tip</span>
-              <span class="chip-value">Mănăstire de maici</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Amplasament</span>
-              <span class="chip-value">Deal împădurit, zona Novaci</span>
-            </div>
+    <!-- 5 Icoana -->
+    <a href="#icoana" class="m-card" aria-label="Mănăstirea Icoana">
+      <div class="m-card-img-wrap" style="background:var(--parchment2); aspect-ratio:16/10; display:flex; align-items:center; justify-content:center;">
+        <img class="m-card-img"
+             src="https://basilica.ro/wp-content/uploads/2017/06/hram-manatirea-icoanei.jpg"
+             alt="Mănăstirea Polovragi"
+             loading="lazy">
+        <span style="font-size:3rem; opacity:0.18;">☦</span>
+      </div>
+      <div class="m-card-body">
+        <div class="m-card-meta">Nr. 05</div>
+        <h3 class="m-card-title">Mănăstirea Icoana</h3>
+        <div class="m-card-location">📍 Icoana — Dealurile Gorjului</div>
+        <p class="m-card-excerpt">Fondată în jurul unei icoane făcătoare de minuni descoperite în pădure, adăpostind un renumit atelier de broderie liturgică.</p>
+        <div class="m-card-footer">
+          <div class="m-card-chips">
+            <span class="m-chip">Sec. XVIII</span>
+            <span class="m-chip">Maici</span>
           </div>
-
-          <div class="content-block">
-            <h3>Scurt Istoric</h3>
-            <p>
-              Mănăstirea Icoana se află situată pe un deal împădurit din zona Novaci, în partea de 
-              sud-est a judeţului Gorj. Numele aşezământului vine, potrivit tradiţiei, de la o icoană 
-              făcătoare de minuni găsită în pădure de un cioban, icoana care a indicat miraculosor locul 
-              viitoarei ctitorii.
-            </p>
-            <p>
-              Înfiinţată în veacul al XVIII-lea de un grup de credincioşi locali, mănăstirea a crescut 
-              lent, devenind cu timpul un important centru al vieţii religioase din zona subcarpatică. 
-              O comunitate de maici care se numără astăzi la circa 30 de vieuifoare animă cu mult zel 
-              activităţile spirituale şi gospodăreşti ale locului.
-            </p>
-            <p>
-              Bogăţia artistică a mănăstirii rezidă mai ales în icoanele vechi — printre care se numără 
-              cea originală de la care îşi trage numele aşezamamantul — şi în broderia liturgică de 
-              excepţie lucrată în atelierul propriu.
-            </p>
-          </div>
-
-          <div class="two-col">
-            <div class="content-block">
-              <h3>Arhitectură</h3>
-              <p>
-                Edificiul central al mănăstirii datează în forma actuală din a doua jumătate a veacului 
-                al XIX-lea, cu un pridvor deschis sprijinit pe coloane de lemn şi o turlă zveltă care 
-                se vede de la depărtare. Chiliile sunt dispuse pe trei laturi ale unei curţi dreptunghiulare 
-                îngrijit amenajate cu flori şi pomi fructiferi.
-              </p>
-            </div>
-            <div class="content-block">
-              <h3>Importanţă Spirituală</h3>
-              <p>
-                Icoana făcătoare de minuni de la care locul îşi trage numele este păstrată cu sfinţenie 
-                în biserica principală şi este obiectul unui cult local statornic. Pelerinii vin 
-                îndeosebi cu rugăciuni pentru vindecare şi mulţumiri pentru graţiile primite, 
-                conferind locului o atmosferă de bucurie şi speranţă.
-              </p>
-            </div>
-          </div>
-
-          <div class="content-block">
-            <div class="practical-box">
-              <h4>Informaţii Utile pentru Vizitatori</h4>
-              <div class="practical-grid">
-                <div class="practical-item">
-                  <span class="pi-label">Acces</span>
-                  <span class="pi-value">Drum comunal din Novaci; 50 km de Târgu-Jiu</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Program vizitare</span>
-                  <span class="pi-value">Zilnic, ora 7:00–19:00</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Hram</span>
-                  <span class="pi-value">Naşterea Maicii Domnului (8 septembrie)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Atelier</span>
-                  <span class="pi-value">Broderie liturgică — obiecte disponibile la metoc</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <span class="m-card-arrow" aria-hidden="true">→</span>
         </div>
       </div>
-    </article>
+    </a>
 
-    <div class="section-divider">✦ ✦ ✦</div>
-
-    <!-- ======== GURA MOTRULUI ======== -->
-    <article class="monastery-section" id="gura-motrului">
-      <div class="monastery-card">
-        <div class="card-header" data-symbol="🌊">
-          <div class="monastery-number">Mănăstire nr. 06</div>
-          <h2>Mănăstirea Gura Motrului</h2>
-          <span class="location-badge">Gura Motrului, Gorj, confluenţa Motru–Dunăre</span>
-        </div>
-        <div class="card-body">
-
-          <div class="info-row">
-            <div class="info-chip">
-              <span class="chip-label">Fondată</span>
-              <span class="chip-value">sec. XVI (1512, prima atestare)</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Ctitor</span>
-              <span class="chip-value">Familia Craioveştilor</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Tip</span>
-              <span class="chip-value">Mănăstire de călugări</span>
-            </div>
+    <!-- 6 Gura Motrului -->
+    <a href="#gura-motrului" class="m-card" aria-label="Mănăstirea Gura Motrului">
+      <div class="m-card-img-wrap" style="background:var(--parchment2); aspect-ratio:16/10; display:flex; align-items:center; justify-content:center;">
+        <img class="m-card-img"
+             src="https://www.trinitas.tv/wp-content/uploads/2020/03/Comori-ale-Ortodoxiei.-M%C4%83n%C4%83stirea-Gura-Motrului-01-03-2020.jpg"
+             alt="Mănăstirea Polovragi"
+             loading="lazy">
+        <span style="font-size:3rem; opacity:0.18;">☦</span>
+      </div>
+      <div class="m-card-body">
+        <div class="m-card-meta">Nr. 06</div>
+        <h3 class="m-card-title">Mănăstirea Gura Motrului</h3>
+        <div class="m-card-location">📍 Gura Motrului — confluența Motru–Dunăre</div>
+        <p class="m-card-excerpt">Atestată din 1512, ctitorită de familia Craioveştilor — centrul spiritual al câmpiei gorjene, cu un portal sculptat remarcabil.</p>
+        <div class="m-card-footer">
+          <div class="m-card-chips">
+            <span class="m-chip">Oltean Sec. XVI</span>
+            <span class="m-chip">Călugări</span>
           </div>
-
-          <div class="content-block">
-            <h3>Scurt Istoric</h3>
-            <p>
-              Mănăstirea Gura Motrului este aşezată în sudul judeţului Gorj, în zona de câmpie, 
-              aproape de confluenţa râului Motru cu fluviul Dunărea. Prima atestare documentară 
-              sigură datează din 1512, din vremea voievodului Vlăduţ I, dar originile sale sunt 
-              legate tradiţional de puternica familie a Craioveştilor, care au stăpânit Oltenia 
-              la sfârşitul veacului al XV-lea.
-            </p>
-            <p>
-              Situată pe o rută comercială şi militară importantă, mănăstirea a îndeplinit de-a 
-              lungul istoriei şi un rol de punct de apărare şi de refugiu. Incendiile şi incursiunile 
-              otomane au distrus de mai multe ori complexul monahal, care a fost refăcut de fiecare 
-              dată cu sprijinul boierilor localnici şi al donatorilor din Ţara Românească.
-            </p>
-            <p>
-              Cel mai important moment de restaurare s-a petrecut în veacul al XVII-lea, când un 
-              mare boier gorjean a ridicat pe ruinele fostei ctitorii o nouă biserică de zid în 
-              stilul epocii, cu elemente caracteristice arhitecturii oltenești din acea perioadă. 
-              Ulterior, edificiul a primit ziduri de incintă consolidate şi anexe gospodăreşti.
-            </p>
-            <p>
-              Astăzi mănăstirea este frecventată de comunităţile rurale din sudul Gorjului şi 
-              de pelerini care vin să cinstească hramul şi să se bucure de liniştea câmpiei oltene.
-            </p>
-          </div>
-
-          <div class="two-col">
-            <div class="content-block">
-              <h3>Arhitectură</h3>
-              <p>
-                Spre deosebire de mănăstirile din zona montană, Gura Motrului prezintă o arhitectură 
-                de câmpie, mai deschisă şi mai puţin dramatică. Portalul de intrare în incintă 
-                este un exemplu de sculptură în piatră de calitate, cu decoraţii florale şi inscripţii 
-                cu litere chirilice parţial lizibile. Pictura interioară a fost refăcută în mai 
-                multe rânduri, ultima oară în deceniile recente.
-              </p>
-            </div>
-            <div class="content-block">
-              <h3>Importanţă Spirituală</h3>
-              <p>
-                Prin amplasarea în sudul judeţului, Gura Motrului serveşte drept centru spiritual 
-                pentru comunitǎţile mai îndepărtate de marile mănăstiri din zona montanǎ. Hramul 
-                Înălţarea Sfintei Cruci adunǎ anual credincioşi din zeci de sate gorjene şi 
-                mehedințene în una dintre cele mai frumoase manifestări de tradiţie religioasă din regiune.
-              </p>
-            </div>
-          </div>
-
-          <div class="content-block">
-            <div class="practical-box">
-              <h4>Informaţii Utile pentru Vizitatori</h4>
-              <div class="practical-grid">
-                <div class="practical-item">
-                  <span class="pi-label">Acces</span>
-                  <span class="pi-value">DN 55A, la 80 km sud de Târgu-Jiu</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Program vizitare</span>
-                  <span class="pi-value">Zilnic, ora 7:00–18:00</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Hram</span>
-                  <span class="pi-value">Înălţarea Sfintei Cruci (14 sept.)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Notă</span>
-                  <span class="pi-value">Zona câmpiei — uşor accesibil cu maşina</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <span class="m-card-arrow" aria-hidden="true">→</span>
         </div>
       </div>
-    </article>
+    </a>
 
-    <div class="section-divider">✦ ✦ ✦</div>
-
-    <!-- ======== VISINA-STRAMT ======== -->
-    <article class="monastery-section" id="visinaStramt">
-      <div class="monastery-card">
-        <div class="card-header" data-symbol="🌲">
-          <div class="monastery-number">Mănăstire nr. 07</div>
-          <h2>Mănăstirea Vișina–Strâmt</h2>
-          <span class="location-badge">Vișina, Gorj, Valea Gilortului</span>
-        </div>
-        <div class="card-body">
-
-          <div class="info-row">
-            <div class="info-chip">
-              <span class="chip-label">Fondată</span>
-              <span class="chip-value">sec. XVII–XVIII</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Tip</span>
-              <span class="chip-value">Mănăstire de maici</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Amplasament</span>
-              <span class="chip-value">Strâmtoarea Gilortului</span>
-            </div>
+    <!-- 7 Vișina–Strâmt -->
+    <a href="#visinaStramt" class="m-card" aria-label="Mănăstirea Vișina–Strâmt">
+      <div class="m-card-img-wrap" style="background:var(--parchment2); aspect-ratio:16/10; display:flex; align-items:center; justify-content:center;">
+        <img class="m-card-img"
+             src="https://www.crestinortodox.ro/admin/_files/newsannounce/visina-32.jpg"
+             alt="Mănăstirea Polovragi"
+             loading="lazy">
+        <span style="font-size:3rem; opacity:0.18;">☦</span>
+      </div>
+      <div class="m-card-body">
+        <div class="m-card-meta">Nr. 07</div>
+        <h3 class="m-card-title">Mănăstirea Vișina–Strâmt</h3>
+        <div class="m-card-location">📍 Vișina — Strâmtoarea Gilortului</div>
+        <p class="m-card-excerpt">Ancorată în stânca Gilortului, cu construcții pe terase succesive și un paraclis rupestru sculptat în munte.</p>
+        <div class="m-card-footer">
+          <div class="m-card-chips">
+            <span class="m-chip">Sec. XVII–XVIII</span>
+            <span class="m-chip">Maici</span>
           </div>
-
-          <div class="content-block">
-            <h3>Scurt Istoric</h3>
-            <p>
-              Aşezată la intrarea în Strâmtoarea Gilortului, Mănăstirea Vișina–Strâmt ocupă un loc 
-              de o frumuseţe sălbatică, cu pereţi de stâncă ce se ridică abrupt de ambele maluri ale 
-              apei. Originile sale sunt legate de un schit pusnicesc înfiinţat de câţiva monahi veniţi 
-              de la Tismana cu dorinţa de a găsi un loc şi mai retras şi mai tăcut.
-            </p>
-            <p>
-              Documentele indică existenţa unui schit activ în această zonă cel târziu din veacul 
-              al XVIII-lea. Locul a fost refăcut şi extins în mai multe rânduri, ultima refacere 
-              importantă desfăşurând se în ultimele decenii ale secolului XX, când s-au construit 
-              chilii noi şi o stăreţie modernă, integrată armonios în peisajul natural.
-            </p>
-            <p>
-              Obştea actuală de maici menţine un program liturgic riguros şi se bucură de o bună 
-              reputaţie în privinţa ospitalităţii oferite pelerinilor şi turiştilor care descoperă 
-              această zonă mai puţin cunoscută.
-            </p>
-          </div>
-
-          <div class="two-col">
-            <div class="content-block">
-              <h3>Arhitectură</h3>
-              <p>
-                Specificul arhitectural al mănăstirii este dat de adaptarea la relief: construcţiile 
-                sunt dispuse în terase succesive, cu trepte de piatră şi pasaje boltite care creează 
-                un labirint plăcut. Stânca în care este parţial săpat paraclisul mic al mănăstirii 
-                reprezintă o prezenţă vie a muntelui în inima aşezămantului.
-              </p>
-            </div>
-            <div class="content-block">
-              <h3>Importanţă Spirituală</h3>
-              <p>
-                Locul are o energie aparte, percepută de mulţi vizitatori ca deosebit de propice 
-                rugăciunii şi meditaţiei. Apropierea de natură sălbatică, sunetul permanent al apei 
-                şi atmosfera de linişte imensă fac din Vișina–Strâmt un loc de retragere şi 
-                recăpătare a echilibrului interior, îndrăgit îndeosebi de tineri.
-              </p>
-            </div>
-          </div>
-
-          <div class="content-block">
-            <div class="practical-box">
-              <h4>Informaţii Utile pentru Vizitatori</h4>
-              <div class="practical-grid">
-                <div class="practical-item">
-                  <span class="pi-label">Acces</span>
-                  <span class="pi-value">DJ 674, Valea Gilortului; 45 km de Târgu-Jiu</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Program vizitare</span>
-                  <span class="pi-value">Zilnic, ora 7:00–19:00</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Hram</span>
-                  <span class="pi-value">Sfinţii Arhangheli Mihail şi Gavriil (8 nov.)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Combina cu</span>
-                  <span class="pi-value">Traseul de hiking Strâmtoarea Gilortului</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <span class="m-card-arrow" aria-hidden="true">→</span>
         </div>
       </div>
-    </article>
+    </a>
 
-    <div class="section-divider">✦ ✦ ✦</div>
-
-    <!-- ======== LOCURELE ======== -->
-    <article class="monastery-section" id="barnova">
-      <div class="monastery-card">
-        <div class="card-header" data-symbol="🕊">
-          <div class="monastery-number">Schit nr. 08</div>
-          <h2>Schitul Locurele</h2>
-          <span class="location-badge">Locurele, Gorj, Munţii Parâng</span>
-        </div>
-        <div class="card-body">
-
-          <div class="info-row">
-            <div class="info-chip">
-              <span class="chip-label">Fondată</span>
-              <span class="chip-value">sec. XVIII (atestată 1796)</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Tip</span>
-              <span class="chip-value">Schit de călugări</span>
-            </div>
-            <div class="info-chip">
-              <span class="chip-label">Amplasament</span>
-              <span class="chip-value">Munte înalt, poiană izolată</span>
-            </div>
+    <!-- 8 Locurele -->
+    <a href="#locurele" class="m-card" aria-label="Schitul Locurele">
+      <div class="m-card-img-wrap" style="background:var(--parchment2); aspect-ratio:16/10; display:flex; align-items:center; justify-content:center;">
+        <img class="m-card-img"
+             src="https://www.trinitas.tv/wp-content/uploads/2025/09/Manastirea-Polovragi-din-judetul-Gorj-%E2%80%93-o-poarta-intre-pamant-si-cer-pasiipelerinului.jpg"
+             alt="Mănăstirea Polovragi"
+             loading="lazy">
+        <span style="font-size:3rem; opacity:0.18;">☦</span>
+      </div>
+      <div class="m-card-body">
+        <div class="m-card-meta">Schit · Nr. 08</div>
+        <h3 class="m-card-title">Schitul Locurele</h3>
+        <div class="m-card-location">📍 Locurele — Munții Parâng, ~900m alt.</div>
+        <p class="m-card-excerpt">Cel mai solitar dintre lăcașurile gorjene — o mică bisericuță de lemn și piatră accesibilă doar pe jos, în tăcerea masivului Parâng.</p>
+        <div class="m-card-footer">
+          <div class="m-card-chips">
+            <span class="m-chip">Sec. XVIII</span>
+            <span class="m-chip">Schit munte</span>
           </div>
-
-          <div class="content-block">
-            <h3>Scurt Istoric</h3>
-            <p>
-              Ascuns într-o poiană de munte din masivul Parâng, la o altitudine de aproape 900 de 
-              metri, Schitul Locurele este unul dintre cele mai solitare şi mai puţin accesibile 
-              aşezăminte monahale din Gorj. Datele documentare amintesc de el abia spre sfârşitul 
-              veacului al XVIII-lea, dar tradiţia locală îl leagă de retragerea pustnicilor în 
-              cătunele cele mai înalte ale muntelui, cu câteva veacuri mai înainte.
-            </p>
-            <p>
-              Schitul a fost locul de nevoinţă al mai multor monahi cu o viaţă exemplară de 
-              rugăciune şi post, dintre care unii au lăsat amintiri hagiografice transmise pe 
-              cale orală în comunităţile din vale. Izolarea geografică a făcut ca refacerile să 
-              fie întârziate şi construcţiile să rămână mai modeste, cu o arhitectură de munte 
-              simplă şi funcţională.
-            </p>
-            <p>
-              Accesibil în mare parte doar pe jos sau cu vehicule de teren, schitul atrage în 
-              principal pelerini hotărâţi şi pasionaţi de natură sălbatică care combină vizita 
-              spirituală cu traseele montane din împrejurimi.
-            </p>
-          </div>
-
-          <div class="highlight-quote">
-            „Cel care urcă până la Locurele nu caută un monument, ci un loc unde cerul şi 
-            pămantul par mai aproape unul de altul."
-          </div>
-
-          <div class="two-col">
-            <div class="content-block">
-              <h3>Arhitectură</h3>
-              <p>
-                Modestia construcţiei este înseşi esenţa locului. O mică bisericuţă din lemn şi 
-                piatră, câteva chilii adosate stâncii şi o fântână cu apă rece de munte 
-                alcătuiesc întreg aşezămantul. Clopoţelul mic din turla de lemn răsună departe 
-                în tăcerea muntelui. Totul inspiră simplitate şi concentrare.
-              </p>
-            </div>
-            <div class="content-block">
-              <h3>Importanţă Spirituală</h3>
-              <p>
-                Locurele este un spaţiu de purificare şi de reîntoarcere la esenţe. Pelerinii 
-                care ajung aici după ore de mers pe jos poartă deja în suflet o stare de 
-                pregătire duhovniceasă. Schitul practică ospitalitate simplă faţă de oricine 
-                vine cu bună intenţie, oferind un pat şi o masă frugală celor care doresc 
-                să petreacă câteva zile în tăcere şi rugăciune.
-              </p>
-            </div>
-          </div>
-
-          <div class="content-block">
-            <div class="practical-box">
-              <h4>Informaţii Utile pentru Vizitatori</h4>
-              <div class="practical-grid">
-                <div class="practical-item">
-                  <span class="pi-label">Acces</span>
-                  <span class="pi-value">Traseu marcat din Novaci (2–3 ore pe jos)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Program vizitare</span>
-                  <span class="pi-value">Permanent (anunţaţi călugărul înaintea vizitei)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Hram</span>
-                  <span class="pi-value">Schimbarea la Faţă (6 august)</span>
-                </div>
-                <div class="practical-item">
-                  <span class="pi-label">Recomandare</span>
-                  <span class="pi-value">Echipament de trekking obligatoriu</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <span class="m-card-arrow" aria-hidden="true">→</span>
         </div>
       </div>
-    </article>
+    </a>
 
-    <div class="section-divider">☦</div>
+  </div><!-- /.monastery-grid -->
+</section>
 
-    <div class="intro-section">
-      <h2>Un Peisaj Sacru Viu</h2>
-      <p>
-        Mănăstirile gorjene formează împreună o hartă a credinţei şi a istoriei care face din 
-        judeţul Gorj un loc unic în România. Indiferent dacă vii ca pelerin, ca turist cultural 
-        sau pur şi simplu ca om în căutare de linişte, fiecare lăcaş îţi oferă ceva diferit 
-        şi preţios.
-      </p>
-      <p>
-        Vizitaţi-le cu respect, cu răbdare şi cu inima deschisă. Ele au supravieţuit secole 
-        tocmai pentru că au ştiut să dăruiascǎ fiecărei generaţii exact ceea ce aceasta 
-        căuta mai mult — pace, sens şi legătură cu ceva mai mare decât noi înşine.
-      </p>
-      <span class="ornament">✦ ✦ ✦</span>
-    </div>
-
-  </main>
+<!-- ============================================================
+     GRID → DETAIL BRIDGE
+     ============================================================ -->
+<div class="grid-detail-bridge" aria-hidden="true">
+  <p class="bridge-label">Prezentare Detaliată</p>
+  <div class="bridge-rule">✦</div>
+  <p class="bridge-subtitle">Fiecare lăcaș — un capitol de istorie, credință și arhitectură</p>
 </div>
 
-<!-- ======== FOOTER ======== -->
-<footer class="site-footer">
-  <span class="footer-cross">☦</span>
-  <p><strong>Mănăstirile din Gorj</strong> · Patrimoniu Spiritual al Olteniei</p>
-  <p style="margin-top:8px;">
-    Județul Gorj · România · Episcopia Râmnicului
-  </p>
-  <p style="margin-top:12px; font-size:0.75rem; opacity:0.6;">
-    Informaţiile de pe această pagină au caracter documentar şi cultural. 
-    Programele de vizitare se pot modifica — verificaţi la faţa locului sau contactaţi stăreţia.
-    <br>Website realizat de Gîscă Alin și Geica Fabian. 
-    <br>Clasa a XI-a C · Liceul Teoretic Tudor Arghiezi · Târgul Cărbunești
-  </p>
+
+<!-- ============================================================
+     DETAIL SECTIONS
+     ============================================================ -->
+
+<!-- ── 1. TISMANA ── -->
+<article class="detail-section" id="tismana" aria-labelledby="t-title">
+  <div class="detail-inner">
+    <header class="detail-header fade-in">
+      <div class="detail-meta-row">
+        <a href="#grid-label" class="detail-back-link">← Toate mănăstirile</a>
+        <span class="detail-read-time">~ 3 min citire</span>
+      </div>
+      <div class="detail-num">Mănăstire nr. 01</div>
+      <h2 class="detail-title" id="t-title">Mănăstirea <em>Tismana</em></h2>
+      <div class="detail-location">📍 Tismana, Gorj · pe malul râului Tismana</div>
+      <div class="detail-chips">
+        <div class="detail-chip"><span class="detail-chip-label">Fondată</span><span class="detail-chip-value">cca. 1375–1378</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Ctitor</span><span class="detail-chip-value">Sf. Nicodim de la Tismana</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Stil</span><span class="detail-chip-value">Byzantine-Brâncovenesc</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Tip</span><span class="detail-chip-value">Mănăstire de maici</span></div>
+      </div>
+    </header>
+
+    <div class="detail-cols cols-3-2 fade-in">
+      <!-- Main content -->
+      <div>
+        <div class="content-block">
+          <div class="content-block-label">Scurt Istoric</div>
+          <p>Mănăstirea Tismana este cel mai vechi lăcaș de cult ortodox cu existență documentată din Ţara Românească, înainte chiar de întemeierea acesteia ca stat. Fondată de monahul Nicodim, originar din Macedonia, aşezămantul a beneficiat de sprijinul voievozilor Vladislav I şi Radu I, care au oferit importante danii şi privilegii.</p>
+          <p>Sfântul Nicodim a ales cu înţelepciune locul: un masiv stâncos ce se înalţă abrupt deasupra văii râului Tismana, un loc apărat în mod natural şi izolat de zgomotul lumii. Mănăstirea a devenit repede un centru spiritual şi cultural de primă importanţă, adăpostind o valoroasă bibliotecă şi o şcoală de caligrafie şi miniatură.</p>
+          <p>Mircea cel Bătrân, Vladislav al II-lea şi mai târziu Constantin Brâncoveanu au contribuit cu donaţii şi lucrări de renovare care i-au conferit înfăţişarea actuală. Racla cu moaştele Sfântului Nicodim, aduse de la Mănăstirea Topolniţa în 1955, reprezintă cel mai preţios odor spiritual al aşezămantului.</p>
+        </div>
+
+        <div class="pull-quote">
+          <p>„Sfântul Nicodim a construit mănăstirea nu pentru a scăpa de lume, ci pentru a face din singurătate o poartă spre lumea lui Dumnezeu."</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Arhitectură</div>
+          <p>Construcţia din piatră, dispusă pe mai multe niveluri, este ancorată în stânca muntelui. Turnul-clopotniţă, de factură medieval-balcanică, datează parţial din veacul al XIV-lea. Bolniţa şi paraclisele ridicate ulterior adaugă influenţe renascentiste şi brâncoveneşti, cu arcade bogat sculptate şi pridvor cu coloane.</p>
+          <p>Interiorul bisericii principale impresionează prin frescele din 1732, restaurate în secolul XX. Catapeteasma sculptată şi aurită reflectă cu fidelitate estetica brâncovenească, cu rozete şi vegetal ornamental specifice.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Importanță Spirituală</div>
+          <p>Tismana este locul de canonizare al Sfântului Nicodim, prăznuit la 26 decembrie. Anual, de Sfintele Paşti şi de hramul mănăstirii, mii de pelerini urcă pe drumul abrupt pentru a se atinge de moaştele sfântului şi a participa la slujbele de noapte însoţite de torţe şi cântec psaltic.</p>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside>
+        <div class="detail-img-wrap is-duplicate" style="margin-bottom:24px;">
+          <img src="https://stirileprotv.ro/img/2024/11/26/220000/62501402.jpg?fm=jpg&q=80&fit=crop&crop=2048,1152,0,442&w=800"
+               alt="Mănăstirea Tismana — vedere generală" loading="lazy">
+          <div class="detail-img-caption">Mănăstirea Tismana — vedere generală</div>
+        </div>
+
+        <div class="practical">
+          <div class="practical-heading">Informații Vizitatori</div>
+          <div class="practical-items">
+            <div class="practical-item">
+              <div class="practical-item-icon">🚗</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Acces</span>
+                <span class="practical-item-value">DN67D, 25 km vest de Târgu-Jiu; drum asfaltat</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🕐</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Program</span>
+                <span class="practical-item-value">Zilnic, 7:00–20:00</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">✦</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Hram</span>
+                <span class="practical-item-value">Adormirea Maicii Domnului (15 august)</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🏨</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Cazare</span>
+                <span class="practical-item-value">Disponibilă la stăreţie şi pensiunile locale</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<div class="ornament-divider" aria-hidden="true">✦</div>
+
+<!-- ── 2. LAINICI ── -->
+<article class="detail-section" id="lainici" aria-labelledby="l-title">
+  <div class="detail-inner">
+    <header class="detail-header fade-in">
+      <div class="detail-meta-row">
+        <a href="#grid-label" class="detail-back-link">← Toate mănăstirile</a>
+        <span class="detail-read-time">~ 3 min citire</span>
+      </div>
+      <div class="detail-num">Mănăstire nr. 02</div>
+      <h2 class="detail-title" id="l-title">Mănăstirea <em>Lainici</em></h2>
+      <div class="detail-location">📍 Brănești, Gorj · Defileul Jiului</div>
+      <div class="detail-chips">
+        <div class="detail-chip"><span class="detail-chip-label">Fondată</span><span class="detail-chip-value">Sec. XVII (atestată 1812)</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Stil</span><span class="detail-chip-value">Neobizantin Montan</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Tip</span><span class="detail-chip-value">Mănăstire de călugări</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Amplasament</span><span class="detail-chip-value">Terasă stâncoasă, defileu</span></div>
+      </div>
+    </header>
+
+    <div class="detail-cols cols-2-3 fade-in">
+      <aside>
+        <div class="detail-img-wrap is-duplicate" style="margin-bottom:24px;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b6/M%C4%83n%C4%83stirea_Lainici%2C_Biserica_Veche.JPG"
+               alt="Mănăstirea Lainici — Defileul Jiului" loading="lazy">
+          <div class="detail-img-caption">Mănăstirea Lainici — Defileul Jiului</div>
+        </div>
+
+        <div class="practical">
+          <div class="practical-heading">Informații Vizitatori</div>
+          <div class="practical-items">
+            <div class="practical-item">
+              <div class="practical-item-icon">🚗</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Acces</span>
+                <span class="practical-item-value">E79 (Tg-Jiu–Petroșani), km 36; parcare la intrare</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🕐</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Program</span>
+                <span class="practical-item-value">Zilnic, 6:00–21:00</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">✦</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Hram</span>
+                <span class="practical-item-value">Naşterea Sf. Ioan Botezătorul (24 iunie)</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🥾</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Atracții</span>
+                <span class="practical-item-value">Peșterile pustnicilor, panorama defileului</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div>
+        <div class="content-block">
+          <div class="content-block-label">Scurt Istoric</div>
+          <p>Aşezată spectaculos pe o terasă stâncoasă în Defileul Jiului, Mănăstirea Lainici este una dintre ctitoriile cu cea mai dramatică localizare din întreaga Oltenie. Primele menţiuni documentare datează din 1812, dar tradiţia orală şi anumite urme materiale sugerează existenţa unui schit în locul acesta încă din veacul al XVII-lea.</p>
+          <p>Originile locului sunt legate de un monah ermit care a ales peşterile din stânca Jiului drept locuinţă de rugăciune. Treptat, în jurul acestuia s-a format o mică obşte, iar pe ruinele schitului primar s-a ridicat actuala biserică din piatră. Mănăstirea a suferit serios din cauza construirii căii ferate prin defileu la sfârşitul veacului al XIX-lea şi a inundaţiilor frecvente ale Jiului.</p>
+          <p>Astăzi, mănăstirea este condusă de o obşte de călugări, cu o viaţă liturgică intensă şi un program duhovnicesc de tip athonit, inspirat de tradiţia rugăciunii isihaste.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Arhitectură</div>
+          <p>Complexul monahal se sprijină literalmente pe stâncile defileului, cu câteva construcţii suprapuse pe terase orizontale sculptate în munte. Un pasaj boltit săpat prin stâncă leagă incinta de paraclisul rupestru, una dintre rarităţile arhitecturii monastice gorjene. Biserica principală din sec. XIX îmbină tradiţia muntenească cu elemente neobizantine.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Importanță Spirituală · Isihasm</div>
+          <p>Lainici este renumit ca loc de nevoință şi de isihasm — tradiţia contemplativă a tăcerii interioare. Duhovnicii mănăstirii au exercitat o influenţă profundă asupra vieţii religioase din sudul ţării. Peşterile din preajma mănăstirii, unde s-au retras pustnici, pot fi vizitate şi astăzi, constituind un circuit de pelerinaj foarte popular.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<div class="ornament-divider" aria-hidden="true">✦</div>
+
+<!-- ── 3. POLOVRAGI ── -->
+<article class="detail-section" id="polovragi" aria-labelledby="p-title">
+  <div class="detail-inner">
+    <header class="detail-header fade-in">
+      <div class="detail-meta-row">
+        <a href="#grid-label" class="detail-back-link">← Toate mănăstirile</a>
+        <span class="detail-read-time">~ 3 min citire</span>
+      </div>
+      <div class="detail-num">Mănăstire nr. 03</div>
+      <h2 class="detail-title" id="p-title">Mănăstirea <em>Polovragi</em></h2>
+      <div class="detail-location">📍 Polovragi, Gorj · Cheile Olteţului</div>
+      <div class="detail-chips">
+        <div class="detail-chip"><span class="detail-chip-label">Refăcută</span><span class="detail-chip-value">1703 de Constantin Brâncoveanu</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Stil</span><span class="detail-chip-value">Brâncovenesc</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Tip</span><span class="detail-chip-value">Mănăstire de călugări</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Fundație</span><span class="detail-chip-value">Sec. XVI–XVII</span></div>
+      </div>
+    </header>
+
+    <div class="detail-cols cols-3-2 fade-in">
+      <div>
+        <div class="content-block">
+          <div class="content-block-label">Scurt Istoric</div>
+          <p>Mănăstirea Polovragi se ridică la intrarea în Cheile Olteţului, în preajma Peşterii Polovragi, formând împreună un ansamblu natural şi spiritual de o rară frumuseţe. Primele atestări documentare ale unui aşezământ monahal datează din prima jumătate a veacului al XVII-lea.</p>
+          <p>Momentul de referinţă din istoria sa este refacerea completă din 1703, realizată din porunca domitorului Constantin Brâncoveanu. Acesta a dotat mănăstirea cu o nouă biserică în stil brâncovenesc, cu chilii, turn-clopotniţă şi ziduri de incintă. Ulterior, în perioada fanariotă şi în veacul al XIX-lea, mănăstirea a trecut prin perioade de declin şi de refacere, inclusiv prin închiderea forţată din 1864 prin legea secularizării.</p>
+        </div>
+
+        <div class="pull-quote">
+          <p>„Lacul clar al Olteţului, stâncile suri ale cheilor şi turla mănăstirii compun împreună una dintre cele mai emoţionante imagini ale Gorjului."</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Arhitectură · Stilul Brâncovenesc</div>
+          <p>Edificiul central este o bijuterie a stilului brâncovenesc: pridvor cu arcade pe coloane zvelte, ancadramente bogat profilate, sculptură în piatră cu motive vegetale şi geometrice. Pisania din 1703 — păstrată în original — consemnează ctitorirea de către Brâncoveanu. Turnul-clopotniţă, remarcabil prin proporţii, domină intrarea în incintă.</p>
+          <p>Stilul brâncovenesc reprezintă sinteza unică a arhitecturii românești cu elementele orientale şi renascentiste — un limbaj vizual național de o eleganță inconfundabilă.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Importanță Spirituală</div>
+          <p>Hramul mănăstirii, Adormirea Maicii Domnului (15 august), atrage anual mii de pelerini din întreaga Oltenie. Legătura spirituală cu Peştera Polovragi — unde, conform tradiţiei, un pustnic se nevoieşte de secole — conferă locului o dimensiune mistică aparte.</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="detail-img-wrap is-duplicate" style="margin-bottom:24px;">
+          <img src="https://www.trinitas.tv/wp-content/uploads/2025/09/Manastirea-Polovragi-din-judetul-Gorj-%E2%80%93-o-poarta-intre-pamant-si-cer-pasiipelerinului.jpg"
+               alt="Mănăstirea Polovragi — Cheile Olteţului" loading="lazy">
+          <div class="detail-img-caption">Mănăstirea Polovragi — Cheile Olteţului</div>
+        </div>
+
+        <div class="practical">
+          <div class="practical-heading">Informații Vizitatori</div>
+          <div class="practical-items">
+            <div class="practical-item">
+              <div class="practical-item-icon">🚗</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Acces</span>
+                <span class="practical-item-value">DN67, spre Rânca; 40 km de Târgu-Jiu</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🕐</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Program</span>
+                <span class="practical-item-value">Zilnic, 8:00–19:00</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">✦</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Hram</span>
+                <span class="practical-item-value">Adormirea Maicii Domnului (15 august)</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🗺️</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Combină cu</span>
+                <span class="practical-item-value">Peştera Polovragi, Cheile Olteţului</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<div class="ornament-divider" aria-hidden="true">✦</div>
+
+<!-- ── 4. CRASNA ── -->
+<article class="detail-section" id="crasna" aria-labelledby="cr-title">
+  <div class="detail-inner">
+    <header class="detail-header fade-in">
+      <div class="detail-meta-row">
+        <a href="#grid-label" class="detail-back-link">← Toate mănăstirile</a>
+        <span class="detail-read-time">~ 2 min citire</span>
+      </div>
+      <div class="detail-num">Mănăstire nr. 04</div>
+      <h2 class="detail-title" id="cr-title">Mănăstirea <em>Crasna</em></h2>
+      <div class="detail-location">📍 Crasna, Gorj · Valea Crasna</div>
+      <div class="detail-chips">
+        <div class="detail-chip"><span class="detail-chip-label">Fondată</span><span class="detail-chip-value">Sec. XVI (atestată 1636)</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Stil</span><span class="detail-chip-value">Rustic de munte</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Tip</span><span class="detail-chip-value">Mănăstire de maici</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Amplasament</span><span class="detail-chip-value">Pădure de fag, munte</span></div>
+      </div>
+    </header>
+
+    <div class="detail-cols fade-in">
+      <div>
+        <div class="content-block">
+          <div class="content-block-label">Scurt Istoric</div>
+          <p>Pierdută în verdele dens al codrilor gorjeni, Mănăstirea Crasna este unul dintre acele aşezăminte care par să fi crescut din însuşi pămantul muntelui. Primele documente cunoscute datează de pe la 1636, deşi tradiţia locală urcă originile mai sus în timp, legând întemeierea de un grup de monahi refugiaţi din sudul Dunării în faţa invaziilor otomane.</p>
+          <p>Crasna a rămas un loc mai retras şi mai puţin celebru, dar tocmai această discreţie i-a conservat farmecul autentic. Monahiile care vieuiesc acolo duc un trai de rugăciune şi muncă manuală inspirat din cel al monahismului primar: ţesut de covoare, cultivarea grădinii, apicultură.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Arhitectură · Autenticitate Rustică</div>
+          <p>Mănăstirea Crasna nu uimeşte prin grandoare, ci printr-o armonie discretă cu mediul înconjurător. Zidurile din piatră de munte, acoperişurile înalte de şindrilă şi pridvorul simplu din lemn cioplit conferă ansamblului o autenticitate rustică rară. Turnul-clopotniţă de lemn, refăcut în 1970, este emblema vizuală a locului.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Importanță Spirituală</div>
+          <p>Crasna este un loc de pelerinaj mai intim, ales de cei care caută liniştea profundă mai mult decât marile manifestări de masă. Pădurea care înconjoară mănăstirea, cu fagii ei seculari, contribuie la atmosfera de rugăciune şi reculegere.</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="practical">
+          <div class="practical-heading">Informații Vizitatori</div>
+          <div class="practical-items">
+            <div class="practical-item">
+              <div class="practical-item-icon">🚗</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Acces</span>
+                <span class="practical-item-value">DJ 672C, spre Valea Crasna; 35 km de Târgu-Jiu</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🕐</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Program</span>
+                <span class="practical-item-value">Zilnic, 7:00–18:00</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">✦</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Hram</span>
+                <span class="practical-item-value">Sf. Grigorie Decapolitul (20 noiembrie)</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🌿</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Recomandare</span>
+                <span class="practical-item-value">Iarnă şi primăvară — priveliştea e excepţională</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<div class="ornament-divider" aria-hidden="true">✦</div>
+
+<!-- ── 5. ICOANA ── -->
+<article class="detail-section" id="icoana" aria-labelledby="ic-title">
+  <div class="detail-inner">
+    <header class="detail-header fade-in">
+      <div class="detail-meta-row">
+        <a href="#grid-label" class="detail-back-link">← Toate mănăstirile</a>
+        <span class="detail-read-time">~ 2 min citire</span>
+      </div>
+      <div class="detail-num">Mănăstire nr. 05</div>
+      <h2 class="detail-title" id="ic-title">Mănăstirea <em>Icoana</em></h2>
+      <div class="detail-location">📍 Icoana, Gorj · Dealurile Gorjului</div>
+      <div class="detail-chips">
+        <div class="detail-chip"><span class="detail-chip-label">Fondată</span><span class="detail-chip-value">Sec. XVIII</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Tip</span><span class="detail-chip-value">Mănăstire de maici</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Amplasament</span><span class="detail-chip-value">Deal împădurit, zona Novaci</span></div>
+      </div>
+    </header>
+
+    <div class="detail-cols fade-in">
+      <div>
+        <div class="content-block">
+          <div class="content-block-label">Scurt Istoric</div>
+          <p>Mănăstirea Icoana se află situată pe un deal împădurit din zona Novaci. Numele aşezământului vine, potrivit tradiţiei, de la o icoană făcătoare de minuni găsită în pădure de un cioban, care a indicat miraculos locul viitoarei ctitorii.</p>
+          <p>Înfiinţată în veacul al XVIII-lea de un grup de credincioşi locali, mănăstirea a crescut lent, devenind un important centru al vieţii religioase din zona subcarpatică. Bogăţia artistică rezidă mai ales în icoanele vechi şi în broderia liturgică de excepţie lucrată în atelierul propriu.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Importanță Spirituală</div>
+          <p>Icoana făcătoare de minuni este păstrată cu sfinţenie în biserica principală şi este obiectul unui cult local statornic. Pelerinii vin îndeosebi cu rugăciuni pentru vindecare şi mulţumiri pentru graţiile primite, conferind locului o atmosferă de bucurie şi speranţă.</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="practical">
+          <div class="practical-heading">Informații Vizitatori</div>
+          <div class="practical-items">
+            <div class="practical-item">
+              <div class="practical-item-icon">🚗</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Acces</span>
+                <span class="practical-item-value">Drum comunal din Novaci; 50 km de Târgu-Jiu</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🕐</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Program</span>
+                <span class="practical-item-value">Zilnic, 7:00–19:00</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">✦</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Hram</span>
+                <span class="practical-item-value">Naşterea Maicii Domnului (8 septembrie)</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🧵</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Atelier</span>
+                <span class="practical-item-value">Broderie liturgică — obiecte la metoc</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<div class="ornament-divider" aria-hidden="true">✦</div>
+
+<!-- ── 6. GURA MOTRULUI ── -->
+<article class="detail-section" id="gura-motrului" aria-labelledby="gm-title">
+  <div class="detail-inner">
+    <header class="detail-header fade-in">
+      <div class="detail-meta-row">
+        <a href="#grid-label" class="detail-back-link">← Toate mănăstirile</a>
+        <span class="detail-read-time">~ 3 min citire</span>
+      </div>
+      <div class="detail-num">Mănăstire nr. 06</div>
+      <h2 class="detail-title" id="gm-title">Mănăstirea <em>Gura Motrului</em></h2>
+      <div class="detail-location">📍 Gura Motrului, Gorj · confluenţa Motru–Dunăre</div>
+      <div class="detail-chips">
+        <div class="detail-chip"><span class="detail-chip-label">Fondată</span><span class="detail-chip-value">Sec. XVI (atestată 1512)</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Ctitor</span><span class="detail-chip-value">Familia Craioveştilor</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Tip</span><span class="detail-chip-value">Mănăstire de călugări</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Amplasament</span><span class="detail-chip-value">Câmpie, sud Gorj</span></div>
+      </div>
+    </header>
+
+    <div class="detail-cols fade-in">
+      <div>
+        <div class="content-block">
+          <div class="content-block-label">Scurt Istoric</div>
+          <p>Mănăstirea Gura Motrului este aşezată în sudul judeţului Gorj, în zona de câmpie, aproape de confluenţa râului Motru cu fluviul Dunărea. Prima atestare documentară sigură datează din 1512, din vremea voievodului Vlăduţ I, dar originile sale sunt legate tradiţional de puternica familie a Craioveştilor.</p>
+          <p>Situată pe o rută comercială şi militară importantă, mănăstirea a îndeplinit de-a lungul istoriei şi un rol de punct de apărare şi de refugiu. Incendiile şi incursiunile otomane au distrus de mai multe ori complexul monahal, care a fost refăcut de fiecare dată cu sprijinul boierilor localnici.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Arhitectură · Tradiție Oltenească</div>
+          <p>Spre deosebire de mănăstirile din zona montană, Gura Motrului prezintă o arhitectură de câmpie, mai deschisă şi mai puţin dramatică. Portalul de intrare în incintă este un exemplu de sculptură în piatră de calitate, cu decoraţii florale şi inscripţii cu litere chirilice parţial lizibile — o mărturie vie a trecerii timpului.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Importanță Spirituală</div>
+          <p>Prin amplasarea în sudul judeţului, Gura Motrului serveşte drept centru spiritual pentru comunităţile mai îndepărtate de marile mănăstiri montane. Hramul Înălţarea Sfintei Cruci adunǎ anual credincioşi din zeci de sate gorjene şi mehedințene.</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="practical">
+          <div class="practical-heading">Informații Vizitatori</div>
+          <div class="practical-items">
+            <div class="practical-item">
+              <div class="practical-item-icon">🚗</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Acces</span>
+                <span class="practical-item-value">DN 55A, 80 km sud de Târgu-Jiu</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🕐</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Program</span>
+                <span class="practical-item-value">Zilnic, 7:00–18:00</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">✦</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Hram</span>
+                <span class="practical-item-value">Înălţarea Sfintei Cruci (14 septembrie)</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">ℹ️</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Notă</span>
+                <span class="practical-item-value">Zona câmpiei — ușor accesibil cu maşina</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<div class="ornament-divider" aria-hidden="true">✦</div>
+
+<!-- ── 7. VIȘINA–STRÂMT ── -->
+<article class="detail-section" id="visinaStramt" aria-labelledby="vs-title">
+  <div class="detail-inner">
+    <header class="detail-header fade-in">
+      <div class="detail-meta-row">
+        <a href="#grid-label" class="detail-back-link">← Toate mănăstirile</a>
+        <span class="detail-read-time">~ 2 min citire</span>
+      </div>
+      <div class="detail-num">Mănăstire nr. 07</div>
+      <h2 class="detail-title" id="vs-title">Mănăstirea <em>Vișina–Strâmt</em></h2>
+      <div class="detail-location">📍 Vișina, Gorj · Strâmtoarea Gilortului</div>
+      <div class="detail-chips">
+        <div class="detail-chip"><span class="detail-chip-label">Fondată</span><span class="detail-chip-value">Sec. XVII–XVIII</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Tip</span><span class="detail-chip-value">Mănăstire de maici</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Amplasament</span><span class="detail-chip-value">Perete stâncos, Gilort</span></div>
+      </div>
+    </header>
+
+    <div class="detail-cols fade-in">
+      <div>
+        <div class="content-block">
+          <div class="content-block-label">Scurt Istoric</div>
+          <p>Aşezată la intrarea în Strâmtoarea Gilortului, Mănăstirea Vișina–Strâmt ocupă un loc de o frumuseţe sălbatică, cu pereţi de stâncă ce se ridică abrupt de ambele maluri ale apei. Originile sale sunt legate de un schit pusnicesc înfiinţat de câţiva monahi veniţi de la Tismana cu dorinţa de a găsi un loc şi mai retras.</p>
+          <p>Documentele indică existenţa unui schit activ în această zonă cel târziu din veacul al XVIII-lea. Obştea actuală de maici menţine un program liturgic riguros şi se bucură de o bună reputaţie în privinţa ospitalităţii.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Arhitectură · Terase în Stâncă</div>
+          <p>Specificul arhitectural al mănăstirii este dat de adaptarea la relief: construcţiile sunt dispuse în terase succesive, cu trepte de piatră şi pasaje boltite care creează un labirint plăcut. Stânca în care este parţial săpat paraclisul mic al mănăstirii reprezintă o prezenţă vie a muntelui în inima aşezămantului.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Importanță Spirituală</div>
+          <p>Locul are o energie aparte, percepută de mulţi vizitatori ca deosebit de propice rugăciunii şi meditaţiei. Apropierea de natură sălbatică, sunetul permanent al apei şi atmosfera de linişte imensă fac din Vișina–Strâmt un loc de retragere îndrăgit îndeosebi de tineri.</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="practical">
+          <div class="practical-heading">Informații Vizitatori</div>
+          <div class="practical-items">
+            <div class="practical-item">
+              <div class="practical-item-icon">🚗</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Acces</span>
+                <span class="practical-item-value">DJ 674, Valea Gilortului; 45 km de Târgu-Jiu</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🕐</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Program</span>
+                <span class="practical-item-value">Zilnic, 7:00–19:00</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">✦</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Hram</span>
+                <span class="practical-item-value">Sfinţii Arhangheli Mihail şi Gavriil (8 nov.)</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🥾</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Combină cu</span>
+                <span class="practical-item-value">Traseul de hiking Strâmtoarea Gilortului</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<div class="ornament-divider" aria-hidden="true">✦</div>
+
+<!-- ── 8. LOCURELE ── -->
+<article class="detail-section" id="locurele" aria-labelledby="lo-title">
+  <div class="detail-inner">
+    <header class="detail-header fade-in">
+      <div class="detail-meta-row">
+        <a href="#grid-label" class="detail-back-link">← Toate mănăstirile</a>
+        <span class="detail-read-time">~ 2 min citire</span>
+      </div>
+      <div class="detail-num">Schit nr. 08</div>
+      <h2 class="detail-title" id="lo-title">Schitul <em>Locurele</em></h2>
+      <div class="detail-location">📍 Locurele, Gorj · Munţii Parâng (~900m altitudine)</div>
+      <div class="detail-chips">
+        <div class="detail-chip"><span class="detail-chip-label">Fondată</span><span class="detail-chip-value">Sec. XVIII (atestată 1796)</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Tip</span><span class="detail-chip-value">Schit de călugări</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Amplasament</span><span class="detail-chip-value">Munte înalt, poiană izolată</span></div>
+        <div class="detail-chip"><span class="detail-chip-label">Acces</span><span class="detail-chip-value">2–3 ore pe jos</span></div>
+      </div>
+    </header>
+
+    <div class="detail-cols fade-in">
+      <div>
+        <div class="content-block">
+          <div class="content-block-label">Scurt Istoric</div>
+          <p>Ascuns într-o poiană de munte din masivul Parâng, la o altitudine de aproape 900 de metri, Schitul Locurele este unul dintre cele mai solitare şi mai puţin accesibile aşezăminte monahale din Gorj. Datele documentare amintesc de el abia spre sfârşitul veacului al XVIII-lea, dar tradiţia locală îl leagă de retragerea pustnicilor în cătunele cele mai înalte ale muntelui, cu câteva veacuri mai înainte.</p>
+          <p>Schitul a fost locul de nevoinţă al mai multor monahi cu o viaţă exemplară de rugăciune şi post. Izolarea geografică a făcut ca refacerile să fie întârziate, iar construcţiile să rămână mai modeste, cu o arhitectură de munte simplă şi funcţională. Accesibil în mare parte doar pe jos sau cu vehicule de teren.</p>
+        </div>
+
+        <div class="pull-quote">
+          <p>„Cel care urcă până la Locurele nu caută un monument, ci un loc unde cerul şi pămantul par mai aproape unul de altul."</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Arhitectură · Simplitate Esenţială</div>
+          <p>Modestia construcţiei este înseşi esenţa locului. O mică bisericuţă din lemn şi piatră, câteva chilii adosate stâncii şi o fântână cu apă rece de munte alcătuiesc întreg aşezămantul. Clopoţelul mic din turla de lemn răsună departe în tăcerea muntelui. Totul inspiră simplitate şi concentrare.</p>
+        </div>
+
+        <div class="content-block">
+          <div class="content-block-label">Importanță Spirituală</div>
+          <p>Locurele este un spaţiu de purificare şi de reîntoarcere la esenţe. Pelerinii care ajung după ore de mers pe jos poartă deja în suflet o stare de pregătire duhovniceasca. Schitul practică ospitalitate simplă faţă de oricine vine cu bună intenţie, oferind un pat şi o masă frugală celor care doresc câteva zile în tăcere şi rugăciune.</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="practical">
+          <div class="practical-heading">Informații Vizitatori</div>
+          <div class="practical-items">
+            <div class="practical-item">
+              <div class="practical-item-icon">🥾</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Acces</span>
+                <span class="practical-item-value">Traseu marcat din Novaci (2–3 ore pe jos)</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">🕐</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Program</span>
+                <span class="practical-item-value">Permanent — anunţaţi călugărul înaintea vizitei</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">✦</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Hram</span>
+                <span class="practical-item-value">Schimbarea la Faţă (6 august)</span>
+              </div>
+            </div>
+            <div class="practical-item">
+              <div class="practical-item-icon">⚠️</div>
+              <div class="practical-item-info">
+                <span class="practical-item-label">Recomandare</span>
+                <span class="practical-item-value">Echipament de trekking obligatoriu</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+
+<!-- ============================================================
+     CLOSING
+     ============================================================ -->
+<section class="closing" aria-label="Încheiere">
+  <div class="closing-inner fade-in">
+    <span class="closing-cross">☦</span>
+    <h2 class="closing-title">Un Peisaj Sacru Viu</h2>
+    <p class="closing-text">
+      Mănăstirile gorjene formează împreună o hartă a credinţei şi a istoriei care face din judeţul Gorj un loc unic în România. Indiferent dacă vii ca pelerin, ca turist cultural sau pur şi simplu ca om în căutare de linişte, fiecare lăcaş îţi oferă ceva diferit şi preţios. Vizitaţi-le cu respect, cu răbdare şi cu inima deschisă.
+    </p>
+    <div class="closing-ornament">✦ ✦ ✦</div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-school-name">Liceul Teoretic Tudor Arghezi</div>
+      <div class="footer-school-sub">Târgul Cărbunești · Clasa a XI-a C · Episcopia Râmnicului</div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-team">
+      <div class="footer-member">
+        <div class="footer-member-avatar">A</div>
+        <div class="footer-member-name">Gîscă Alin</div>
+      </div>
+      <div class="footer-member">
+        <div class="footer-member-avatar">F</div>
+        <div class="footer-member-name">Geica Fabian</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar">
+    Informaţiile au caracter documentar şi cultural. Programele de vizitare se pot modifica — verificaţi la faţa locului sau contactaţi stăreţia.
+    &nbsp;·&nbsp; Județul Gorj · România
+  </div>
 </footer>
 
+
 <!-- Back to top -->
-<a class="back-to-top" href="#top" title="Înapoi sus">↑</a>
+<a href="#top" class="back-top" id="backTop" aria-label="Înapoi sus">↑</a>
+
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── Nav scroll state ── */
+  const nav = document.getElementById('nav');
+  const progressBar = document.getElementById('scrollProgress');
+
+  function onScroll() {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+    document.getElementById('backTop').classList.toggle('visible', window.scrollY > 300);
+
+    // Scroll progress bar
+    if (progressBar) {
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docH > 0 ? (window.scrollY / docH) * 100 : 0;
+      progressBar.style.width = pct + '%';
+    }
+
+    // Active nav link highlight
+    const sections = document.querySelectorAll('article[id], section[id]');
+    let currentId = '';
+    sections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= 100 && rect.bottom > 100) currentId = sec.id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      const href = a.getAttribute('href');
+      a.classList.toggle('is-active', href === '#' + currentId);
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ── Mobile drawer ── */
+  const burger  = document.getElementById('navBurger');
+  const drawer  = document.getElementById('navDrawer');
+  const overlay = document.getElementById('navOverlay');
+
+  function openDrawer() {
+    burger.classList.add('open');
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    burger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    burger.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  burger.addEventListener('click', () =>
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer()
+  );
+  overlay.addEventListener('click', closeDrawer);
+
+  document.querySelectorAll('.drawer-link').forEach(link =>
+    link.addEventListener('click', closeDrawer)
+  );
+
+  /* ── Scroll-in reveal ── */
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    }),
+    { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  document.querySelectorAll('.fade-in, .fade-in-group').forEach(el => observer.observe(el));
+
+})();
+</script>
 
 </body>
 </html>

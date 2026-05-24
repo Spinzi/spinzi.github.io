@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BALL KNOWER</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+    :root {
+      --bg-color: #05010d;
+      --panel-bg: rgba(18, 7, 38, 0.75);
+      --neon-cyan: #00f0ff;
+      --neon-magenta: #ff007f;
+      --neon-green: #39ff14;
+      --neon-purple: #9d00ff;
+      --text-color: #f1ebfa;
+      --panel-border: rgba(157, 0, 255, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Cosmic Background Grid and Orbs */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(rgba(157, 0, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(157, 0, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+    }
+
+    .bg-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(157, 0, 255, 0.15) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+      animation: ambientPulse 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambientPulse {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    }
+
+    /* Container Box Styling */
+    .container {
+      width: 100%;
+      max-width: 650px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid var(--panel-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(157, 0, 255, 0.1);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      transform: translateY(0);
+      transition: border-color 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .container.shake-container {
+      animation: containerImpact 0.4s ease-out both;
+    }
+
+    @keyframes containerImpact {
+      0% { transform: translateY(0); }
+      10% { transform: translateY(6px) scaleY(0.98); }
+      30% { transform: translateY(-10px) rotate(1deg); }
+      50% { transform: translateY(5px) rotate(-1deg); }
+      70% { transform: translateY(-2px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Typography */
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      background: linear-gradient(135deg, #fff 0%, #cbd5e1 50%, var(--neon-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    h1::after {
+      content: 'BALL KNOWER';
+      position: absolute;
+      left: 0; top: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: transparent;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(157, 0, 255, 0.6);
+    }
+
+    /* Inputs Frame with Micro-interactions */
+    .inputs-wrapper {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      transition: color 0.3s ease;
+      text-align: left;
+    }
+
+    .input-group:nth-child(1) label { color: var(--neon-cyan); }
+    .input-group:nth-child(2) label { color: var(--neon-magenta); }
+
+    input[type="text"] {
+      background: rgba(10, 3, 26, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px 18px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .input-group:nth-child(1) input[type="text"]:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.25), inset 0 2px 4px rgba(0,0,0,0.4);
+      background: rgba(0, 240, 255, 0.03);
+    }
+
+    .input-group:nth-child(2) input[type="text"]:focus {
+      border-color: var(--neon-magenta);
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.25), inset 0 2px 4px rgba(0,0,0,0.4);
+      background: rgba(255, 0, 127, 0.03);
+    }
+
+    /* Futuristic Dynamic Trigger Button */
+    .btn-container {
+      position: relative;
+      margin-bottom: 35px;
+      border-radius: 50px;
+    }
+
+    button {
+      background: transparent;
+      border: 2px solid var(--neon-green);
+      color: var(--neon-green);
+      font-family: 'Orbitron', sans-serif;
+      padding: 18px 40px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.1);
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.2), transparent);
+      transition: all 0.6s ease;
+    }
+
+    button:hover:not(:disabled)::before {
+      left: 100%;
+    }
+
+    button:hover:not(:disabled) {
+      background: rgba(57, 255, 20, 0.05);
+      box-shadow: 0 0 30px rgba(57, 255, 20, 0.4), inset 0 0 15px rgba(57, 255, 20, 0.2);
+      transform: scale(1.01);
+    }
+
+    button:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    button:disabled {
+      border-color: #332340;
+      color: #5c4d6b;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Arena & Advanced Animation Environments */
+    .arena {
+      height: 300px;
+      position: relative;
+      margin-bottom: 35px;
+      border-radius: 20px;
+      background: radial-gradient(circle at center, rgba(15, 6, 36, 0.8) 0%, rgba(5, 2, 13, 0.9) 100%);
+      border: 1px solid rgba(157, 0, 255, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Mystical Geometric Spinners Behind Character */
+    .astrolabe {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px dashed rgba(157, 0, 255, 0.15);
+      pointer-events: none;
+      transition: all 0.5s ease;
+    }
+    .astrolabe.inner {
+      width: 200px; height: 200px;
+      border-color: rgba(0, 240, 255, 0.1);
+      animation: spin linear infinite 12s;
+    }
+    .astrolabe.outer {
+      width: 270px; height: 270px;
+      border-color: rgba(255, 0, 127, 0.08);
+      animation: spin linear infinite 24s reverse;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Canvas Layer for Particles */
+    .particle-canvas {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Shockwave Blast Ring */
+    .shockwave {
+      position: absolute;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 4px solid var(--neon-green);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .shockwave.run {
+      animation: ripple 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) both;
+    }
+
+    @keyframes ripple {
+      0% { width: 10px; height: 10px; opacity: 1; border-color: var(--active-color, var(--neon-green)); border-width: 8px; }
+      100% { width: 500px; height: 500px; opacity: 0; border-color: transparent; border-width: 1px; }
+    }
+
+    /* Central Character Architecture */
+    .ball-knower {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #46148c 0%, #17042b 65%, #05000a 100%);
+      box-shadow: 
+        0 0 40px rgba(138, 43, 226, 0.4), 
+        inset -15px -15px 30px rgba(0,0,0,0.8), 
+        inset 12px 12px 25px rgba(255,255,255,0.12);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      transform: translateY(0) scale(1);
+      animation: fineFloat 5s ease-in-out infinite alternate;
+    }
+
+    @keyframes fineFloat {
+      0% { transform: translateY(4px) rotate(-1deg); }
+      50% { transform: translateY(-8px) rotate(1deg); scale: 1.01; }
+      100% { transform: translateY(4px) rotate(-0.5deg); }
+    }
+
+    .face {
+      width: 105px;
+      height: 65px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      top: -4px;
+      perspective: 200px;
+    }
+
+    .eyes-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 8px;
+    }
+
+    .eye-socket {
+      position: relative;
+    }
+
+    .brow {
+      position: absolute;
+      top: -8px; left: -2px;
+      width: 28px; height: 4px;
+      background: var(--neon-purple);
+      border-radius: 2px;
+      opacity: 0.6;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    .eye {
+      width: 24px;
+      height: 24px;
+      background: #ffffff;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 12px rgba(255,255,255,0.8);
+      overflow: hidden;
+      transition: transform 0.2s ease, background-color 0.4s ease, box-shadow 0.4s ease, height 0.1s ease;
+    }
+
+    .pupil {
+      width: 10px;
+      height: 10px;
+      background: #030008;
+      border-radius: 50%;
+      position: absolute;
+      top: calc(50% - 5px);
+      left: calc(50% - 5px);
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    }
+
+    .mouth {
+      width: 30px;
+      height: 6px;
+      background: #ffffff;
+      border-radius: 4px;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 8px rgba(255,255,255,0.4);
+    }
+
+    /* High-Fidelity Character Expression States */
+    
+    /* 1. Excited State (During Roll) */
+    .ball-knower.excited {
+      animation: vibrate 0.1s linear infinite !important;
+    }
+    .ball-knower.excited .brow {
+      transform: translateY(-4px) rotate(-10deg);
+      background: #fff;
+    }
+    .ball-knower.excited .eye {
+      background: var(--neon-cyan);
+      box-shadow: 0 0 20px var(--neon-cyan);
+      transform: scale(1.15);
+    }
+    .ball-knower.excited .pupil {
+      width: 14px; height: 14px;
+      top: calc(50% - 7px); left: calc(50% - 7px);
+      background: #000;
+    }
+    .ball-knower.excited .mouth {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 20px #fff;
+    }
+
+    /* 2. Knowing State (Successful Decree Pick) */
+    .ball-knower.knowing .brow {
+      transform: translateY(2px) rotate(15deg);
+      background: var(--neon-green);
+      opacity: 1;
+    }
+    .ball-knower.knowing .eye {
+      height: 5px;
+      border-radius: 2px;
+      background: var(--neon-green);
+      box-shadow: 0 0 15px var(--neon-green);
+    }
+    .ball-knower.knowing .pupil { display: none; }
+    .ball-knower.knowing .mouth {
+      width: 44px;
+      height: 18px;
+      border-radius: 0 0 30px 30px;
+      background: #fff;
+      box-shadow: 0 0 15px rgba(255,255,255,0.6);
+    }
+
+    /* 3. Speaking Modulation (Micro-movement applied via JS) */
+    .ball-knower.speaking .mouth {
+      border-radius: 12px;
+    }
+
+    @keyframes vibrate {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      20% { transform: translate(-2px, -1px) rotate(-1deg); }
+      40% { transform: translate(-1px, 1px) rotate(1deg); }
+      60% { transform: translate(2px, -1px) rotate(0deg); }
+      80% { transform: translate(-2px, 2px) rotate(-1deg); }
+      100% { transform: translate(1px, 1px) rotate(1deg); }
+    }
+
+    /* Rolling Orbits Elements */
+    .rolling-ball {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 8px;
+      text-align: center;
+      overflow: hidden;
+      word-break: break-word;
+      text-transform: uppercase;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .rolling-ball.left {
+      background: radial-gradient(circle at 30% 30%, #00f0ff 0%, #004d54 75%, #001a1c 100%);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.6), inset 0 0 10px rgba(255,255,255,0.3);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+    }
+
+    .rolling-ball.right {
+      background: radial-gradient(circle at 30% 30%, #ff007f 0%, #610030 75%, #240012 100%);
+      box-shadow: 0 0 25px rgba(255, 0, 127, 0.6), inset 0 0 10px rgba(255,255,255,0.3);
+      border: 1px solid rgba(255, 0, 127, 0.4);
+    }
+
+    /* Advanced Orbital Mechanics (CSS Keyframes) */
+    .rolling-ball.left.active {
+      animation: chaoticOrbitLeft 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .rolling-ball.right.active {
+      animation: chaoticOrbitRight 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes chaoticOrbitLeft {
+      0% { opacity: 0; transform: translate(-250px, 0) scale(0.4) rotate(0deg); filter: blur(4px); }
+      15% { opacity: 1; transform: translate(-140px, -80px) scale(1) rotate(-180deg); filter: blur(0); }
+      35% { transform: translate(110px, 60px) scale(0.7) rotate(-450deg); z-index: 3; }
+      55% { transform: translate(-90px, 90px) scale(1.1) rotate(-800deg); z-index: 12; }
+      75% { transform: translate(130px, -70px) scale(0.8) rotate(-1100deg); z-index: 3; }
+      90% { opacity: 1; transform: translate(-40px, -20px) scale(0.95) rotate(-1350deg); }
+      100% { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(-1440deg); }
+    }
+
+    @keyframes chaoticOrbitRight {
+      0% { opacity: 0; transform: translate(250px, 0) scale(0.4) rotate(0deg); filter: blur(4px); }
+      15% { opacity: 1; transform: translate(140px, 80px) scale(1) rotate(180deg); filter: blur(0); }
+      35% { transform: translate(-110px, -60px) scale(0.7) rotate(450deg); z-index: 3; }
+      55% { transform: translate(90px, -90px) scale(1.1) rotate(800deg); z-index: 12; }
+      75% { transform: translate(-130px, 70px) scale(0.8) rotate(1100deg); z-index: 3; }
+      90% { opacity: 1; transform: translate(40px, 20px) scale(0.95) rotate(1350deg); }
+      100% { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(1440deg); }
+    }
+
+    /* Output Console Layout */
+    .output-container {
+      text-align: left;
+    }
+
+    .output-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      color: #6d5494;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      display: block;
+    }
+
+    .decree-box {
+      width: 100%;
+      min-height: 95px;
+      background: rgba(5, 2, 13, 0.7);
+      border: 1px solid rgba(157, 0, 255, 0.2);
+      border-radius: 14px;
+      padding: 18px 22px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--neon-green);
+      transition: all 0.3s ease;
+      line-height: 1.6;
+      word-wrap: break-word;
+      position: relative;
+      box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .decree-box.highlight-cyan {
+      color: var(--neon-cyan);
+      border-color: rgba(0, 240, 255, 0.4);
+      box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 0 15px rgba(0, 240, 255, 0.1);
+    }
+
+    .decree-box.highlight-magenta {
+      color: var(--neon-magenta);
+      border-color: rgba(255, 0, 127, 0.4);
+      box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 0 15px rgba(255, 0, 127, 0.1);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1.25rem;
+      background: currentColor;
+      margin-left: 5px;
+      animation: blink 0.8s infinite steps(2, start);
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      to { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <div class="container" id="mainContainer">
+    <h1>Ball Knower</h1>
+
+    <div class="inputs-wrapper">
+      <div class="input-group">
+        <label for="leftBallInput">Left Ball</label>
+        <input type="text" id="leftBallInput" placeholder="Yes" maxlength="12" value="Yes">
+      </div>
+      <div class="input-group">
+        <label for="rightBallInput">Right Ball</label>
+        <input type="text" id="rightBallInput" placeholder="No" maxlength="12" value="No">
+      </div>
+    </div>
+
+    <div class="btn-container">
+      <button id="rollButton">Roll the Balls</button>
+    </div>
+
+    <div class="arena">
+      <!-- Background Astrolabe effects -->
+      <div class="astrolabe inner" id="astrolabeInner"></div>
+      <div class="astrolabe outer"></div>
+
+      <!-- Advanced canvas particle emitter overlay -->
+      <canvas class="particle-canvas" id="particleCanvas"></canvas>
+
+      <!-- Collision shockwave -->
+      <div class="shockwave" id="shockwave"></div>
+
+      <!-- Left Rolling Ball Graphic -->
+      <div class="rolling-ball left" id="leftRollingBall"></div>
+      
+      <!-- Central Interactive Entity -->
+      <div class="ball-knower" id="ballKnower">
+        <div class="face">
+          <div class="eyes-container">
+            <div class="eye-socket">
+              <div class="brow"></div>
+              <div class="eye"><div class="pupil" id="leftPupil"></div></div>
+            </div>
+            <div class="eye-socket">
+              <div class="brow"></div>
+              <div class="eye"><div class="pupil" id="rightPupil"></div></div>
+            </div>
+          </div>
+          <div class="mouth" id="knowerMouth"></div>
+        </div>
+      </div>
+
+      <!-- Right Rolling Ball Graphic -->
+      <div class="rolling-ball right" id="rightRollingBall"></div>
+    </div>
+
+    <div class="output-container">
+      <span class="output-label">The Ball Knower's Decree</span>
+      <div class="decree-box" id="decreeBox">
+        <span id="decreeText">Awaiting your query, fragile mortal...</span><span class="cursor"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const mainContainer = document.getElementById('mainContainer');
+    const rollButton = document.getElementById('rollButton');
+    const ballKnower = document.getElementById('ballKnower');
+    const leftRollingBall = document.getElementById('leftRollingBall');
+    const rightRollingBall = document.getElementById('rightRollingBall');
+    const leftBallInput = document.getElementById('leftBallInput');
+    const rightBallInput = document.getElementById('rightBallInput');
+    const decreeBox = document.getElementById('decreeBox');
+    const decreeText = document.getElementById('decreeText');
+    const leftPupil = document.getElementById('leftPupil');
+    const rightPupil = document.getElementById('rightPupil');
+    const knowerMouth = document.getElementById('knowerMouth');
+    const shockwave = document.getElementById('shockwave');
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Global Interactive State values for Interpolated eye positions
+    let mouseX = 0, mouseY = 0;
+    let currentPupilX = 0, currentPupilY = 0;
+    let particles = [];
+    let particleInterval = null;
+    let isRolling = false;
+
+    // Prefixes loaded with mystical flavor
+    const prefixes = [
+      "THE COSMIC FORCES CONVERGE...",
+      "THE SACRED GEOMETRY ALIGNS...",
+      "THE GRAND TRUTH MANIFESTS...",
+      "BY THE SPHERES OF ENLIGHTENMENT...",
+      "THE ANCIENT FREQUENCIES REVEAL..."
+    ];
+
+    // Initialize Canvas Sizing
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Particle System Engine
+    class Particle {
+      constructor(x, y, color, speedX, speedY, size) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.speedX = speedX;
+        this.speedY = speedY;
+        this.size = size || Math.random() * 3 + 1;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.02 + 0.015;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha -= this.decay;
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function spawnExplosion(x, y, color, count = 30) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 4 + 1.5;
+        particles.push(new Particle(
+          x, y, color,
+          Math.cos(angle) * speed,
+          Math.sin(angle) * speed,
+          Math.random() * 4 + 2
+        ));
+      }
+    }
+
+    function spawnAmbientStream() {
+      if (!isRolling) return;
+      const rect = canvas.getBoundingClientRect();
+      // Streams from outer edges inward toward center character
+      particles.push(new Particle(0, Math.random() * canvas.height, 'var(--neon-cyan)', Math.random() * 3 + 2, Math.random() * 2 - 1));
+      particles.push(new Particle(canvas.width, Math.random() * canvas.height, 'var(--neon-magenta)', -(Math.random() * 3 + 2), Math.random() * 2 - 1));
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, index) => {
+        p.update();
+        if (p.alpha <= 0) {
+          particles.splice(index, 1);
+        } else {
+          p.draw();
+        }
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Natural Lerped Eye-Tracking Configuration
+    document.addEventListener('mousemove', (e) => {
+      const rect = ballKnower.getBoundingClientRect();
+      const centerTargetX = rect.left + rect.width / 2;
+      const centerTargetY = rect.top + rect.height / 2;
+      
+      const angle = Math.atan2(e.clientY - centerTargetY, e.clientX - centerTargetX);
+      const distance = Math.min(5, Math.hypot(e.clientX - centerTargetX, e.clientY - centerTargetY) / 60);
+      
+      mouseX = Math.cos(angle) * distance;
+      mouseY = Math.sin(angle) * distance;
+    });
+
+    // Eye Tracking Loop using standard Linear Interpolation (lerp)
+    function updateFacePhysics() {
+      if (!ballKnower.classList.contains('excited') && !ballKnower.classList.contains('knowing')) {
+        currentPupilX += (mouseX - currentPupilX) * 0.12;
+        currentPupilY += (mouseY - currentPupilY) * 0.12;
+        leftPupil.style.transform = `translate(${currentPupilX}px, ${currentPupilY}px)`;
+        rightPupil.style.transform = `translate(${currentPupilX}px, ${currentPupilY}px)`;
+      }
+      requestAnimationFrame(updateFacePhysics);
+    }
+    updateFacePhysics();
+
+    // Natural organic blinking schedule
+    function proceduralBlink() {
+      if (!isRolling) {
+        const leftEye = leftPupil.parentElement;
+        const rightEye = rightPupil.parentElement;
+        leftEye.style.height = '2px';
+        rightEye.style.height = '2px';
+        setTimeout(() => {
+          leftEye.style.height = '24px';
+          rightEye.style.height = '24px';
+        }, 120);
+      }
+      setTimeout(proceduralBlink, Math.random() * 4000 + 2500);
+    }
+    setTimeout(proceduralBlink, 3000);
+
+    // The Roll System Control Logic
+    rollButton.addEventListener('click', () => {
+      const leftWord = leftBallInput.value.trim() || "Left";
+      const rightWord = rightBallInput.value.trim() || "Right";
+
+      leftRollingBall.textContent = leftWord;
+      rightRollingBall.textContent = rightWord;
+
+      // Lock Interactive State
+      isRolling = true;
+      rollButton.disabled = true;
+      decreeBox.className = "decree-box";
+      decreeText.textContent = "";
+
+      // Fire Dynamic State Animations
+      ballKnower.className = "ball-knower excited";
+      leftRollingBall.className = "rolling-ball left active";
+      rightRollingBall.className = "rolling-ball right active";
+      
+      // Ignite loop for energy trails
+      particleInterval = setInterval(spawnAmbientStream, 30);
+
+      // Resolve Event Timeline at 2 seconds
+      setTimeout(() => {
+        clearInterval(particleInterval);
+        isRolling = false;
+
+        // Perform Calculation
+        const selectLeft = Math.random() < 0.5;
+        const targetColor = selectLeft ? 'var(--neon-cyan)' : 'var(--neon-magenta)';
+        
+        // Impact Visual Effects execution
+        mainContainer.classList.add('shake-container');
+        shockwave.style.setProperty('--active-color', targetColor);
+        shockwave.classList.add('run');
+
+        // Burst clean vector particles inside canvas arena
+        const arenaRect = canvas.getBoundingClientRect();
+        spawnExplosion(arenaRect.width / 2, arenaRect.height / 2, targetColor, 45);
+
+        // Transform central character expression archetype
+        ballKnower.className = "ball-knower knowing";
+        leftRollingBall.className = "rolling-ball left";
+        rightRollingBall.className = "rolling-ball right";
+
+        // Assign Specific Theme Elements based on outcome
+        const chosenLabel = selectLeft ? "The Left Ball" : "The Right Ball";
+        const chosenWord = selectLeft ? leftWord : rightWord;
+        decreeBox.classList.add(selectLeft ? 'highlight-cyan' : 'highlight-magenta');
+
+        const finalPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        const fullStatement = `${finalPrefix}\n${chosenLabel}: ${chosenWord}`;
+
+        // Initialize Specialized Speaking Script Engine
+        setTimeout(() => {
+          typeSpeakerDecree(fullStatement, 0, () => {
+            // Unlock Actions once statement sequence fully displays
+            rollButton.disabled = false;
+            mainContainer.classList.remove('shake-container');
+            shockwave.classList.remove('run');
+            setTimeout(() => ballKnower.className = "ball-knower", 2500);
+          });
+        }, 200);
+
+      }, 2000);
+    });
+
+    // Syllabic Speaking Engine Synced with Output Generation
+    function typeSpeakerDecree(text, index, completionCallback) {
+      if (index < text.length) {
+        const char = text.charAt(index);
+        
+        if (char === '\n') {
+          decreeText.innerHTML += '<br>';
+        } else {
+          decreeText.innerHTML += char;
+        }
+
+        // Modulate jaw structure continuously during typing increments to match speech
+        if (char !== ' ' && char !== '.') {
+          ballKnower.classList.add('speaking');
+          knowerMouth.style.height = Math.random() > 0.4 ? '15px' : '4px';
+          knowerMouth.style.width = Math.random() > 0.5 ? '24px' : '34px';
+        } else {
+          knowerMouth.style.height = '12px';
+        }
+
+        setTimeout(() => {
+          typeSpeakerDecree(text, index + 1, completionCallback);
+        }, 35);
+      } else {
+        // Return Mouth structure back to base knowing smirk line
+        knowerMouth.style.height = '';
+        knowerMouth.style.width = '';
+        ballKnower.classList.remove('speaking');
+        if (completionCallback) completionCallback();
+      }
+    }
+  </script>
+</body>
+</html>

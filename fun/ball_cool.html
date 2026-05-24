@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BALL KNOWER - Infinite Arena Edition</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+    :root {
+      --bg-color: #05010d;
+      --panel-bg: rgba(18, 7, 38, 0.75);
+      --neon-cyan: #00f0ff;
+      --neon-magenta: #ff007f;
+      --neon-green: #39ff14;
+      --neon-purple: #9d00ff;
+      --text-color: #f1ebfa;
+      --panel-border: rgba(157, 0, 255, 0.3);
+      --hand-glow: var(--neon-purple);
+      --grid-line: rgba(157, 0, 255, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+      transition: background-color 0.4s ease;
+    }
+
+    /* BACKGROUND SCROLLING TEXTURE - ACTIVE ALL THE TIME */
+    body::before {
+      content: '';
+      position: absolute;
+      top: -40px; left: -40px; right: -40px; bottom: -40px;
+      background-image: 
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+      pointer-events: none;
+      animation: infiniteGridScroll 16s linear infinite;
+    }
+
+    @keyframes infiniteGridScroll {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(40px, 40px); }
+    }
+
+    /* COLOR CHANGING STATE - TRIGGERS ONLY WHEN ACTIVE */
+    body.arena-active {
+      animation: dynamicBgChange 0.5s infinite alternate linear;
+    }
+
+    body.arena-active::before {
+      animation: infiniteGridScroll 4s linear infinite; /* Speeds up grid movement while active */
+    }
+
+    @keyframes dynamicBgChange {
+      0% {
+        background-color: #0c011a;
+        --grid-line: rgba(0, 240, 255, 0.2);
+      }
+      100% {
+        background-color: #1c0012;
+        --grid-line: rgba(255, 0, 127, 0.3);
+      }
+    }
+
+    .bg-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(157, 0, 255, 0.15) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+      animation: ambientPulse 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambientPulse {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+      100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    }
+
+    /* Container Box Styling */
+    .container {
+      width: 100%;
+      max-width: 650px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid var(--panel-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(157, 0, 255, 0.1);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      transform: translateY(0);
+      transition: border-color 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .container.shake-container {
+      animation: containerImpact 0.4s ease-out both;
+    }
+
+    @keyframes containerImpact {
+      0% { transform: translateY(0); }
+      10% { transform: translateY(6px) scaleY(0.98); }
+      30% { transform: translateY(-10px) rotate(1deg); }
+      50% { transform: translateY(5px) rotate(-1deg); }
+      70% { transform: translateY(-2px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Typography */
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      background: linear-gradient(135deg, #fff 0%, #cbd5e1 50%, var(--neon-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    /* Inputs Frame */
+    .inputs-wrapper {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 25px;
+    }
+
+    .input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      transition: color 0.3s ease;
+      text-align: left;
+    }
+
+    .input-group:nth-child(1) label { color: var(--neon-cyan); }
+    .input-group:nth-child(2) label { color: var(--neon-magenta); }
+
+    input[type="text"] {
+      background: rgba(10, 3, 26, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px 18px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .input-group:nth-child(1) input[type="text"]:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.25), inset 0 2px 4px rgba(0,0,0,0.4);
+      background: rgba(0, 240, 255, 0.03);
+    }
+
+    .input-group:nth-child(2) input[type="text"]:focus {
+      border-color: var(--neon-magenta);
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.25), inset 0 2px 4px rgba(0,0,0,0.4);
+      background: rgba(255, 0, 127, 0.03);
+    }
+
+    /* Trigger Button */
+    .btn-container {
+      position: relative;
+      margin-bottom: 35px;
+      border-radius: 50px;
+    }
+
+    button.btn-main {
+      background: transparent;
+      border: 2px solid var(--neon-green);
+      color: var(--neon-green);
+      font-family: 'Orbitron', sans-serif;
+      padding: 18px 40px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.1);
+    }
+
+    button.btn-main:hover:not(:disabled) {
+      background: rgba(57, 255, 20, 0.05);
+      box-shadow: 0 0 30px rgba(57, 255, 20, 0.4), inset 0 0 15px rgba(57, 255, 20, 0.2);
+      transform: scale(1.01);
+    }
+
+    button.btn-main:disabled {
+      border-color: #332340;
+      color: #5c4d6b;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Arena Environment */
+    .arena {
+      height: 320px;
+      position: relative;
+      margin-bottom: 35px;
+      border-radius: 20px;
+      background: radial-gradient(circle at center, rgba(15, 6, 36, 0.8) 0%, rgba(5, 2, 13, 0.9) 100%);
+      border: 1px solid rgba(157, 0, 255, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* HAND COMPONENTS */
+    .geo-hand {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 15;
+      pointer-events: none;
+      transform-origin: center center;
+    }
+
+    .geo-hand.left { left: 45px; top: 120px; }
+    .geo-hand.right { right: 45px; top: 120px; }
+
+    .hand-palm {
+      width: 55px;
+      height: 38px;
+      background: rgba(10, 3, 26, 0.9);
+      border: 2.5px solid var(--hand-glow);
+      box-shadow: 0 0 15px var(--hand-glow);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .hand-fingers {
+      display: flex;
+      gap: 4px;
+      align-items: flex-end;
+      height: 35px;
+    }
+
+    .hand-finger {
+      width: 10px;
+      background: rgba(157, 0, 255, 0.1);
+      border: 2.5px solid var(--hand-glow);
+      border-bottom: none;
+      border-radius: 2px 2px 0 0;
+      transition: all 0.3s ease;
+    }
+
+    .hand-finger.f1 { height: 20px; }
+    .hand-finger.f2 { height: 32px; }
+    .hand-finger.f3 { height: 35px; }
+    .hand-finger.f4 { height: 26px; }
+
+    /* Chaotic option shake motion */
+    .geo-hand.left.active-67 {
+      animation: chaoticShakeLeft 0.12s infinite alternate linear;
+      --hand-glow: var(--neon-cyan);
+    }
+    .geo-hand.right.active-67 {
+      animation: chaoticShakeRight 0.12s infinite alternate linear;
+      --hand-glow: var(--neon-magenta);
+    }
+
+    @keyframes chaoticShakeLeft {
+      0% { transform: translateY(12px) rotate(-4deg) scale(1.05); }
+      100% { transform: translateY(-12px) rotate(4deg) scale(0.95); }
+    }
+    @keyframes chaoticShakeRight {
+      0% { transform: translateY(-12px) rotate(-4deg) scale(0.95); }
+      100% { transform: translateY(12px) rotate(4deg) scale(1.05); }
+    }
+
+    /* Fixed Immutable Mask Configuration */
+    .geo-hand.left.active-higuruma {
+      left: 50%; top: 50%;
+      transform: translate(-56px, 12px) rotate(35deg) scale(1.35);
+      --hand-glow: #ff003c;
+      z-index: 25;
+    }
+    .geo-hand.right.active-higuruma {
+      right: auto; left: 50%; top: 50%;
+      transform: translate(1px, 12px) rotate(-35deg) scale(1.35);
+      --hand-glow: #ff003c;
+      z-index: 25;
+    }
+
+    /* Mystical Background Spinners */
+    .astrolabe {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px dashed rgba(157, 0, 255, 0.15);
+      pointer-events: none;
+    }
+    .astrolabe.inner {
+      width: 200px; height: 200px;
+      border-color: rgba(0, 240, 255, 0.1);
+      animation: spin linear infinite 12s;
+    }
+    .astrolabe.outer {
+      width: 270px; height: 270px;
+      border-color: rgba(255, 0, 127, 0.08);
+      animation: spin linear infinite 24s reverse;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .particle-canvas {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .shockwave {
+      position: absolute;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 4px solid var(--neon-green);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .shockwave.run { animation: ripple 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) both; }
+
+    @keyframes ripple {
+      0% { width: 10px; height: 10px; opacity: 1; border-color: var(--active-color, var(--neon-green)); border-width: 8px; }
+      100% { width: 500px; height: 500px; opacity: 0; border-color: transparent; border-width: 1px; }
+    }
+
+    /* Central Character Architecture */
+    .ball-knower {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #46148c 0%, #17042b 65%, #05000a 100%);
+      box-shadow: 0 0 40px rgba(138, 43, 226, 0.4), inset -15px -15px 30px rgba(0,0,0,0.8);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      animation: fineFloat 5s ease-in-out infinite alternate;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fineFloat {
+      0% { transform: translateY(4px); }
+      100% { transform: translateY(-8px); }
+    }
+
+    .face {
+      width: 110px;
+      height: 75px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      top: -2px;
+    }
+
+    .eyes-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 6px;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .eye-socket { position: relative; }
+
+    .brow {
+      position: absolute;
+      top: -8px; left: -2px;
+      width: 28px; height: 4px;
+      background: var(--neon-purple);
+      border-radius: 2px;
+      opacity: 0.6;
+      transition: all 0.25s ease;
+    }
+
+    .eye {
+      width: 26px;
+      height: 26px;
+      background: #ffffff;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 12px rgba(255,255,255,0.8);
+      overflow: hidden;
+      transition: all 0.2s linear;
+    }
+
+    .pupil {
+      width: 10px;
+      height: 10px;
+      background: #030008;
+      border-radius: 50%;
+      position: absolute;
+      top: calc(50% - 5px);
+      left: calc(50% - 5px);
+      transition: transform 0.2s ease;
+    }
+
+    /* Mouth Component */
+    .mouth {
+      width: 32px;
+      height: 6px;
+      background: #ffffff;
+      border-radius: 4px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 8px rgba(255,255,255,0.4);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Embedded Teeth Animations */
+    .teeth-row {
+      display: none;
+      justify-content: center;
+      gap: 3px;
+      width: 100%;
+      height: 5px;
+    }
+    .teeth-row span {
+      width: 6px;
+      height: 5px;
+      background: #ffffff;
+    }
+    
+    .mouth-meme-badge {
+      display: none;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.25rem;
+      color: var(--neon-magenta);
+      text-shadow: 0 0 8px var(--neon-magenta);
+      text-align: center;
+      line-height: 1;
+      animation: textWildJitter 0.08s infinite alternate linear;
+    }
+
+    @keyframes textWildJitter {
+      0% { transform: scale(0.85) rotate(-6deg); }
+      100% { transform: scale(1.25) rotate(6deg); }
+    }
+
+    /* Chaotic Mode Activation */
+    .ball-knower.mode-67 {
+      animation: chaoticBodyVibrate 0.08s infinite linear !important;
+    }
+    .ball-knower.mode-67 .brow {
+      transform: translateY(-4px) rotate(-12deg);
+      background: #fff;
+      opacity: 1;
+    }
+    .ball-knower.mode-67 .eye {
+      background: var(--neon-cyan);
+      box-shadow: 0 0 20px var(--neon-cyan);
+      transform: scale(1.15);
+    }
+    .ball-knower.mode-67 .pupil {
+      width: 14px; height: 14px;
+      top: calc(50% - 7px); left: calc(50% - 7px);
+      background: #000;
+    }
+    .ball-knower.mode-67 .mouth {
+      width: 76px;
+      height: 54px;
+      background: #000000;
+      border: 2.5px solid #ffffff;
+      border-radius: 6px;
+      box-shadow: 0 0 25px #ffffff;
+      padding: 2px 0;
+      transform: translateY(8px);
+    }
+    .ball-knower.mode-67 .teeth-row { display: flex; }
+    .ball-knower.mode-67 .mouth-meme-badge { display: block; margin: auto; }
+
+    @keyframes chaoticBodyVibrate {
+      0% { transform: translate(2px, 2px) rotate(0.5deg); }
+      100% { transform: translate(-2px, -2px) rotate(-0.5deg); }
+    }
+
+    /* HIGURUMA STANCE MODIFICATIONS */
+    .ball-knower.mode-higuruma .eyes-container {
+      transform: translateY(-11px); /* MOVES EYES EXPLICITLY UPWARD ON THE FACE */
+    }
+    .ball-knower.mode-higuruma .pupil {
+      transform: translateY(-13px) !important; /* Forces pupils right to the very rim */
+    }
+    .ball-knower.mode-higuruma .eye-socket:first-child .brow {
+      transform: translateY(-5px) rotate(-28deg); /* Slanted / configuration */
+      background: #ff003c;
+      opacity: 1;
+    }
+    .ball-knower.mode-higuruma .eye-socket:last-child .brow {
+      transform: translateY(-5px) rotate(28deg); /* Slanted \ configuration */
+      background: #ff003c;
+      opacity: 1;
+    }
+    .ball-knower.mode-higuruma .eye {
+      box-shadow: 0 0 15px #ff003c;
+    }
+
+    /* Neutral Base Stance Animation Helpers */
+    .ball-knower.knowing .brow { transform: translateY(2px) rotate(15deg); background: var(--neon-green); opacity: 1; }
+    .ball-knower.knowing .eye { height: 5px; border-radius: 2px; background: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); }
+    .ball-knower.knowing .pupil { display: none; }
+    .ball-knower.knowing .mouth { width: 44px; height: 18px; border-radius: 0 0 30px 30px; background: #fff; }
+    .ball-knower.speaking .mouth { border-radius: 12px; }
+
+    /* Ultra-Speed Orbit Equations */
+    .rolling-ball {
+      position: absolute;
+      width: 85px; height: 85px;
+      border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 0.8rem;
+      padding: 8px; text-align: center; overflow: hidden; word-break: break-word; text-transform: uppercase;
+      opacity: 0; pointer-events: none;
+    }
+    .rolling-ball.left { background: radial-gradient(circle at 30% 30%, #00f0ff 0%, #004d54 75%); box-shadow: 0 0 25px rgba(0, 240, 255, 0.6); border: 1px solid rgba(0, 240, 255, 0.4); }
+    .rolling-ball.right { background: radial-gradient(circle at 30% 30%, #ff007f 0%, #610030 75%); box-shadow: 0 0 25px rgba(255, 0, 127, 0.6); border: 1px solid rgba(255, 0, 127, 0.4); }
+    
+    .rolling-ball.left.active { animation: chaoticOrbitLeft 0.45s infinite linear; opacity: 1; }
+    .rolling-ball.right.active { animation: chaoticOrbitRight 0.45s infinite linear; opacity: 1; }
+
+    @keyframes chaoticOrbitLeft {
+      0% { transform: translate(-180px, 40px) scale(0.5); z-index: 4; }
+      25% { transform: translate(0px, -110px) scale(0.8); z-index: 4; }
+      50% { transform: translate(180px, -20px) scale(1.35); z-index: 16; }
+      75% { transform: translate(0px, 120px) scale(1.1); z-index: 16; }
+      100% { transform: translate(-180px, 40px) scale(0.5); z-index: 4; }
+    }
+    @keyframes chaoticOrbitRight {
+      0% { transform: translate(180px, -40px) scale(0.5); z-index: 4; }
+      25% { transform: translate(0px, 110px) scale(0.8); z-index: 4; }
+      50% { transform: translate(-180px, 20px) scale(1.35); z-index: 16; }
+      75% { transform: translate(0px, -120px) scale(1.1); z-index: 16; }
+      100% { transform: translate(180px, -40px) scale(0.5); z-index: 4; }
+    }
+
+    /* Output Console Layout */
+    .output-container { text-align: left; }
+    .output-label { font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: #6d5494; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-weight: 700; display: block; }
+    .decree-box { width: 100%; min-height: 95px; background: rgba(5, 2, 13, 0.7); border: 1px solid rgba(157, 0, 255, 0.2); border-radius: 14px; padding: 18px 22px; font-size: 1.25rem; font-weight: 700; color: var(--neon-green); transition: all 0.3s ease; line-height: 1.6; word-wrap: break-word; position: relative; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); }
+    .decree-box.highlight-cyan { color: var(--neon-cyan); border-color: rgba(0, 240, 255, 0.4); box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 0 15px rgba(0, 240, 255, 0.1); }
+    .decree-box.highlight-magenta { color: var(--neon-magenta); border-color: rgba(255, 0, 127, 0.4); box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 0 15px rgba(255, 0, 127, 0.1); }
+    .cursor { display: inline-block; width: 8px; height: 1.25rem; background: currentColor; margin-left: 5px; animation: blink 0.8s infinite steps(2, start); vertical-align: middle; }
+    @keyframes blink { to { opacity: 0; } }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <div class="container" id="mainContainer">
+    <h1>Ball Knower</h1>
+
+    <div class="inputs-wrapper">
+      <div class="input-group">
+        <label for="leftBallInput">Left Ball</label>
+        <input type="text" id="leftBallInput" placeholder="Yes" maxlength="12" value="Yes">
+      </div>
+      <div class="input-group">
+        <label for="rightBallInput">Right Ball</label>
+        <input type="text" id="rightBallInput" placeholder="No" maxlength="12" value="No">
+      </div>
+    </div>
+
+    <div class="btn-container">
+      <button class="btn-main" id="rollButton">Roll the Balls</button>
+    </div>
+
+    <div class="arena">
+      <div class="astrolabe inner"></div>
+      <div class="astrolabe outer"></div>
+
+      <canvas class="particle-canvas" id="particleCanvas"></canvas>
+      <div class="shockwave" id="shockwave"></div>
+
+      <div class="geo-hand left" id="geoHandLeft">
+        <div class="hand-fingers">
+          <div class="hand-finger f1"></div>
+          <div class="hand-finger f2"></div>
+          <div class="hand-finger f3"></div>
+          <div class="hand-finger f4"></div>
+        </div>
+        <div class="hand-palm"></div>
+      </div>
+
+      <div class="rolling-ball left" id="leftRollingBall"></div>
+      
+      <div class="ball-knower" id="ballKnower">
+        <div class="face">
+          <div class="eyes-container">
+            <div class="eye-socket">
+              <div class="brow"></div>
+              <div class="eye"><div class="pupil" id="leftPupil"></div></div>
+            </div>
+            <div class="eye-socket">
+              <div class="brow"></div>
+              <div class="eye"><div class="pupil" id="rightPupil"></div></div>
+            </div>
+          </div>
+          
+          <div class="mouth" id="knowerMouth">
+            <div class="teeth-row"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="mouth-meme-badge">67</div>
+            <div class="teeth-row"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rolling-ball right" id="rightRollingBall"></div>
+
+      <div class="geo-hand right" id="geoHandRight">
+        <div class="hand-fingers">
+          <div class="hand-finger f4"></div>
+          <div class="hand-finger f3"></div>
+          <div class="hand-finger f2"></div>
+          <div class="hand-finger f1"></div>
+        </div>
+        <div class="hand-palm"></div>
+      </div>
+    </div>
+
+    <div class="output-container">
+      <span class="output-label">The Ball Knower's Decree</span>
+      <div class="decree-box" id="decreeBox">
+        <span id="decreeText">Awaiting your query, fragile mortal...</span><span class="cursor"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const mainContainer = document.getElementById('mainContainer');
+    const rollButton = document.getElementById('rollButton');
+    const ballKnower = document.getElementById('ballKnower');
+    const leftRollingBall = document.getElementById('leftRollingBall');
+    const rightRollingBall = document.getElementById('rightRollingBall');
+    const leftBallInput = document.getElementById('leftBallInput');
+    const rightBallInput = document.getElementById('rightBallInput');
+    const decreeBox = document.getElementById('decreeBox');
+    const decreeText = document.getElementById('decreeText');
+    const leftPupil = document.getElementById('leftPupil');
+    const rightPupil = document.getElementById('rightPupil');
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const geoHandLeft = document.getElementById('geoHandLeft');
+    const geoHandRight = document.getElementById('geoHandRight');
+
+    let mouseX = 0, mouseY = 0;
+    let currentPupilX = 0, currentPupilY = 0;
+    let particles = [];
+    let particleInterval = null;
+    let isRolling = false;
+
+    const prefixes = [
+      "THE COSMIC FORCES CONVERGE...",
+      "THE SACRED GEOMETRY ALIGNS...",
+      "THE GRAND TRUTH MANIFESTS...",
+      "THE ANCIENT FREQUENCIES REVEAL..."
+    ];
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor(x, y, color, speedX, speedY, size) {
+        this.x = x; this.y = y; this.color = color;
+        this.speedX = speedX; this.speedY = speedY;
+        this.size = size || Math.random() * 3 + 1;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.02 + 0.015;
+      }
+      update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= this.decay; }
+      draw() {
+        ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color; ctx.shadowBlur = 8; ctx.shadowColor = this.color;
+        ctx.fill(); ctx.restore();
+      }
+    }
+
+    class TextParticle {
+      constructor(x, y, text, color, speedX, speedY) {
+        this.x = x; this.y = y; this.text = text; this.color = color;
+        this.speedX = speedX; this.speedY = speedY;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.03 + 0.025;
+        this.fontSize = Math.floor(Math.random() * 10) + 12;
+      }
+      update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= this.decay; }
+      draw() {
+        ctx.save(); ctx.globalAlpha = this.alpha;
+        ctx.font = `900 ${this.fontSize}px 'Orbitron', sans-serif`;
+        ctx.fillStyle = this.color; ctx.shadowBlur = 12; ctx.shadowColor = this.color;
+        ctx.fillText(this.text, this.x, this.y); ctx.restore();
+      }
+    }
+
+    function spawnExplosion(x, y, color, count = 30) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 4 + 1.5;
+        particles.push(new Particle(x, y, color, Math.cos(angle) * speed, Math.sin(angle) * speed, Math.random() * 4 + 2));
+      }
+    }
+
+    function spawnAmbientStream() {
+      if (!isRolling) return;
+      particles.push(new Particle(0, Math.random() * canvas.height, 'var(--neon-cyan)', Math.random() * 3 + 2, Math.random() * 2 - 1));
+      particles.push(new Particle(canvas.width, Math.random() * canvas.height, 'var(--neon-magenta)', -(Math.random() * 3 + 2), Math.random() * 2 - 1));
+
+      const leftWord = leftBallInput.value.trim() || "Left";
+      const rightWord = rightBallInput.value.trim() || "Right";
+
+      if (Math.random() < 0.6) {
+        particles.push(new TextParticle(0, Math.random() * canvas.height, leftWord, 'var(--neon-cyan)', Math.random() * 12 + 10, Math.random() * 4 - 2));
+      }
+      if (Math.random() < 0.6) {
+        particles.push(new TextParticle(canvas.width, Math.random() * canvas.height, rightWord, 'var(--neon-magenta)', -(Math.random() * 12 + 10), Math.random() * 4 - 2));
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, index) => {
+        p.update();
+        if (p.alpha <= 0) particles.splice(index, 1);
+        else p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    document.addEventListener('mousemove', (e) => {
+      if (ballKnower.classList.contains('mode-higuruma')) return;
+      const rect = ballKnower.getBoundingClientRect();
+      const centerTargetX = rect.left + rect.width / 2;
+      const centerTargetY = rect.top + rect.height / 2;
+      const angle = Math.atan2(e.clientY - centerTargetY, e.clientX - centerTargetX);
+      const distance = Math.min(5, Math.hypot(e.clientX - centerTargetX, e.clientY - centerTargetY) / 60);
+      mouseX = Math.cos(angle) * distance;
+      mouseY = Math.sin(angle) * distance;
+    });
+
+    function updateFacePhysics() {
+      if (!ballKnower.classList.contains('mode-67') && !ballKnower.classList.contains('mode-higuruma') && !ballKnower.classList.contains('knowing')) {
+        currentPupilX += (mouseX - currentPupilX) * 0.12;
+        currentPupilY += (mouseY - currentPupilY) * 0.12;
+        leftPupil.style.transform = `translate(${currentPupilX}px, ${currentPupilY}px)`;
+        rightPupil.style.transform = `translate(${currentPupilX}px, ${currentPupilY}px)`;
+      }
+      requestAnimationFrame(updateFacePhysics);
+    }
+    updateFacePhysics();
+
+    function proceduralBlink() {
+      if (!isRolling && !ballKnower.classList.contains('mode-higuruma')) {
+        const leftEye = leftPupil.parentElement;
+        const rightEye = rightPupil.parentElement;
+        leftEye.style.height = '2px'; rightEye.style.height = '2px';
+        setTimeout(() => { leftEye.style.height = '26px'; rightEye.style.height = '26px'; }, 120);
+      }
+      setTimeout(proceduralBlink, Math.random() * 4000 + 2500);
+    }
+    setTimeout(proceduralBlink, 3000);
+
+    function clearAnimationStances() {
+      ballKnower.classList.remove('mode-67', 'mode-higuruma', 'knowing', 'speaking');
+      geoHandLeft.classList.remove('active-67', 'active-higuruma');
+      geoHandRight.classList.remove('active-67', 'active-higuruma');
+      leftPupil.style.transform = '';
+      rightPupil.style.transform = '';
+    }
+
+    rollButton.addEventListener('click', () => {
+      const leftWord = leftBallInput.value.trim() || "Left";
+      const rightWord = rightBallInput.value.trim() || "Right";
+
+      leftRollingBall.textContent = leftWord;
+      rightRollingBall.textContent = rightWord;
+
+      isRolling = true;
+      rollButton.disabled = true;
+      decreeBox.className = "decree-box";
+      decreeText.textContent = "";
+
+      clearAnimationStances();
+      
+      document.body.classList.add('arena-active');
+
+      ballKnower.classList.add('mode-67');
+      leftRollingBall.className = "rolling-ball left active";
+      rightRollingBall.className = "rolling-ball right active";
+      geoHandLeft.classList.add('active-67');
+      geoHandRight.classList.add('active-67');
+
+      particleInterval = setInterval(spawnAmbientStream, 20);
+
+      setTimeout(() => {
+        clearInterval(particleInterval);
+        isRolling = false;
+        document.body.classList.remove('arena-active');
+
+        const selectLeft = Math.random() < 0.5;
+        const targetColor = selectLeft ? 'var(--neon-cyan)' : 'var(--neon-magenta)';
+        
+        mainContainer.classList.add('shake-container');
+        shockwave.style.setProperty('--active-color', targetColor);
+        shockwave.classList.add('run');
+
+        const arenaRect = canvas.getBoundingClientRect();
+        spawnExplosion(arenaRect.width / 2, arenaRect.height / 2, targetColor, 45);
+
+        clearAnimationStances();
+        ballKnower.classList.add('mode-higuruma');
+        geoHandLeft.classList.add('active-higuruma');
+        geoHandRight.classList.add('active-higuruma');
+
+        leftRollingBall.className = "rolling-ball left";
+        rightRollingBall.className = "rolling-ball right";
+
+        const chosenLabel = selectLeft ? "The Left Ball" : "The Right Ball";
+        const chosenWord = selectLeft ? leftWord : rightWord;
+        decreeBox.classList.add(selectLeft ? 'highlight-cyan' : 'highlight-magenta');
+
+        const finalPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        const fullStatement = `${finalPrefix}\n${chosenLabel}: ${chosenWord}`;
+
+        setTimeout(() => {
+          typeSpeakerDecree(fullStatement, 0, () => {
+            rollButton.disabled = false;
+            mainContainer.classList.remove('shake-container');
+            shockwave.classList.remove('run');
+            
+            setTimeout(() => {
+              clearAnimationStances();
+            }, 3000);
+          });
+        }, 400);
+
+      }, 2000);
+    });
+
+    function typeSpeakerDecree(text, index, completionCallback) {
+      if (index < text.length) {
+        const char = text.charAt(index);
+        if (char === '\n') {
+          decreeText.innerHTML += '<br>';
+        } else {
+          decreeText.innerHTML += char;
+        }
+        setTimeout(() => {
+          typeSpeakerDecree(text, index + 1, completionCallback);
+        }, 35);
+      } else {
+        if (completionCallback) completionCallback();
+      }
+    }
+  </script>
+</body>
+</html>

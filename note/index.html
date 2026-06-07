@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meeting Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:       #0d0d0d;
+    --bg2:      #141414;
+    --bg3:      #1a1a1a;
+    --bg4:      #222222;
+    --border:   #2a2a2a;
+    --border2:  #333333;
+    --orange:   #f97316;
+    --orange2:  #ea6500;
+    --orange-dim: rgba(249,115,22,0.12);
+    --orange-glow: rgba(249,115,22,0.25);
+    --text:     #e8e4de;
+    --text2:    #8a8480;
+    --text3:    #555250;
+    --mono:     'IBM Plex Mono', monospace;
+    --display:  'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { background: var(--bg); color: var(--text); font-family: var(--mono); }
+
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(249,115,22,0.05) 0%, transparent 60%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px);
+    background-attachment: fixed;
+  }
+
+  /* ── layout ── */
+  .shell {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ── top bar ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--orange);
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%);
+    flex-shrink: 0;
+  }
+  .app-name {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .version {
+    font-size: 10px;
+    color: var(--text3);
+    margin-left: auto;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── meeting header ── */
+  .meeting-header {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .meeting-header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--orange);
+  }
+  .meeting-header-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+  }
+  .title-field {
+    background: none;
+    border: none;
+    outline: none;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--text);
+    width: 100%;
+    caret-color: var(--orange);
+  }
+  .title-field::placeholder { color: var(--text3); }
+  .time-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .time-sep { color: var(--text3); font-size: 11px; }
+  .lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 3px; }
+  input[type=time] {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 5px 8px;
+    outline: none;
+    width: 110px;
+    cursor: pointer;
+  }
+  input[type=time]:focus { border-color: var(--orange); box-shadow: 0 0 0 2px var(--orange-dim); }
+  input[type=time]::-webkit-calendar-picker-indicator { filter: invert(0.5); cursor: pointer; }
+
+  /* status badge */
+  .status-area { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .status-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .status-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .status-btn.live { border-color: var(--orange); color: var(--orange); background: var(--orange-dim); }
+  .status-btn.live .dot { background: var(--orange); animation: pulse 1s infinite; }
+  .status-btn.ended { border-color: #3a5a3a; color: #6aaa6a; background: rgba(100,180,100,0.08); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); flex-shrink: 0; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── notes area ── */
+  .notes-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    min-height: 340px;
+    max-height: 440px;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1px;
+    font-size: 13px;
+    line-height: 2;
+    scroll-behavior: smooth;
+  }
+  .notes-wrap::-webkit-scrollbar { width: 6px; }
+  .notes-wrap::-webkit-scrollbar-track { background: transparent; }
+  .notes-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  .empty-msg {
+    color: var(--text3);
+    font-size: 12px;
+    text-align: center;
+    padding: 3rem 1rem;
+    letter-spacing: 0.05em;
+  }
+  .empty-msg span { display: block; font-size: 10px; margin-top: 6px; opacity: 0.6; }
+
+  .note-line {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 1px 6px;
+    border-radius: 2px;
+    transition: background 0.1s;
+  }
+  .note-line:hover { background: var(--bg3); }
+
+  .ts {
+    font-size: 10px;
+    color: var(--text3);
+    min-width: 54px;
+    flex-shrink: 0;
+    user-select: none;
+    letter-spacing: 0.05em;
+  }
+  .speaker {
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+  .body-text { color: var(--text); word-break: break-word; }
+
+  /* style variants */
+  .st-minimal  .speaker { color: var(--orange); }
+  .st-transcript .speaker { color: #7ad4c4; }
+  .st-transcript .ts { color: #5a7a74; }
+  .st-screenplay .speaker { color: var(--text); text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px; }
+  .st-screenplay .ts { display: none; }
+  .st-screenplay .note-line { margin-left: 1.5rem; }
+  .st-screenplay .note-line.has-speaker { margin-left: 0; }
+  .st-bulleted .note-line::before { content: '›'; color: var(--orange); font-size: 14px; flex-shrink: 0; margin-right: -4px; }
+  .st-bulleted .speaker { color: #d4a056; }
+  .st-raw .speaker, .st-raw .ts { color: var(--text3); font-size: 11px; }
+
+  /* ── input area ── */
+  .input-area {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .input-area:focus-within { border-color: var(--orange); box-shadow: 0 0 0 2px var(--orange-dim); }
+  #line-input {
+    flex: 1;
+    background: var(--bg2);
+    border: none;
+    outline: none;
+    padding: 10px 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text);
+    caret-color: var(--orange);
+  }
+  #line-input::placeholder { color: var(--text3); }
+  .add-btn {
+    background: var(--orange);
+    border: none;
+    padding: 10px 18px;
+    color: #0d0d0d;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .add-btn:hover { background: var(--orange2); }
+  .add-btn:active { transform: scale(0.98); }
+
+  /* ── toolbar ── */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tbar-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-right: 2px; }
+  .pill {
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.12s;
+    text-transform: uppercase;
+  }
+  .pill:hover { border-color: var(--orange); color: var(--orange); }
+  .pill.active { border-color: var(--orange); color: var(--orange); background: var(--orange-dim); }
+  .tbar-right { margin-left: auto; display: flex; gap: 6px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .icon-btn:hover { border-color: var(--border); color: var(--text); }
+  .icon-btn.accent { border-color: var(--orange); color: var(--orange); background: var(--orange-dim); }
+  .icon-btn.accent:hover { background: rgba(249,115,22,0.2); }
+
+  /* ── settings modal ── */
+  .overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(3px);
+    z-index: 200;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 80px;
+  }
+  .overlay.open { display: flex; }
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-top: 2px solid var(--orange);
+    border-radius: 4px;
+    padding: 1.5rem;
+    width: 500px;
+    max-width: 95vw;
+    position: relative;
+  }
+  .modal-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .modal-title::before { content: '//'; color: var(--text3); }
+  .close-x {
+    position: absolute; top: 14px; right: 14px;
+    background: none; border: none; color: var(--text3);
+    font-size: 18px; cursor: pointer; line-height: 1;
+    transition: color 0.12s;
+  }
+  .close-x:hover { color: var(--text); }
+
+  .srow {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .srow label { font-size: 11px; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; }
+  .srow input[type=text], .srow select {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 6px 8px;
+    outline: none;
+    width: 100%;
+  }
+  .srow input:focus, .srow select:focus { border-color: var(--orange); box-shadow: 0 0 0 2px var(--orange-dim); }
+  .srow select option { background: var(--bg3); }
+  .modal-divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+  .modal-hint { font-size: 10px; color: var(--text3); margin-bottom: 14px; margin-top: -6px; grid-column: 2; }
+  .modal-footer { display: flex; justify-content: flex-end; margin-top: 1rem; }
+
+  /* ── footer ── */
+  .footer-line {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-line span { color: var(--orange); }
+
+  /* ── toast ── */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--bg3);
+    border: 1px solid var(--orange);
+    border-radius: 3px;
+    padding: 8px 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--orange);
+    letter-spacing: 0.08em;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.2s;
+    pointer-events: none;
+    z-index: 300;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- topbar -->
+  <div class="topbar">
+    <div class="logo-mark" aria-hidden="true"></div>
+    <div class="app-name">Meetlog</div>
+    <div class="version">v1.0</div>
+  </div>
+
+  <!-- meeting header -->
+  <div class="meeting-header">
+    <div class="meeting-header-grid">
+      <div>
+        <label class="lbl" for="mtitle">meeting title</label>
+        <input type="text" id="mtitle" class="title-field" placeholder="Untitled meeting..." autocomplete="off" spellcheck="false" />
+        <div class="time-row">
+          <div>
+            <label class="lbl" for="mstart">start</label>
+            <input type="time" id="mstart" />
+          </div>
+          <div class="time-sep" style="margin-top:18px">—</div>
+          <div>
+            <label class="lbl" for="mend">end</label>
+            <input type="time" id="mend" />
+          </div>
+        </div>
+      </div>
+      <div class="status-area">
+        <button class="status-btn" id="status-btn" onclick="cycleStatus()">
+          <span class="dot" id="status-dot"></span>
+          <span id="status-text">not started</span>
+        </button>
+        <div style="font-size:10px;color:var(--text3);text-align:right;letter-spacing:0.06em" id="note-count">0 notes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- notes output -->
+  <div class="empty-msg" id="empty-msg">
+    // no notes yet
+    <span>start typing below — press enter to log a note</span>
+  </div>
+  <div class="notes-wrap st-minimal" id="notes-area" style="display:none"></div>
+
+  <!-- input row -->
+  <div class="input-area">
+    <input type="text" id="line-input"
+      placeholder="type a note... or &quot;name# message&quot; to tag a speaker"
+      autocomplete="off" spellcheck="false"
+      onkeydown="handleKey(event)" oninput="onInputChange(event)" />
+    <button class="add-btn" onclick="addLine()">↵ log</button>
+  </div>
+
+  <!-- toolbar -->
+  <div class="toolbar">
+    <span class="tbar-label">style</span>
+    <button class="pill active" id="p-minimal" onclick="setStyle('minimal')">minimal</button>
+    <button class="pill" id="p-transcript" onclick="setStyle('transcript')">transcript</button>
+    <button class="pill" id="p-screenplay" onclick="setStyle('screenplay')">screenplay</button>
+    <button class="pill" id="p-bulleted" onclick="setStyle('bulleted')">bulleted</button>
+    <button class="pill" id="p-raw" onclick="setStyle('raw')">raw</button>
+    <div class="tbar-right">
+      <button class="icon-btn" onclick="clearNotes()">✕ clear</button>
+      <button class="icon-btn" onclick="openSettings()">⚙ settings</button>
+      <button class="icon-btn" onclick="copyScript()">⎘ copy</button>
+      <button class="icon-btn accent" onclick="downloadTxt()">↓ .txt</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- settings modal -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" id="modal">
+    <button class="close-x" onclick="closeSettings()" aria-label="close">✕</button>
+    <div class="modal-title">parser config</div>
+
+    <div class="srow">
+      <label for="s-delims">speaker delimiters</label>
+      <input type="text" id="s-delims" value="#/" placeholder="e.g. #/:" autocomplete="off" />
+    </div>
+    <div class="srow"><div></div><div class="modal-hint">chars after speaker name that trigger tagging — e.g. <code>john#</code> or <code>sarah/</code></div></div>
+
+    <div class="srow">
+      <label for="s-fmt">speaker format</label>
+      <select id="s-fmt">
+        <option value="angle">&lt;Name&gt; text</option>
+        <option value="colon">Name: text</option>
+        <option value="dash">— Name — text</option>
+        <option value="bracket">[Name] text</option>
+        <option value="parens">(Name) text</option>
+      </select>
+    </div>
+
+    <div class="srow">
+      <label for="ts-fmt">timestamp format</label>
+      <select id="ts-fmt">
+        <option value="hhmm">HH:MM</option>
+        <option value="hhmmss">HH:MM:SS</option>
+        <option value="relative">+mm:ss from start</option>
+        <option value="none">none</option>
+      </select>
+    </div>
+
+    <div class="srow">
+      <label for="s-caps">speaker capitalization</label>
+      <select id="s-caps">
+        <option value="title">Title Case</option>
+        <option value="upper">ALL CAPS</option>
+        <option value="none">as typed</option>
+      </select>
+    </div>
+
+    <hr class="modal-divider" />
+    <div style="font-size:10px;color:var(--text3);margin-bottom:4px;letter-spacing:0.06em">// speaker format preview</div>
+    <div id="fmt-preview" style="font-size:13px;font-family:var(--mono);color:var(--orange);padding:8px 10px;background:var(--bg3);border-radius:3px;border:1px solid var(--border)"></div>
+
+    <div class="modal-footer">
+      <button class="icon-btn accent" onclick="closeSettings()">done →</button>
+    </div>
+  </div>
+</div>
+
+<!-- toast -->
+<div class="toast" id="toast"></div>
+
+<div class="footer-line">
+  <span>meetlog</span>
+  <span style="color:var(--text3)">built with <span style="color:var(--orange)">claude</span> · log everything, forget nothing</span>
+</div>
+
+<script>
+  /* ── state ── */
+  let notes = [];
+  let noteStyle = 'minimal';
+  let statusIdx = 0;
+  let meetingStart = null;
+
+  const STATUS = [
+    { label: 'not started', cls: '' },
+    { label: 'live',        cls: 'live' },
+    { label: 'ended',       cls: 'ended' }
+  ];
+
+  /* ── init ── */
+  const now = new Date();
+  document.getElementById('mstart').value = now.toTimeString().slice(0, 5);
+
+  /* ── status ── */
+  function cycleStatus() {
+    statusIdx = (statusIdx + 1) % 3;
+    if (statusIdx === 1) meetingStart = Date.now();
+    const s = STATUS[statusIdx];
+    const btn = document.getElementById('status-btn');
+    btn.className = 'status-btn ' + s.cls;
+    document.getElementById('status-text').textContent = s.label;
+    if (statusIdx === 2) {
+      const endEl = document.getElementById('mend');
+      if (!endEl.value) endEl.value = new Date().toTimeString().slice(0, 5);
+    }
+  }
+
+  /* ── timestamp ── */
+  function getTs() {
+    const fmt = document.getElementById('ts-fmt').value;
+    if (fmt === 'none') return '';
+    const d = new Date();
+    if (fmt === 'hhmmss') return d.toTimeString().slice(0, 8);
+    if (fmt === 'relative' && meetingStart) {
+      const diff = Math.floor((Date.now() - meetingStart) / 1000);
+      const m = String(Math.floor(diff / 60)).padStart(2, '0');
+      const s = String(diff % 60).padStart(2, '0');
+      return '+' + m + ':' + s;
+    }
+    return d.toTimeString().slice(0, 5);
+  }
+
+  /* ── parser ── */
+  function parseLine(raw) {
+    const delims = document.getElementById('s-delims').value || '#/';
+    const esc = [...delims].map(c => c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('');
+    const re = new RegExp('^([\\w .\'\\-]+)[' + esc + ']\\s*(.*)$');
+    const m = raw.trim().match(re);
+    if (m) return { speaker: fmtCaps(m[1].trim()), content: m[2].trim() };
+    return { speaker: null, content: raw.trim() };
+  }
+
+  function fmtCaps(name) {
+    const c = document.getElementById('s-caps').value;
+    if (c === 'upper') return name.toUpperCase();
+    if (c === 'title') return name.replace(/\b\w/g, ch => ch.toUpperCase());
+    return name;
+  }
+
+  function renderSpeakerInline(name) {
+    const fmt = document.getElementById('s-fmt').value;
+    if (fmt === 'angle')   return '<' + name + '>';
+    if (fmt === 'colon')   return name + ':';
+    if (fmt === 'dash')    return '— ' + name + ' —';
+    if (fmt === 'bracket') return '[' + name + ']';
+    if (fmt === 'parens')  return '(' + name + ')';
+    return '<' + name + '>';
+  }
+
+  function renderSpeakerPlain(name) {
+    const fmt = document.getElementById('s-fmt').value;
+    if (fmt === 'angle')   return '<' + name + '>';
+    if (fmt === 'colon')   return name + ':';
+    if (fmt === 'dash')    return '— ' + name + ' —';
+    if (fmt === 'bracket') return '[' + name + ']';
+    if (fmt === 'parens')  return '(' + name + ')';
+    return '<' + name + '>';
+  }
+
+  /* ── add note ── */
+  function handleKey(e) { if (e.key === 'Enter') addLine(); }
+
+  function addLine() {
+    const inp = document.getElementById('line-input');
+    const raw = inp.value.trim();
+    if (!raw) return;
+    const ts = getTs();
+    const parsed = parseLine(raw);
+    notes.push({ ts, raw, ...parsed, id: Date.now() });
+    inp.value = '';
+    inp.focus();
+    renderNotes();
+    const area = document.getElementById('notes-area');
+    area.scrollTop = area.scrollHeight;
+    updateCount();
+  }
+
+  /* ── render ── */
+  function renderNotes() {
+    const area  = document.getElementById('notes-area');
+    const empty = document.getElementById('empty-msg');
+    area.className = 'notes-wrap st-' + noteStyle;
+    if (!notes.length) {
+      empty.style.display = '';
+      area.style.display  = 'none';
+      area.innerHTML = '';
+      return;
+    }
+    empty.style.display = 'none';
+    area.style.display  = '';
+    area.innerHTML = notes.map(n => {
+      const tsCell = '<span class="ts">' + (n.ts || '') + '</span>';
+      const spkCell = n.speaker
+        ? '<span class="speaker">' + esc(renderSpeakerInline(n.speaker)) + '</span>'
+        : '';
+      const hasSpk = n.speaker ? ' has-speaker' : '';
+      return '<div class="note-line' + hasSpk + '">' + tsCell + spkCell + '<span class="body-text">' + esc(n.content) + '</span></div>';
+    }).join('');
+    updateCount();
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function updateCount() {
+    document.getElementById('note-count').textContent = notes.length + ' note' + (notes.length !== 1 ? 's' : '');
+  }
+
+  /* ── style switcher ── */
+  function setStyle(s) {
+    noteStyle = s;
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    document.getElementById('p-' + s).classList.add('active');
+    renderNotes();
+  }
+
+  /* ── settings ── */
+  function openSettings() {
+    document.getElementById('overlay').classList.add('open');
+    updatePreview();
+  }
+  function closeSettings() {
+    document.getElementById('overlay').classList.remove('open');
+    renderNotes();
+  }
+  function overlayClick(e) { if (e.target === document.getElementById('overlay')) closeSettings(); }
+
+  function updatePreview() {
+    const spk = fmtCaps('john doe');
+    document.getElementById('fmt-preview').textContent = renderSpeakerPlain(spk) + ' the server went down at 14:00';
+  }
+
+  document.getElementById('s-fmt').addEventListener('change', updatePreview);
+  document.getElementById('s-caps').addEventListener('change', updatePreview);
+
+  /* ── export ── */
+  function buildText() {
+    const title = document.getElementById('mtitle').value || 'Untitled meeting';
+    const start = document.getElementById('mstart').value;
+    const end   = document.getElementById('mend').value;
+    let out = title + '\n';
+    if (start || end) out += (start || '??:??') + ' — ' + (end || '??:??') + '\n';
+    out += '─'.repeat(50) + '\n\n';
+    notes.forEach(n => {
+      const ts = n.ts ? '[' + n.ts + '] ' : '';
+      const spk = n.speaker ? renderSpeakerPlain(n.speaker) + ' ' : '';
+      out += ts + spk + n.content + '\n';
+    });
+    return out;
+  }
+
+  function copyScript() {
+    navigator.clipboard.writeText(buildText()).then(() => toast('copied to clipboard'));
+  }
+
+  function downloadTxt() {
+    const title = (document.getElementById('mtitle').value || 'meeting-notes')
+      .toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const blob = new Blob([buildText()], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = title + '.txt';
+    a.click();
+    toast('downloading ' + title + '.txt');
+  }
+
+  function clearNotes() {
+    if (!notes.length) return;
+    if (confirm('clear all ' + notes.length + ' notes?')) {
+      notes = [];
+      renderNotes();
+      updateCount();
+      toast('notes cleared');
+    }
+  }
+
+  /* ── input hint (orange when speaker detected) ── */
+  function onInputChange(e) {
+    const delims = document.getElementById('s-delims').value || '#/';
+    const esc2 = [...delims].map(c => c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('');
+    const re = new RegExp('^[\\w .\'\\-]+[' + esc2 + ']');
+    e.target.style.color = re.test(e.target.value) ? 'var(--orange)' : 'var(--text)';
+  }
+
+  /* ── toast ── */
+  let toastTimer;
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = '// ' + msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+  }
+</script>
+</body>
+</html>

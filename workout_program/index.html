@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fat Loss & Muscle Building Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #12121a;
+  --bg3: #1a1a26;
+  --card: #16161f;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f5;
+  --muted: #8888aa;
+  --dim: #555570;
+  --accent-red: #ff4455;
+  --accent-orange: #ff8533;
+  --accent-yellow: #ffcc33;
+  --accent-green: #33dd88;
+  --accent-blue: #4488ff;
+  --accent-purple: #aa66ff;
+  --accent-cyan: #33ccff;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Space Grotesk', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* HEADER */
+.header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 2.5rem 2rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,68,85,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-grid { max-width: 1100px; margin: 0 auto; }
+.header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+.program-title { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.program-title span { color: var(--accent-red); }
+.program-subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 0.4rem; font-family: var(--mono); }
+.profile-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+.chip {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.chip span { color: var(--text); }
+
+/* NAV TABS */
+.nav {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  overflow-x: auto;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0;
+}
+.nav-btn {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.85rem 1.1rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.nav-btn:hover { color: var(--text); }
+.nav-btn.active { color: var(--text); border-bottom-color: var(--accent-red); }
+.nav-btn .day-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+/* MAIN CONTENT */
+.main { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* MODE SWITCHER */
+.mode-switch {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.35rem;
+  width: fit-content;
+}
+.mode-btn {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.45rem 1rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: none;
+  color: var(--muted);
+}
+.mode-btn.active { background: var(--bg3); color: var(--text); border: 1px solid var(--border2); }
+.mode-btn.hard.active { color: var(--accent-orange); }
+.mode-btn.low.active { color: var(--accent-green); }
+
+/* DAY HEADER */
+.day-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.day-badge {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 3rem;
+}
+.day-info h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.3rem; }
+.day-info .day-type { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; }
+.day-info .day-why { font-size: 0.88rem; color: var(--muted); line-height: 1.6; max-width: 700px; }
+.day-stats { display: flex; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap; }
+.day-stat { font-family: var(--mono); font-size: 0.72rem; color: var(--dim); }
+.day-stat span { color: var(--accent-yellow); }
+
+/* REST DAY */
+.rest-card {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.rest-card h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+.rest-card p { color: var(--muted); max-width: 600px; margin: 0 auto 1.5rem; font-size: 0.9rem; }
+.rest-tasks { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 1.5rem; }
+.rest-task {
+  font-size: 0.82rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--muted);
+}
+
+/* SECTION */
+.section { margin-bottom: 2rem; }
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* EXERCISE TABLE */
+.ex-table { width: 100%; border-collapse: collapse; }
+.ex-table th {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--dim);
+  text-align: left;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.ex-table td {
+  padding: 0.75rem 0.75rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.ex-table tr:last-child td { border-bottom: none; }
+.ex-table tbody tr { background: var(--card); }
+.ex-table tbody tr:hover { background: var(--bg3); }
+.ex-name { font-weight: 600; font-size: 0.88rem; display: block; margin-bottom: 0.15rem; }
+.ex-note { font-size: 0.75rem; color: var(--muted); }
+.sets-reps { font-family: var(--mono); font-size: 0.82rem; color: var(--accent-yellow); white-space: nowrap; }
+.tempo-cell { font-family: var(--mono); font-size: 0.78rem; color: var(--accent-cyan); white-space: nowrap; }
+.rest-cell { font-family: var(--mono); font-size: 0.78rem; color: var(--accent-blue); white-space: nowrap; }
+.tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  margin-right: 3px;
+  white-space: nowrap;
+}
+.tag-superset { background: rgba(170,102,255,0.15); color: var(--accent-purple); border: 1px solid rgba(170,102,255,0.2); }
+.tag-circuit { background: rgba(255,133,51,0.15); color: var(--accent-orange); border: 1px solid rgba(255,133,51,0.2); }
+.tag-finisher { background: rgba(255,68,85,0.15); color: var(--accent-red); border: 1px solid rgba(255,68,85,0.2); }
+.tag-unilateral { background: rgba(51,204,255,0.15); color: var(--accent-cyan); border: 1px solid rgba(51,204,255,0.2); }
+.tag-isometric { background: rgba(51,221,136,0.15); color: var(--accent-green); border: 1px solid rgba(51,221,136,0.2); }
+.tag-mds { background: rgba(255,204,51,0.15); color: var(--accent-yellow); border: 1px solid rgba(255,204,51,0.2); }
+
+/* SUPERSET CONNECTOR */
+.ex-table .superset-row td { border-bottom: none; background: var(--card); }
+.superset-group { background: rgba(170,102,255,0.03) !important; }
+.superset-group td:first-child { border-left: 2px solid rgba(170,102,255,0.4); }
+
+/* PROGRESS BOX */
+.progress-box {
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(68,136,255,0.06);
+  border: 1px solid rgba(68,136,255,0.2);
+  border-radius: 8px;
+}
+.progress-box h4 { font-size: 0.82rem; font-weight: 600; color: var(--accent-blue); margin-bottom: 0.6rem; font-family: var(--mono); }
+.progress-box ul { list-style: none; }
+.progress-box li { font-size: 0.82rem; color: var(--muted); padding: 0.2rem 0; padding-left: 1rem; position: relative; }
+.progress-box li::before { content: '→'; position: absolute; left: 0; color: var(--accent-blue); }
+
+/* HARD MODE BOX */
+.hardmode-box {
+  margin-top: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(255,133,51,0.05);
+  border: 1px solid rgba(255,133,51,0.2);
+  border-radius: 8px;
+  display: none;
+}
+.hardmode-box.show { display: block; }
+.hardmode-box h4 { font-size: 0.82rem; font-weight: 600; color: var(--accent-orange); margin-bottom: 0.6rem; font-family: var(--mono); }
+.hardmode-box ul { list-style: none; }
+.hardmode-box li { font-size: 0.82rem; color: var(--muted); padding: 0.2rem 0; padding-left: 1rem; position: relative; }
+.hardmode-box li::before { content: '🔥'; position: absolute; left: 0; font-size: 0.7rem; top: 0.25rem; }
+
+/* LOW ENERGY BOX */
+.lowmode-box {
+  margin-top: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(51,221,136,0.05);
+  border: 1px solid rgba(51,221,136,0.2);
+  border-radius: 8px;
+  display: none;
+}
+.lowmode-box.show { display: block; }
+.lowmode-box h4 { font-size: 0.82rem; font-weight: 600; color: var(--accent-green); margin-bottom: 0.6rem; font-family: var(--mono); }
+.lowmode-box ul { list-style: none; }
+.lowmode-box li { font-size: 0.82rem; color: var(--muted); padding: 0.2rem 0; padding-left: 1rem; position: relative; }
+.lowmode-box li::before { content: '✦'; position: absolute; left: 0; color: var(--accent-green); font-size: 0.6rem; top: 0.3rem; }
+
+/* OVERVIEW GRID */
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.ov-card {
+  padding: 1.25rem;
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.ov-card:hover { border-color: var(--border2); background: var(--bg3); }
+.ov-card .ov-day { font-family: var(--mono); font-size: 0.72rem; color: var(--dim); margin-bottom: 0.4rem; }
+.ov-card .ov-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
+.ov-card .ov-focus { font-size: 0.8rem; color: var(--muted); }
+.ov-card .ov-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+
+/* PRINCIPLE BOXES */
+.principles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 700px) { .principles-grid { grid-template-columns: 1fr; } }
+.principle-card {
+  padding: 1.25rem;
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.principle-card h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.6rem; }
+.principle-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+.principle-card ul { list-style: none; }
+.principle-card li { font-size: 0.82rem; color: var(--muted); padding: 0.2rem 0; padding-left: 1rem; position: relative; }
+.principle-card li::before { content: '—'; position: absolute; left: 0; color: var(--dim); }
+
+/* NUTRITION SECTION */
+.nutrition-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+.nut-card {
+  padding: 1rem;
+  background: var(--card);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+.nut-card .nut-val { font-size: 1.6rem; font-weight: 700; font-family: var(--mono); }
+.nut-card .nut-label { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+
+/* CALLOUT */
+.callout {
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin: 1rem 0;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+.callout.warn { background: rgba(255,204,51,0.06); border: 1px solid rgba(255,204,51,0.2); color: #d4a820; }
+.callout.info { background: rgba(68,136,255,0.06); border: 1px solid rgba(68,136,255,0.2); color: #6699ff; }
+.callout.success { background: rgba(51,221,136,0.06); border: 1px solid rgba(51,221,136,0.2); color: #33dd88; }
+
+/* LEGEND */
+.legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .main { padding: 1rem; }
+  .header { padding: 1.5rem 1rem; }
+  .program-title { font-size: 1.4rem; }
+  .day-header { flex-direction: column; gap: 1rem; }
+  .ex-table th:nth-child(4), .ex-table td:nth-child(4) { display: none; }
+  .nav { padding: 0 1rem; }
+}
+
+.week-schedule {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.sched-day {
+  padding: 0.75rem 0.5rem;
+  background: var(--card);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sched-day:hover { border-color: var(--border2); }
+.sched-day.rest-sched { opacity: 0.5; }
+.sched-day .sd-name { font-family: var(--mono); font-size: 0.65rem; color: var(--dim); }
+.sched-day .sd-title { font-size: 0.78rem; font-weight: 600; margin-top: 0.3rem; line-height: 1.3; }
+.sched-day .sd-dot { width: 6px; height: 6px; border-radius: 50%; margin: 0.4rem auto 0; }
+@media (max-width: 700px) {
+  .week-schedule { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-grid">
+    <div class="header-top">
+      <div>
+        <div class="program-title">Project <span>Recomp</span></div>
+        <div class="program-subtitle">// 5-day home gym program · fat loss primary · muscle building secondary</div>
+      </div>
+    </div>
+    <div class="profile-chips">
+      <div class="chip">Age <span>17</span></div>
+      <div class="chip">Height <span>190 cm</span></div>
+      <div class="chip">Weight <span>120 kg</span></div>
+      <div class="chip">Equipment <span>2×5kg DBs · 20kg BB · bench · bodyweight</span></div>
+      <div class="chip">Level <span>Beginner–Early Intermediate</span></div>
+      <div class="chip">Days/Week <span>5</span></div>
+      <div class="chip">Priority Weak Points <span>Shoulders · Biceps</span></div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showTab('overview')">Overview</button>
+    <button class="nav-btn" onclick="showTab('day1')"><span class="day-dot" style="background:#ff4455"></span>Mon — Push</button>
+    <button class="nav-btn" onclick="showTab('day2')"><span class="day-dot" style="background:#4488ff"></span>Tue — Pull</button>
+    <button class="nav-btn" onclick="showTab('day3')"><span class="day-dot" style="background:#ffcc33"></span>Wed — Legs</button>
+    <button class="nav-btn" onclick="showTab('day4')">Thu — Rest</button>
+    <button class="nav-btn" onclick="showTab('day5')"><span class="day-dot" style="background:#aa66ff"></span>Fri — Upper</button>
+    <button class="nav-btn" onclick="showTab('day6')"><span class="day-dot" style="background:#33ddaa"></span>Sat — Full Body</button>
+    <button class="nav-btn" onclick="showTab('day7')">Sun — Rest</button>
+    <button class="nav-btn" onclick="showTab('principles')">Principles</button>
+    <button class="nav-btn" onclick="showTab('nutrition')">Nutrition</button>
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- OVERVIEW TAB -->
+<div id="tab-overview" class="tab-content active">
+  <div class="section-label">Weekly Schedule</div>
+  <div class="week-schedule">
+    <div class="sched-day" onclick="showTab('day1')">
+      <div class="sd-name">MON</div>
+      <div class="sd-title" style="color:#ff4455">Push + Shoulder Priority</div>
+      <div class="sd-dot" style="background:#ff4455"></div>
+    </div>
+    <div class="sched-day" onclick="showTab('day2')">
+      <div class="sd-name">TUE</div>
+      <div class="sd-title" style="color:#4488ff">Pull + Bicep Priority</div>
+      <div class="sd-dot" style="background:#4488ff"></div>
+    </div>
+    <div class="sched-day" onclick="showTab('day3')">
+      <div class="sd-name">WED</div>
+      <div class="sd-title" style="color:#ffcc33">Legs + Core Circuit</div>
+      <div class="sd-dot" style="background:#ffcc33"></div>
+    </div>
+    <div class="sched-day rest-sched" onclick="showTab('day4')">
+      <div class="sd-name">THU</div>
+      <div class="sd-title" style="color:#555570">Active Rest</div>
+      <div class="sd-dot" style="background:#333340"></div>
+    </div>
+    <div class="sched-day" onclick="showTab('day5')">
+      <div class="sd-name">FRI</div>
+      <div class="sd-title" style="color:#aa66ff">Upper Body + Finishers</div>
+      <div class="sd-dot" style="background:#aa66ff"></div>
+    </div>
+    <div class="sched-day" onclick="showTab('day6')">
+      <div class="sd-name">SAT</div>
+      <div class="sd-title" style="color:#33ddaa">Full Body Conditioning</div>
+      <div class="sd-dot" style="background:#33ddaa"></div>
+    </div>
+    <div class="sched-day rest-sched" onclick="showTab('day7')">
+      <div class="sd-name">SUN</div>
+      <div class="sd-title" style="color:#555570">Full Rest</div>
+      <div class="sd-dot" style="background:#333340"></div>
+    </div>
+  </div>
+
+  <div class="section-label">Program Logic</div>
+  <div class="callout info">
+    <span>ℹ</span>
+    <div>This program is built around a <strong>body recomposition</strong> approach — simultaneous fat loss and muscle gain, which is achievable for a newer trainee at a caloric deficit. At 17, your hormonal environment is highly anabolic. Limited equipment is compensated by tempo manipulation, unilateral work, density training, and mechanical advantage drop sets. You will be <strong>challenged every session</strong>.</div>
+  </div>
+
+  <div class="principles-grid" style="margin-top:1.5rem">
+    <div class="principle-card">
+      <h4 style="color:var(--accent-red)">Why This Split?</h4>
+      <ul>
+        <li>Mon/Fri push days with 5 days between them — full chest/shoulder recovery</li>
+        <li>Tue dedicated pull hits back + biceps with high volume without interference</li>
+        <li>Wed legs mid-week — largest muscle group burns most calories, placed where fatigue is lowest</li>
+        <li>Thu rest breaks accumulation before Fri/Sat hard sessions</li>
+        <li>Sat full-body conditioning functions as metabolic finisher for the week</li>
+        <li>Sun full rest — school + recovery = performance next Monday</li>
+      </ul>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-orange)">Overload Without More Weight</h4>
+      <ul>
+        <li>Slow eccentrics (3–5s down) increase time under tension dramatically</li>
+        <li>Pause reps eliminate momentum, maximize mechanical tension</li>
+        <li>Unilateral exercises halve load symmetry, expose weaknesses</li>
+        <li>Mechanical drop sets: change leverage, not weight</li>
+        <li>Rest-pause: brief 10-15s pause to extend a set past failure</li>
+        <li>Density: same work in less time = progressive overload</li>
+        <li>High-rep barbell work: 20–30+ reps creates metabolic stress</li>
+      </ul>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-yellow)">Fat Loss Strategy</h4>
+      <ul>
+        <li>High-rep, short-rest circuits maximize caloric burn per session</li>
+        <li>Leg-dominant sessions are calorie powerhouses (large muscle mass)</li>
+        <li>Saturday conditioning session adds ~400–600 kcal deficit</li>
+        <li>Muscle retention protected by adequate protein and progressive tension</li>
+        <li>No excessive cardio — preserves recovery for muscle stimulus</li>
+      </ul>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-purple)">Shoulder + Bicep Priority</h4>
+      <ul>
+        <li>Shoulders trained on BOTH push days (Mon + Fri) plus lateral raises on Sat</li>
+        <li>Every push session opens with shoulder-dominant movement before chest</li>
+        <li>Biceps trained on Tue, Fri, and Saturday — 3× weekly direct stimulus</li>
+        <li>Focus on peak contraction holds, slow curling, and varied angles</li>
+        <li>These are your weak points — they get the most attention</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:2rem">Legend</div>
+  <div class="legend">
+    <span class="tag tag-superset">SUPERSET</span>
+    <span class="tag tag-circuit">CIRCUIT</span>
+    <span class="tag tag-finisher">FINISHER</span>
+    <span class="tag tag-unilateral">UNILATERAL</span>
+    <span class="tag tag-isometric">ISOMETRIC</span>
+    <span class="tag tag-mds">MECH DROP SET</span>
+  </div>
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:0.75rem; font-size:0.8rem; color:var(--muted);">
+    <div><span style="color:var(--accent-yellow);font-family:var(--mono)">SETS × REPS</span> — sets and repetitions</div>
+    <div><span style="color:var(--accent-cyan);font-family:var(--mono)">TEMPO</span> — eccentric/pause/concentric (seconds)</div>
+    <div><span style="color:var(--accent-blue);font-family:var(--mono)">REST</span> — rest between sets</div>
+    <div><strong>RIR</strong> — Reps In Reserve (reps left before failure)</div>
+    <div><strong>3-1-1</strong> = 3s down, 1s pause at bottom, 1s up</div>
+    <div><strong>X</strong> = as fast as possible (concentric)</div>
+  </div>
+</div>
+
+<!-- DAY 1: PUSH + SHOULDER PRIORITY -->
+<div id="tab-day1" class="tab-content">
+  <div class="mode-switch">
+    <button class="mode-btn active" onclick="setMode(1,'standard',this)">Standard</button>
+    <button class="mode-btn hard" onclick="setMode(1,'hard',this)">🔥 Hard Mode</button>
+    <button class="mode-btn low" onclick="setMode(1,'low',this)">✦ Low Energy</button>
+  </div>
+  <div class="day-header">
+    <div class="day-badge" style="color:#ff4455">01</div>
+    <div class="day-info">
+      <div class="day-type">MONDAY · PUSH + SHOULDER PRIORITY</div>
+      <h2>Chest, Shoulders, Triceps</h2>
+      <div class="day-why">Opens the week fresh. Shoulders come first while CNS is fully recovered. High-volume push work with slow tempos and supersets creates significant metabolic stress. Chest volume is secondary to shoulder emphasis. Triceps finished with bodyweight density work.</div>
+      <div class="day-stats">
+        <div class="day-stat">Duration <span>65–80 min</span></div>
+        <div class="day-stat">Volume <span>~22 sets</span></div>
+        <div class="day-stat">Intensity Focus <span>Time Under Tension + Supersets</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">A — Warm-Up (5 min)</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Arm Circles (forward + back)</span></td><td class="sets-reps">2 × 15 each</td><td class="tempo-cell">controlled</td><td class="rest-cell">—</td><td><span class="ex-note">Full range. Feel shoulder joint wake up.</span></td></tr>
+        <tr><td><span class="ex-name">Band-Free Shoulder Dislocations</span><span class="ex-note">(or use a broomstick/belt)</span></td><td class="sets-reps">2 × 10</td><td class="tempo-cell">slow</td><td class="rest-cell">—</td><td><span class="ex-note">External rotation prep. Don't skip this.</span></td></tr>
+        <tr><td><span class="ex-name">Push-Up with Reach</span></td><td class="sets-reps">1 × 10</td><td class="tempo-cell">2-1-1</td><td class="rest-cell">—</td><td><span class="ex-note">Warm up pressing pattern slowly</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">B — Shoulder Priority Block</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Barbell Overhead Press</span><span class="ex-note">20kg · standing</span></td><td class="sets-reps">4 × 15–20</td><td class="tempo-cell">3-1-X</td><td class="rest-cell">90 sec</td><td><span class="ex-note">3s down, 1s pause at collarbone, press fast. RIR 2. If 20 reps easy, add 5-sec hold at top on last rep.</span></td></tr>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET A1</span> DB Lateral Raise</span><span class="ex-note">5kg each · strict form</span></td><td class="sets-reps">4 × 15–20</td><td class="tempo-cell">2-1-3</td><td class="rest-cell">—</td><td><span class="ex-note">2s up, 1s hold at top, 3s slow lower. Slight elbow bend. No swinging.</span></td></tr>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET A2</span> Pike Push-Up</span><span class="ex-note">bodyweight · hips high</span></td><td class="sets-reps">4 × 12–15</td><td class="tempo-cell">3-1-1</td><td class="rest-cell">75 sec</td><td><span class="ex-note">More vertical = more shoulder. Walk feet in as you get stronger.</span></td></tr>
+        <tr><td><span class="ex-name">DB Front Raise</span><span class="ex-note">5kg each · alternating</span></td><td class="sets-reps">3 × 12 each</td><td class="tempo-cell">2-1-2</td><td class="rest-cell">60 sec</td><td><span class="ex-note">Targets anterior delt. Control on the way down — that's where growth happens.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">C — Chest Block</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Barbell Floor Press</span><span class="ex-note">20kg · no rack needed</span></td><td class="sets-reps">4 × 20–25</td><td class="tempo-cell">3-2-X</td><td class="rest-cell">90 sec</td><td><span class="ex-note">3s down, 2s pause floor (eliminates bounce), explode up. The pause is mandatory. Floor limits range — add a 5-sec squeeze at top.</span></td></tr>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET B1</span> Wide Push-Up</span></td><td class="sets-reps">3 × AMRAP</td><td class="tempo-cell">3-1-1</td><td class="rest-cell">—</td><td><span class="ex-note">All reps with full 3s eccentric. Stop 2 reps before failure.</span></td></tr>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET B2</span> DB Squeeze Press</span><span class="ex-note">5kg each</span></td><td class="sets-reps">3 × 20</td><td class="tempo-cell">2-2-2</td><td class="rest-cell">75 sec</td><td><span class="ex-note">Press DBs together hard at top. 2s squeeze at peak contraction every rep.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-mds">MECH DROP SET</span> Push-Up Drop</span></td><td class="sets-reps">2 sets</td><td class="tempo-cell">controlled</td><td class="rest-cell">2 min</td><td><span class="ex-note">Wide push-up to failure → immediately diamond push-up to failure → immediately incline push-up (hands on bench) to failure. 1 set = all 3 positions without stopping.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">D — Tricep Finisher</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Diamond Push-Up</span></td><td class="sets-reps">3 × AMRAP</td><td class="tempo-cell">3-0-1</td><td class="rest-cell">60 sec</td><td><span class="ex-note">Hands together under chest. Focus on elbow lockout at top.</span></td></tr>
+        <tr><td><span class="ex-name">Bench Dip</span><span class="ex-note">feet on floor</span></td><td class="sets-reps">3 × 15–20</td><td class="tempo-cell">3-1-X</td><td class="rest-cell">60 sec</td><td><span class="ex-note">Full range of motion. 3s down. If easy: elevate feet on second bench/chair.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-finisher">FINISHER</span> Push-Up Burnout</span></td><td class="sets-reps">1 × max</td><td class="tempo-cell">1-0-1</td><td class="rest-cell">—</td><td><span class="ex-note">Normal pace to absolute muscular failure. Rest-pause: hit failure, rest 15s, do more. Repeat until can't do 1 rep.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="progress-box">
+    <h4>// Progressive Overload Rules — Day 1</h4>
+    <ul>
+      <li>When you can hit the top of the rep range with RIR 3+, add 1 more set before adding weight</li>
+      <li>OHP: once 4×20 is easy with 3-1-X tempo, switch to 4×12 with 5-3-X (5s eccentric, 3s pause)</li>
+      <li>Lateral raise: once 4×20 is easy, add a 5-sec isometric hold at top on every rep</li>
+      <li>Push-up AMRAP: log reps each session — beat your total volume each week</li>
+      <li>Mechanical drop set: once you can get 10+ reps in each position, increase eccentric to 4s</li>
+    </ul>
+  </div>
+
+  <div class="hardmode-box" id="day1-hard">
+    <h4>🔥 Hard Mode Additions (high recovery weeks only)</h4>
+    <ul>
+      <li>Add a 5th set to OHP and Floor Press</li>
+      <li>Superset A becomes a TRISET: Lateral Raise → Pike Push-Up → DB Arnold Press (full range, 3×12)</li>
+      <li>After the push-up mechanical drop set, add a 10-min EMOM: 5 explosive push-ups every minute on the minute</li>
+      <li>Increase all eccentric tempos by 1 second (3s → 4s, 2s → 3s)</li>
+    </ul>
+  </div>
+
+  <div class="lowmode-box" id="day1-low">
+    <h4>✦ Low Energy Version</h4>
+    <ul>
+      <li>Skip Section D entirely (tricep finisher)</li>
+      <li>Reduce all sets to 3 (instead of 4) in sections B and C</li>
+      <li>Increase rest periods by 30 seconds across the board</li>
+      <li>Remove supersets — perform A1 and A2 as straight sets with 90s rest each</li>
+      <li>Still complete the warm-up. The worst thing is to skip entirely — a reduced session still works</li>
+    </ul>
+  </div>
+</div>
+
+<!-- DAY 2: PULL + BICEP PRIORITY -->
+<div id="tab-day2" class="tab-content">
+  <div class="mode-switch">
+    <button class="mode-btn active" onclick="setMode(2,'standard',this)">Standard</button>
+    <button class="mode-btn hard" onclick="setMode(2,'hard',this)">🔥 Hard Mode</button>
+    <button class="mode-btn low" onclick="setMode(2,'low',this)">✦ Low Energy</button>
+  </div>
+  <div class="day-header">
+    <div class="day-badge" style="color:#4488ff">02</div>
+    <div class="day-info">
+      <div class="day-type">TUESDAY · PULL + BICEP PRIORITY</div>
+      <h2>Back, Biceps, Rear Delts</h2>
+      <div class="day-why">Your back is already a strength. This session exploits that by using your barbell for row variations at high volume while the 5kg dumbbells handle bicep isolation. Rear delt work every pull session prevents shoulder imbalances and improves your posture. Biceps get 3 exercises here — that's your priority treatment.</div>
+      <div class="day-stats">
+        <div class="day-stat">Duration <span>65–75 min</span></div>
+        <div class="day-stat">Volume <span>~21 sets</span></div>
+        <div class="day-stat">Intensity Focus <span>Peak Contraction · Slow Curls · Rows</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">A — Warm-Up (5 min)</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Dead Hang</span><span class="ex-note">from pull-up bar or door frame</span></td><td class="sets-reps">2 × 30 sec</td><td class="tempo-cell">hold</td><td class="rest-cell">30 sec</td><td><span class="ex-note">Decompresses spine, opens lats. If no bar: door frame hang.</span></td></tr>
+        <tr><td><span class="ex-name">Cat-Cow + Thoracic Rotation</span></td><td class="sets-reps">1 × 10 each</td><td class="tempo-cell">slow</td><td class="rest-cell">—</td><td><span class="ex-note">Warms up spine for rows. Don't rush.</span></td></tr>
+        <tr><td><span class="ex-name">Scapular Push-Up</span></td><td class="sets-reps">2 × 10</td><td class="tempo-cell">controlled</td><td class="rest-cell">—</td><td><span class="ex-note">Activates serratus and prepares scapular retraction.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">B — Back Block (Barbell Dominant)</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Barbell Bent-Over Row</span><span class="ex-note">20kg · overhand grip · 45° torso</span></td><td class="sets-reps">4 × 20–25</td><td class="tempo-cell">1-1-3</td><td class="rest-cell">90 sec</td><td><span class="ex-note">Explode up, 1s squeeze at top, 3s eccentric. Torso stays still. Drive elbows up and back.</span></td></tr>
+        <tr><td><span class="ex-name">Barbell Underhand Row</span><span class="ex-note">20kg · supinated grip · more upright</span></td><td class="sets-reps">3 × 20</td><td class="tempo-cell">1-2-3</td><td class="rest-cell">90 sec</td><td><span class="ex-note">Supinated grip hits lower lats and biceps simultaneously. 2s hold at peak every rep.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-unilateral">UNILATERAL</span> Single-Arm DB Row</span><span class="ex-note">5kg · supported on bench</span></td><td class="sets-reps">4 × 20 each</td><td class="tempo-cell">1-2-3</td><td class="rest-cell">60 sec/side</td><td><span class="ex-note">5kg is light — compensate with an extreme 2s isometric squeeze at top + 3s descent. Feel the lat stretch at bottom.</span></td></tr>
+        <tr><td><span class="ex-name">Barbell Good Morning</span><span class="ex-note">20kg · hip hinge · erector work</span></td><td class="sets-reps">3 × 15–20</td><td class="tempo-cell">3-1-1</td><td class="rest-cell">90 sec</td><td><span class="ex-note">3s hinge down, 1s hold at bottom, squeeze glutes to rise. Builds posterior chain that supports everything else.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">C — Bicep Priority Block</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET C1</span> DB Curl</span><span class="ex-note">5kg each · standing</span></td><td class="sets-reps">4 × 15–20</td><td class="tempo-cell">1-2-4</td><td class="rest-cell">—</td><td><span class="ex-note">1s up, 2s hold at peak (flex hard), 4s slow lower. Slow descent is where bicep grows. No swinging.</span></td></tr>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET C2</span> Hammer Curl</span><span class="ex-note">5kg each · neutral grip</span></td><td class="sets-reps">4 × 15</td><td class="tempo-cell">2-1-3</td><td class="rest-cell">75 sec</td><td><span class="ex-note">Neutral grip targets brachialis (outer arm thickness). Alternate arms each set.</span></td></tr>
+        <tr><td><span class="ex-name">Concentration Curl</span><span class="ex-note">5kg · seated · elbow on inner thigh</span></td><td class="sets-reps">3 × 12–15 each</td><td class="tempo-cell">2-3-4</td><td class="rest-cell">60 sec</td><td><span class="ex-note">3s peak contraction squeeze. 4s down. Elbow fixed on leg = no cheating. Mind-muscle connection is everything here.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-isometric">ISOMETRIC</span> DB Curl Hold</span><span class="ex-note">5kg each · 90° hold</span></td><td class="sets-reps">3 × 30 sec hold</td><td class="tempo-cell">hold</td><td class="rest-cell">60 sec</td><td><span class="ex-note">Hold both at 90 degrees. Squeeze as hard as possible for 30 seconds. Brief rest, then lower slowly over 5s. Brutal on light weight.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">D — Rear Delt & Upper Back</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">DB Rear Delt Fly</span><span class="ex-note">5kg each · bent over 45°</span></td><td class="sets-reps">4 × 15–20</td><td class="tempo-cell">2-2-3</td><td class="rest-cell">60 sec</td><td><span class="ex-note">2s fly out, 2s hold at top (pinch shoulder blades), 3s back down. Critical for shoulder health and posture.</span></td></tr>
+        <tr><td><span class="ex-name">Face Pull Substitute</span><span class="ex-note">DB pull-apart or towel pull-apart</span></td><td class="sets-reps">3 × 20</td><td class="tempo-cell">1-2-2</td><td class="rest-cell">45 sec</td><td><span class="ex-note">Hold towel shoulder-width, pull apart against resistance (you create the tension). Trains external rotation.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-finisher">FINISHER</span> Superman Hold</span></td><td class="sets-reps">3 × 30–45 sec</td><td class="tempo-cell">hold</td><td class="rest-cell">45 sec</td><td><span class="ex-note">Prone, arms and legs off floor, hold. Builds lower back / posterior chain endurance critical for safe barbell work.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="progress-box">
+    <h4>// Progressive Overload Rules — Day 2</h4>
+    <ul>
+      <li>Barbell rows: once 4×25 with 1-1-3 tempo is achieved, switch to 5×20 with 1-2-4 tempo</li>
+      <li>Single-arm DB row: when 4×20 is too easy, add a 3-second pause at the stretched position (bottom)</li>
+      <li>DB curl: increase hold time from 2s to 3s at top before considering any load increase</li>
+      <li>Concentration curl: slow from 4s to 5s eccentric when reps feel easy</li>
+      <li>Isometric holds: extend from 30s to 45s, then 60s over weeks</li>
+    </ul>
+  </div>
+
+  <div class="hardmode-box" id="day2-hard">
+    <h4>🔥 Hard Mode Additions</h4>
+    <ul>
+      <li>Add 5×5 barbell deadlift (20kg) at the very start as a CNS primer before row work</li>
+      <li>Superset C becomes a triset: add Reverse Curl (5kg each, overhand, 3×12) as C3</li>
+      <li>Finisher: 50 towel rows (lie under a sturdy table, pull yourself up) or 50 Australian pull-ups</li>
+      <li>Add 3×10 barbell shrugs (20kg) with 3s hold at top for trap development</li>
+    </ul>
+  </div>
+
+  <div class="lowmode-box" id="day2-low">
+    <h4>✦ Low Energy Version</h4>
+    <ul>
+      <li>Remove Good Mornings entirely</li>
+      <li>Reduce to 3 sets on rows (4→3)</li>
+      <li>Keep bicep block but reduce Concentration Curl and Isometric Hold to 2 sets each</li>
+      <li>Skip the finisher</li>
+    </ul>
+  </div>
+</div>
+
+<!-- DAY 3: LEGS + CORE -->
+<div id="tab-day3" class="tab-content">
+  <div class="mode-switch">
+    <button class="mode-btn active" onclick="setMode(3,'standard',this)">Standard</button>
+    <button class="mode-btn hard" onclick="setMode(3,'hard',this)">🔥 Hard Mode</button>
+    <button class="mode-btn low" onclick="setMode(3,'low',this)">✦ Low Energy</button>
+  </div>
+  <div class="day-header">
+    <div class="day-badge" style="color:#ffcc33">03</div>
+    <div class="day-info">
+      <div class="day-type">WEDNESDAY · LEGS + CORE CIRCUIT</div>
+      <h2>Quads, Hamstrings, Glutes, Calves, Core</h2>
+      <div class="day-why">Your legs are your strongest asset and your biggest calorie-burning engine. This session is deliberately placed mid-week when you have two days of food/recovery behind you. Heavy bodyweight and barbell leg work at high reps will be genuinely exhausting. The core circuit at the end is non-negotiable — strong core protects your spine during all barbell work and improves posture.</div>
+      <div class="day-stats">
+        <div class="day-stat">Duration <span>70–85 min</span></div>
+        <div class="day-stat">Volume <span>~24 sets</span></div>
+        <div class="day-stat">Intensity Focus <span>High-Rep Density · Unilateral · Metabolic Stress</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">A — Warm-Up (8 min)</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Bodyweight Squat</span></td><td class="sets-reps">2 × 15</td><td class="tempo-cell">controlled</td><td class="rest-cell">—</td><td><span class="ex-note">Deep, controlled, building warmth</span></td></tr>
+        <tr><td><span class="ex-name">Hip Circles + Leg Swings</span></td><td class="sets-reps">1 × 10 each</td><td class="tempo-cell">slow</td><td class="rest-cell">—</td><td><span class="ex-note">Front/back and side swings</span></td></tr>
+        <tr><td><span class="ex-name">Glute Bridge</span></td><td class="sets-reps">2 × 15</td><td class="tempo-cell">2-2-1</td><td class="rest-cell">—</td><td><span class="ex-note">Activates glutes before squats. Hold at top for 2s.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">B — Squat Block</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Barbell Back Squat</span><span class="ex-note">20kg · high-bar · full depth</span></td><td class="sets-reps">4 × 25–30</td><td class="tempo-cell">3-2-1</td><td class="rest-cell">2 min</td><td><span class="ex-note">3s down, 2s pause at bottom (eliminates elastic rebound), 1s up. At 25–30 reps this becomes brutal. RIR 3. You're using light weight — the pause is what makes it hard.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-unilateral">UNILATERAL</span> Bulgarian Split Squat</span><span class="ex-note">bodyweight · rear foot elevated on bench</span></td><td class="sets-reps">4 × 15 each</td><td class="tempo-cell">3-1-1</td><td class="rest-cell">90 sec/side</td><td><span class="ex-note">Most demanding leg exercise with no equipment. 3s down, 1s pause knee just off floor. This will expose any left/right strength difference.</span></td></tr>
+        <tr><td><span class="ex-name">Pause Squat</span><span class="ex-note">20kg · 4s hold at bottom</span></td><td class="sets-reps">3 × 12–15</td><td class="tempo-cell">2-4-1</td><td class="rest-cell">2 min</td><td><span class="ex-note">These 4-second pauses destroy the quad endurance system. Full depth. No bouncing out.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">C — Hip Hinge & Hamstring Block</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Barbell Romanian Deadlift</span><span class="ex-note">20kg · feel the stretch</span></td><td class="sets-reps">4 × 20–25</td><td class="tempo-cell">3-1-1</td><td class="rest-cell">90 sec</td><td><span class="ex-note">3s hinge down, feel hamstring stretch at bottom (don't round lower back), 1s hold, rise with glutes. Push hips back — not a squat. This is your hamstring and glute primary driver.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-unilateral">UNILATERAL</span> Single-Leg Hip Thrust</span><span class="ex-note">bodyweight · shoulders on bench</span></td><td class="sets-reps">3 × 15 each</td><td class="tempo-cell">2-2-2</td><td class="rest-cell">60 sec/side</td><td><span class="ex-note">One leg in air. 2s up, 2s squeeze at top, 2s down. Isolates each glute hard with zero equipment.</span></td></tr>
+        <tr><td><span class="ex-name">Nordic Hamstring Curl</span><span class="ex-note">hook feet under couch/barbell</span></td><td class="sets-reps">3 × 6–10</td><td class="tempo-cell">5-0-X</td><td class="rest-cell">90 sec</td><td><span class="ex-note">Hardest bodyweight hamstring exercise. Resist gravity for 5s. Use arms to push off floor at bottom. Build up over weeks. Even 3–4 reps is productive early on.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">D — Calf Work</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name"><span class="tag tag-unilateral">UNILATERAL</span> Single-Leg Calf Raise</span><span class="ex-note">on a step or floor edge</span></td><td class="sets-reps">4 × 20 each</td><td class="tempo-cell">1-2-3</td><td class="rest-cell">45 sec/side</td><td><span class="ex-note">1s up, 2s hold at top (full plantarflexion), 3s slow lower below neutral. Single leg creates enough difficulty without weight. Hold wall for balance only.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">E — Core Circuit (3 rounds, 30–45 sec rest between rounds)</div>
+    <div class="callout warn"><span>⚠</span><div>Complete all 5 exercises as a circuit before resting. Rest 30–45s between rounds. This is conditioning work — it is supposed to be uncomfortable.</div></div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Duration/Reps</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">CIRCUIT</span> Plank</span></td><td class="sets-reps">45 sec</td><td><span class="ex-note">Straight body. Squeeze glutes and abs. Not a rest position — actively brace.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">CIRCUIT</span> Dead Bug</span></td><td class="sets-reps">10 each side</td><td><span class="ex-note">Lower back pressed to floor throughout. Opposite arm and leg extend together. Slow.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">CIRCUIT</span> V-Up</span></td><td class="sets-reps">15 reps</td><td><span class="ex-note">Controlled. If too hard, do hollow body hold 30s instead.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">CIRCUIT</span> Russian Twist</span><span class="ex-note">hold 5kg DB</span></td><td class="sets-reps">20 each side</td><td><span class="ex-note">Feet off floor, rotate controlled. The DB adds rotational resistance.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">CIRCUIT</span> Mountain Climbers</span></td><td class="sets-reps">30 sec</td><td><span class="ex-note">Full speed. This is the conditioning piece. Go hard.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="progress-box">
+    <h4>// Progressive Overload Rules — Day 3</h4>
+    <ul>
+      <li>Barbell squat: extend pause from 2s to 3s before increasing rep count</li>
+      <li>Bulgarian split squat: once 4×15 is clean, add a 5kg DB in each hand</li>
+      <li>Nordic curl: target +1–2 reps per week — going from 4 to 10 is weeks of progress</li>
+      <li>Hip thrust: when single-leg feels easy, add a 5kg plate on your hip</li>
+      <li>Core circuit: progress to 4 rounds by Week 4</li>
+    </ul>
+  </div>
+
+  <div class="hardmode-box" id="day3-hard">
+    <h4>🔥 Hard Mode Additions</h4>
+    <ul>
+      <li>Add Barbell Hack Squat (bar behind legs) 3×20 before Bulgarian Split Squats</li>
+      <li>Turn squat block into a density block: 10 minutes AMRAP alternating barbell squat and bodyweight squat. Log total reps.</li>
+      <li>Add 100-rep calf raise challenge: 100 single-leg calf raises per leg, unbroken or in as few sets as possible</li>
+      <li>Core circuit: 4 rounds. Add 30-second hollow body hold after each mountain climber set</li>
+    </ul>
+  </div>
+
+  <div class="lowmode-box" id="day3-low">
+    <h4>✦ Low Energy Version</h4>
+    <ul>
+      <li>Skip Nordic Hamstring Curl entirely (it's CNS-intensive)</li>
+      <li>Replace pause squat with 3×15 regular barbell squat</li>
+      <li>Reduce core circuit to 2 rounds</li>
+      <li>Cut Bulgarian split squats to 3×10 each</li>
+      <li>Still complete B and C sections — these are the most important for the session</li>
+    </ul>
+  </div>
+</div>
+
+<!-- DAY 4: REST -->
+<div id="tab-day4" class="tab-content">
+  <div class="rest-card">
+    <div style="font-size:3rem; margin-bottom:1rem;">🔄</div>
+    <h2>Thursday — Active Recovery</h2>
+    <p>Three hard days in a row is significant volume. Thursday exists to prevent the accumulation of fatigue from compounding into Friday. This is NOT optional time off — it's a programmed physiological necessity. The school week adds mental stress that increases cortisol, which impairs recovery. Active rest minimizes this.</p>
+    <div style="max-width:600px; margin:0 auto; font-size:0.85rem; color:var(--muted); line-height:1.7;">
+      <strong style="color:var(--text)">What to do:</strong> 20–30 minutes of easy walking (not a workout — a walk). Light mobility work. Foam rolling if available. Sleep 8+ hours. Eat your protein. These are the days that make Friday possible.
+    </div>
+    <div class="rest-tasks">
+      <div class="rest-task">20–30 min easy walk</div>
+      <div class="rest-task">5–10 min hip mobility</div>
+      <div class="rest-task">Shoulder mobility drills</div>
+      <div class="rest-task">Foam roll if available</div>
+      <div class="rest-task">8+ hrs sleep tonight</div>
+      <div class="rest-task">Hit protein target</div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 5: UPPER BODY -->
+<div id="tab-day5" class="tab-content">
+  <div class="mode-switch">
+    <button class="mode-btn active" onclick="setMode(5,'standard',this)">Standard</button>
+    <button class="mode-btn hard" onclick="setMode(5,'hard',this)">🔥 Hard Mode</button>
+    <button class="mode-btn low" onclick="setMode(5,'low',this)">✦ Low Energy</button>
+  </div>
+  <div class="day-header">
+    <div class="day-badge" style="color:#aa66ff">05</div>
+    <div class="day-info">
+      <div class="day-type">FRIDAY · UPPER BODY + FINISHERS</div>
+      <h2>Shoulders (2nd hit), Chest, Back, Biceps (2nd hit), Triceps</h2>
+      <div class="day-why">This is the second upper body session of the week. Because it hits everything, it requires more systemic recovery than the split days — hence the Thursday rest. Shoulders and biceps appear again here (your priority targets) but with different exercises and angles. The session ends with a conditioning finisher designed to spike heart rate and maximize caloric expenditure. Friday also psychologically rewards a hard week.</div>
+      <div class="day-stats">
+        <div class="day-stat">Duration <span>70–80 min</span></div>
+        <div class="day-stat">Volume <span>~22 sets</span></div>
+        <div class="day-stat">Intensity Focus <span>Shoulder 2nd Stimulus · Finishers · Supersets</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">A — Shoulder Priority (2nd Weekly Hit)</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">DB Arnold Press</span><span class="ex-note">5kg each · seated or standing</span></td><td class="sets-reps">4 × 15–20</td><td class="tempo-cell">2-1-2</td><td class="rest-cell">90 sec</td><td><span class="ex-note">Start with palms facing you, rotate to forward on the press. Hits all three delt heads. Different movement pattern from Mon OHP.</span></td></tr>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET A1</span> DB Lateral Raise — Partial</span><span class="ex-note">5kg each · bottom half only</span></td><td class="sets-reps">3 × 20</td><td class="tempo-cell">1-0-1</td><td class="rest-cell">—</td><td><span class="ex-note">Bottom half of lateral raise (0-45°) keeps constant tension on lateral delt. No lockout rest.</span></td></tr>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET A2</span> DB Lateral Raise — Full</span><span class="ex-note">5kg each · normal full range</span></td><td class="sets-reps">3 × 15</td><td class="tempo-cell">2-1-3</td><td class="rest-cell">75 sec</td><td><span class="ex-note">Full range immediately after partials. A mini-mechanical drop set for laterals. You'll feel this immediately.</span></td></tr>
+        <tr><td><span class="ex-name">Overhead Press to Failure</span><span class="ex-note">20kg barbell · rest-pause method</span></td><td class="sets-reps">3 × RP</td><td class="tempo-cell">2-1-X</td><td class="rest-cell">2 min</td><td><span class="ex-note">Set goes: press to failure → rack bar, rest 15 seconds → press to failure again → rack, rest 15s → press to failure. That's 1 set. This is rest-pause training.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">B — Chest & Tricep Block</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Close-Grip Barbell Floor Press</span><span class="ex-note">20kg · hands shoulder-width</span></td><td class="sets-reps">4 × 20</td><td class="tempo-cell">3-2-X</td><td class="rest-cell">90 sec</td><td><span class="ex-note">Close grip shifts load to triceps. Same pause-on-floor rule. This is a different stimulus than Monday's wider grip.</span></td></tr>
+        <tr><td><span class="ex-name">Decline Push-Up</span><span class="ex-note">feet on bench</span></td><td class="sets-reps">4 × AMRAP</td><td class="tempo-cell">3-1-1</td><td class="rest-cell">75 sec</td><td><span class="ex-note">Feet elevated shifts emphasis to upper chest. Full 3s eccentric every rep. Log total reps per session.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-mds">MECH DROP SET</span> Dip Progression</span></td><td class="sets-reps">3 sets</td><td class="tempo-cell">controlled</td><td class="rest-cell">2 min</td><td><span class="ex-note">Bench dip (feet elevated) → Bench dip (feet flat) → Incline push-up. Each to near-failure, no rest between within set. Targets chest and triceps through changing mechanical advantage.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">C — Back & Bicep (2nd Hit)</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Barbell Row — Chest Supported</span><span class="ex-note">lie face down on bench · row to chest</span></td><td class="sets-reps">4 × 20</td><td class="tempo-cell">1-2-3</td><td class="rest-cell">90 sec</td><td><span class="ex-note">Eliminates any lower back involvement. Chest on bench isolates upper back and rhomboids. Different from standing row.</span></td></tr>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET D1</span> Incline DB Curl</span><span class="ex-note">5kg · seated on bench at 45°</span></td><td class="sets-reps">4 × 12–15 each</td><td class="tempo-cell">2-2-4</td><td class="rest-cell">—</td><td><span class="ex-note">45° incline stretches long head of bicep. Different angle than yesterday. 4s eccentric. Pure stretch and contraction.</span></td></tr>
+        <tr class="superset-group"><td><span class="ex-name"><span class="tag tag-superset">SUPERSET D2</span> DB Reverse Curl</span><span class="ex-note">5kg · overhand grip</span></td><td class="sets-reps">4 × 12</td><td class="tempo-cell">2-1-3</td><td class="rest-cell">75 sec</td><td><span class="ex-note">Overhand curl hits brachioradialis and brachialis — forearm/elbow complex. Adds outer arm size and thickness.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">E — Conditioning Finisher (12–15 min)</div>
+    <div class="callout warn"><span>⚠</span><div>This finisher is metabolic work. Rest as needed but minimize it. The goal is to complete it in the fastest time possible. Record your time and beat it each week.</div></div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Reps/Time</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name"><span class="tag tag-finisher">FINISHER</span> Barbell Thruster</span><span class="ex-note">squat + press in one movement · 20kg</span></td><td class="sets-reps">10 reps</td><td><span class="ex-note">Squat to parallel, drive up, press barbell overhead in one motion. Full body explosive compound.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-finisher">FINISHER</span> Push-Up</span></td><td class="sets-reps">15 reps</td><td><span class="ex-note">Chest to floor each rep</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-finisher">FINISHER</span> Squat Jump</span></td><td class="sets-reps">10 reps</td><td><span class="ex-note">Full squat, explosive jump. Land soft.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-finisher">FINISHER</span> Mountain Climbers</span></td><td class="sets-reps">30 sec</td><td><span class="ex-note">Maximum speed</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-finisher">FINISHER</span> Barbell Row</span></td><td class="sets-reps">10 reps</td><td><span class="ex-note">Explosive, controlled back</span></td></tr>
+        <tr><td colspan="3" style="text-align:center; color:var(--muted); font-family:var(--mono); font-size:0.78rem; padding:0.75rem">↻ REPEAT for 3–4 rounds total. Rest 60–90 sec between rounds only.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="progress-box">
+    <h4>// Progressive Overload Rules — Day 5</h4>
+    <ul>
+      <li>Arnold Press: once 4×20 is achieved with 2s tempo each way, add a 3s pause at top</li>
+      <li>Lateral raise partial/full superset: aim to add 1 rep per set per session</li>
+      <li>Rest-pause OHP: as weeks pass, you should be able to extend each mini-set by 1 rep</li>
+      <li>Finisher: target reducing completion time by 15–30 seconds each week</li>
+      <li>Incline curl: extend eccentric from 4s to 5s before other changes</li>
+    </ul>
+  </div>
+
+  <div class="hardmode-box" id="day5-hard">
+    <h4>🔥 Hard Mode Additions</h4>
+    <ul>
+      <li>Add a 5th set to Arnold Press and Chest-Supported Row</li>
+      <li>Finisher becomes 5 rounds (not 3–4)</li>
+      <li>Add a 21s method to one bicep exercise: 7 bottom-half reps + 7 top-half reps + 7 full reps = 1 set. 3 sets.</li>
+      <li>Add 4×20 barbell upright row (20kg) at the start — controversial but very effective for delt/trap development</li>
+    </ul>
+  </div>
+
+  <div class="lowmode-box" id="day5-low">
+    <h4>✦ Low Energy Version</h4>
+    <ul>
+      <li>Skip the conditioning finisher entirely — it's a bonus, not the foundation</li>
+      <li>Complete Section A (shoulders) and one of B or C — not all three</li>
+      <li>Reduce to 3 sets throughout</li>
+      <li>This session is still meaningful even at 50% — showing up consistently beats skipping when not perfect</li>
+    </ul>
+  </div>
+</div>
+
+<!-- DAY 6: FULL BODY CONDITIONING -->
+<div id="tab-day6" class="tab-content">
+  <div class="mode-switch">
+    <button class="mode-btn active" onclick="setMode(6,'standard',this)">Standard</button>
+    <button class="mode-btn hard" onclick="setMode(6,'hard',this)">🔥 Hard Mode</button>
+    <button class="mode-btn low" onclick="setMode(6,'low',this)">✦ Low Energy</button>
+  </div>
+  <div class="day-header">
+    <div class="day-badge" style="color:#33ddaa">06</div>
+    <div class="day-info">
+      <div class="day-type">SATURDAY · FULL BODY CONDITIONING</div>
+      <h2>Metabolic Full Body + Lateral Delts + Optional Cardio</h2>
+      <div class="day-why">Saturday is your weekly metabolic flush. It hits everything at lower intensity, focuses on movement quality after a hard week, and maximizes calorie burn for fat loss. It's not about destruction — it's about accumulation. The lateral delt work here is your third shoulder session of the week, which is aggressive but justified given your goals. The session ends with an optional cardio block for those who want to push fat loss hard.</div>
+      <div class="day-stats">
+        <div class="day-stat">Duration <span>60–75 min</span></div>
+        <div class="day-stat">Volume <span>~18 sets + conditioning</span></div>
+        <div class="day-stat">Intensity Focus <span>Metabolic · Conditioning · Volume Accumulation</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">A — Full Body Giant Set Circuit (4 rounds)</div>
+    <div class="callout info"><span>ℹ</span><div>Complete A1→A2→A3→A4→A5 as a circuit. Rest 90 seconds after completing all 5 exercises. That's 1 round. Complete 4 rounds total. Keep rest within the circuit to zero — move directly between exercises.</div></div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Reps</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">A1</span> Barbell Squat</span></td><td class="sets-reps">15 reps</td><td><span class="ex-note">Moderate depth, controlled. Not a max set — sustainable for 4 rounds.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">A2</span> Push-Up</span></td><td class="sets-reps">15 reps</td><td><span class="ex-note">Chest to floor each rep. Modify to incline if needed later in circuit.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">A3</span> Barbell Bent Row</span></td><td class="sets-reps">15 reps</td><td><span class="ex-note">Explosive up, controlled down. Move fast but keep form.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">A4</span> DB Lateral Raise</span><span class="ex-note">5kg each</span></td><td class="sets-reps">15 reps</td><td><span class="ex-note">Strict. This is your third lateral raise session this week. The volume is intentional.</span></td></tr>
+        <tr><td><span class="ex-name"><span class="tag tag-circuit">A5</span> Squat Jump</span></td><td class="sets-reps">10 reps</td><td><span class="ex-note">Explosive. This is the cardio heart rate spike of each round.</span></td></tr>
+        <tr><td colspan="3" style="text-align:center; color:var(--muted); font-family:var(--mono); font-size:0.78rem; padding:0.75rem">Rest 90 sec → Repeat 3 more times</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">B — Bicep & Shoulder Isolation (3rd Weekly Hit)</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">DB Curl — 21s Method</span><span class="ex-note">5kg each</span></td><td class="sets-reps">3 × 21</td><td class="tempo-cell">controlled</td><td class="rest-cell">75 sec</td><td><span class="ex-note">7 bottom-half reps (0–90°) + 7 top-half reps (90–top) + 7 full reps. Non-stop. Targets both peak contraction and stretched position.</span></td></tr>
+        <tr><td><span class="ex-name">Seated DB Lateral Raise</span><span class="ex-note">5kg each · seated on bench</span></td><td class="sets-reps">3 × 20</td><td class="tempo-cell">2-2-3</td><td class="rest-cell">60 sec</td><td><span class="ex-note">Seated limits momentum. Different feel to standing. 2s hold at top.</span></td></tr>
+        <tr><td><span class="ex-name">Rear Delt DB Fly</span><span class="ex-note">5kg each · lying face down on bench</span></td><td class="sets-reps">3 × 15</td><td class="tempo-cell">2-2-3</td><td class="rest-cell">60 sec</td><td><span class="ex-note">Prone position eliminates all swing. Pure rear delt isolation. Critical for shoulder health and rounding out that shoulder look.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">C — Core Strength (Not Circuit — Straight Sets)</div>
+    <table class="ex-table">
+      <thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Hollow Body Hold</span></td><td class="sets-reps">3 × 30–45 sec</td><td class="tempo-cell">hold</td><td class="rest-cell">60 sec</td><td><span class="ex-note">Arms overhead, low back pressed to floor, legs straight. The foundation of core strength.</span></td></tr>
+        <tr><td><span class="ex-name">Pallof Press Substitute</span><span class="ex-note">hold DB at chest, rotate side to side</span></td><td class="sets-reps">3 × 10 each side</td><td class="tempo-cell">3s each way</td><td class="rest-cell">45 sec</td><td><span class="ex-note">Anti-rotation core work. Hold 5kg, brace core, slow rotation against your own resistance.</span></td></tr>
+        <tr><td><span class="ex-name">Barbell Rollout</span><span class="ex-note">from knees · 20kg barbell</span></td><td class="sets-reps">3 × 8–10</td><td class="tempo-cell">3-1-2</td><td class="rest-cell">75 sec</td><td><span class="ex-note">Arguably the best ab exercise available to you. Roll out slowly (3s), 1s stretch, pull back with abs (2s). As strong as any ab machine. Start small range and build.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">D — Optional Cardio Block (20–30 min) — Add when fat loss is priority</div>
+    <table class="ex-table">
+      <thead><tr><th>Protocol</th><th>Duration</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ex-name">Stair Climbing (at home stairs)</span></td><td class="sets-reps">20–30 min</td><td><span class="ex-note">Low impact, high calorie burn. Easy on joints after a training week. Carry 5kg DBs to increase intensity.</span></td></tr>
+        <tr><td><span class="ex-name">LISS Walk / Jog</span></td><td class="sets-reps">20–30 min</td><td><span class="ex-note">Outdoors or indoor walking. Zone 2 (can hold a conversation). Burns fat without impacting recovery.</span></td></tr>
+        <tr><td><span class="ex-name">Tabata Bodyweight (alternative)</span></td><td class="sets-reps">4 min × 4 rounds</td><td><span class="ex-note">20s all-out (burpees/squat jumps/mountain climbers) / 10s rest. 4 min = 1 round. Shorter but higher intensity.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="progress-box">
+    <h4>// Progressive Overload Rules — Day 6</h4>
+    <ul>
+      <li>Giant set circuit: track time to complete 4 rounds. Aim to beat your time each week — that's density overload</li>
+      <li>21s curls: extend to 25s (8+8+9) once 21 becomes manageable</li>
+      <li>Barbell rollout: increase range of motion each week (roll out 2 inches further)</li>
+      <li>Optional cardio: add 5 minutes per week if fat loss is plateauing</li>
+    </ul>
+  </div>
+
+  <div class="hardmode-box" id="day6-hard">
+    <h4>🔥 Hard Mode Additions</h4>
+    <ul>
+      <li>Giant set becomes 5 rounds instead of 4</li>
+      <li>Add A6 to each circuit round: 10 DB curl (5kg each) immediately after squat jumps</li>
+      <li>Complete ALL of Section D cardio — choose the Tabata option</li>
+      <li>Add 3×20 barbell curl (20kg, high rep, lighter touch) as a bicep burnout after 21s curls</li>
+    </ul>
+  </div>
+
+  <div class="lowmode-box" id="day6-low">
+    <h4>✦ Low Energy Version</h4>
+    <ul>
+      <li>Reduce giant set to 3 rounds, 10 reps each exercise</li>
+      <li>Skip Section D cardio entirely</li>
+      <li>Core: just hollow body hold and barbell rollout — 2 sets each</li>
+      <li>This is Saturday — if you've done 4 good sessions this week, a reduced Saturday is still a win</li>
+    </ul>
+  </div>
+</div>
+
+<!-- DAY 7: REST -->
+<div id="tab-day7" class="tab-content">
+  <div class="rest-card">
+    <div style="font-size:3rem; margin-bottom:1rem;">🌙</div>
+    <h2>Sunday — Full Rest</h2>
+    <p>Complete rest. No workout. No guilt. Sunday is where adaptation happens. When you sleep, your body releases growth hormone, repairs muscle tissue, and consolidates neurological motor patterns you learned during the week. Training is the stimulus. Recovery is where results are actually created.</p>
+    <div style="max-width:600px; margin:0 auto; font-size:0.85rem; color:var(--muted); line-height:1.7; margin-top:1rem;">
+      <strong style="color:var(--text)">Mental reframe:</strong> Sunday rest is not laziness. It's a programmed physiological necessity. Five hard sessions + two full rest days is a more effective weekly structure than training 6–7 days at lower quality. Do not add extra sessions here.
+    </div>
+    <div class="rest-tasks">
+      <div class="rest-task">Full sleep (8–9 hrs)</div>
+      <div class="rest-task">High protein meals</div>
+      <div class="rest-task">Light stretching OK</div>
+      <div class="rest-task">Plan next week's sessions</div>
+      <div class="rest-task">Review your training log</div>
+      <div class="rest-task">Avoid screen time late</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINCIPLES TAB -->
+<div id="tab-principles" class="tab-content">
+  <div class="section-label">Core Program Principles</div>
+  <div class="callout success"><span>✔</span><div>These principles are why the program is structured this way. Understanding them helps you make intelligent modifications when life gets in the way — and it will.</div></div>
+
+  <div class="principles-grid" style="margin-top:1.5rem; margin-bottom:2rem;">
+    <div class="principle-card">
+      <h4 style="color:var(--accent-red)">1. Time Under Tension Over Load</h4>
+      <p>Your 20kg barbell is too light for strength work (3×5, 5×5). But at 3–4s eccentrics and 2s pause positions, a 25-rep set becomes 3–4 minutes of active tension per set. Muscle doesn't count reps — it responds to tension and metabolic stress. Your tempo is your weight.</p>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-orange)">2. Unilateral Work Closes Gaps</h4>
+      <p>Bulgarian split squats, single-leg hip thrusts, single-arm rows, and concentration curls aren't just volume — they reveal and fix left/right asymmetries that limit your bilateral lifts. At 120kg with a developing body, this is injury prevention AND performance.</p>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-yellow)">3. Mechanical Drop Sets Without Buying Equipment</h4>
+      <p>A mechanical drop set changes leverage, not weight. Wide → diamond → incline push-up is three progressive difficulty levels using zero equipment. Strength curve manipulation (partial reps, position changes) extends any set well past what adding weight would achieve.</p>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-green)">4. Density Is Progressive Overload</h4>
+      <p>Doing the same work in less time is measurable progress. Log your giant set circuit time every Saturday. When you beat your previous time, that's overload achieved. This is especially powerful for fat loss because higher density = more calories burned.</p>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-purple)">5. School Fatigue Is Real</h4>
+      <p>Central Nervous System fatigue from school — concentration, social stress, decision-making — is physiologically identical to physical fatigue in its effect on training quality. The hard/low-energy modes exist because forcing maximum effort on a depleted day is worse than a smart reduced session.</p>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-cyan)">6. Fat Loss Is a Diet Job</h4>
+      <p>Training creates the muscle retention signal and the metabolic context. But fat loss at the rate you want requires a caloric deficit. No amount of training compensates for unchecked eating. The program maximizes calorie burn, but the kitchen makes fat loss happen.</p>
+    </div>
+  </div>
+
+  <div class="section-label">Training Log Template</div>
+  <div class="callout info"><span>ℹ</span><div>Log every session. At minimum: date, which mode (standard/hard/low), reps achieved per set, and how hard it felt (1–10). This data is how you know when to progress. Without it, you're guessing.</div></div>
+
+  <div style="background:var(--card); border-radius:8px; border:1px solid var(--border); padding:1.25rem; font-family:var(--mono); font-size:0.78rem; color:var(--muted); margin-top:1rem; line-height:2;">
+    <div style="color:var(--accent-green)">// WEEK 1 — MON — PUSH + SHOULDERS</div>
+    <div>Date: _______ | Mode: STANDARD / HARD / LOW</div>
+    <div>OHP 20kg: set1 ___ / set2 ___ / set3 ___ / set4 ___  reps</div>
+    <div>Lateral Raise: set1 ___ / set2 ___ / set3 ___ / set4 ___  reps</div>
+    <div>Pike Push-Up: set1 ___ / set2 ___ / set3 ___ / set4 ___  reps</div>
+    <div>Floor Press: set1 ___ / set2 ___ / set3 ___ / set4 ___  reps</div>
+    <div>Push-Up AMRAP total: ___  |  RPE: ___ /10</div>
+  </div>
+</div>
+
+<!-- NUTRITION TAB -->
+<div id="tab-nutrition" class="tab-content">
+  <div class="section-label">Nutrition Strategy</div>
+  <div class="callout warn"><span>⚠</span><div>These are guidelines, not prescriptions. At 17, your body is still developing and extreme restriction is harmful. The goal is a moderate, sustainable deficit that preserves muscle while allowing fat loss of approximately 0.5–1% of body weight per week (0.6–1.2kg).</div></div>
+
+  <div class="nutrition-grid" style="margin-top:1.5rem; margin-bottom:2rem;">
+    <div class="nut-card">
+      <div class="nut-val" style="color:var(--accent-red)">~2,800</div>
+      <div class="nut-label">kcal/day (training days)<br><span style="color:var(--dim)">deficit of ~400–500 from maintenance</span></div>
+    </div>
+    <div class="nut-card">
+      <div class="nut-val" style="color:var(--accent-blue)">~2,400</div>
+      <div class="nut-label">kcal/day (rest days)<br><span style="color:var(--dim)">slightly lower on rest days</span></div>
+    </div>
+    <div class="nut-card">
+      <div class="nut-val" style="color:var(--accent-yellow)">180–220g</div>
+      <div class="nut-label">protein/day<br><span style="color:var(--dim)">1.5–1.8g per kg bodyweight</span></div>
+    </div>
+    <div class="nut-card">
+      <div class="nut-val" style="color:var(--accent-green)">240–280g</div>
+      <div class="nut-label">carbohydrates/day<br><span style="color:var(--dim)">prioritize around training</span></div>
+    </div>
+    <div class="nut-card">
+      <div class="nut-val" style="color:var(--accent-purple)">80–100g</div>
+      <div class="nut-label">fat/day<br><span style="color:var(--dim)">minimum 70g for hormone health</span></div>
+    </div>
+  </div>
+
+  <div class="principles-grid">
+    <div class="principle-card">
+      <h4 style="color:var(--accent-yellow)">Protein Priority</h4>
+      <p>Protein is the most important nutrient for your goals. At 120kg, you need a lot of it — aim for 180–220g daily. Every meal should have a protein anchor: eggs, chicken, beef, fish, dairy, legumes. If you hit your protein goal and are in a slight caloric deficit, fat loss and muscle gain happen simultaneously.</p>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-cyan)">Carb Timing</h4>
+      <p>Eat most of your carbohydrates around your workouts: 60–90 minutes before training and within 1–2 hours after. Rice, oats, potatoes, fruit. This fuels performance and replenishes muscle glycogen for recovery. On rest days, reduce carbs slightly and increase fat and vegetables.</p>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-green)">What NOT To Do</h4>
+      <ul>
+        <li>Don't drop below 2,000 kcal — muscle loss accelerates</li>
+        <li>Don't skip breakfast on training days — you need fuel</li>
+        <li>Don't eliminate carbs — this tanks training performance</li>
+        <li>Don't rely on supplements over food</li>
+        <li>Don't weigh yourself daily — weekly average is more accurate</li>
+      </ul>
+    </div>
+    <div class="principle-card">
+      <h4 style="color:var(--accent-orange)">Simple Weekly Check-In</h4>
+      <ul>
+        <li>Weigh yourself same time, same conditions, once/week</li>
+        <li>Target: -0.6 to -1.2 kg/week average</li>
+        <li>If losing more than 1.2kg/week: add 200 kcal (likely muscle loss)</li>
+        <li>If not losing: remove 200 kcal from non-protein sources</li>
+        <li>Progress photos monthly — the scale doesn't show body composition shifts</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:2rem">Hydration & Sleep</div>
+  <div class="callout success"><span>✔</span><div>At 120kg training 5× per week, target 3.5–4 litres of water daily. On leg day and conditioning days, push toward 4–4.5L. Sleep 8–9 hours — this is when 90% of the growth hormone your body produces is released. Sleep is not optional recovery. It IS the recovery.</div></div>
+</div>
+
+</div><!-- end .main -->
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const t = document.getElementById('tab-' + id);
+  if (t) t.classList.add('active');
+  const btns = document.querySelectorAll('.nav-btn');
+  btns.forEach(b => {
+    if (b.getAttribute('onclick') === "showTab('" + id + "')") {
+      b.classList.add('active');
+    }
+  });
+}
+
+function setMode(day, mode, btn) {
+  const parent = btn.closest('.tab-content') || btn.parentElement.parentElement;
+  parent.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const hardBox = document.getElementById('day' + day + '-hard');
+  const lowBox = document.getElementById('day' + day + '-low');
+  if (hardBox) hardBox.classList.toggle('show', mode === 'hard');
+  if (lowBox) lowBox.classList.toggle('show', mode === 'low');
+}
+</script>
+</body>
+</html>

@@ -1,69 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>C++ with Spinzi</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="style.css">
-        <meta name="description" content="Learn C++ programming with Spinzi.">
-        <meta name="author" content="Spinzarul de Romania">
-        <meta name="keywords" content="C++, programming, Spinzi, learn, tutorial">
-        <link rel="icon" href="https://i.pinimg.com/736x/60/8f/6b/608f6b1ff2584bdce6627b43744010e9.jpg" type="image/x-icon">
-        <script src="include.js" defer></script>
-    </head>
-    <body>
-        <div id="header-placeholder"></div>
-        
-        <section class="content">
-            <h1>Welcome to C++ with Spinzi</h1>
-            <p>Site made by Spinzarul for top G's</p>
-            <p>Made to revise C++, improve &lt;html&gt; abilities and coding stuff.</p>
-            <img class="special-img" src="https://m.media-amazon.com/images/M/MV5BYjVkOGNhNjQtMDM5Zi00MTI0LWJhZTYtMzQ0OTExMWUyZmM2XkEyXkFqcGdeQWRpZWdtb25n._V1_.jpg" alt="Sakamoto">
-        </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="" id="meta-description" />
+  <meta name="author" content="" id="meta-author" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="" id="og-title" />
+  <meta property="og:description" content="" id="og-description" />
 
-        <section class="content">
-            <h2>🌱 Why I Built This</h2>
-            <p>
-                I want to teach others like I was taught—patiently, simply, and with hope. My dream is to one day make a full game that tells my story. Until then, I'm building this site as a learning space—for me and for you.
-            </p>
+  <title id="page-title">Spinzi</title>
 
-            <p>
-                If you'd like to follow what I’m working on or suggest something, feel free to <a href="contact.html">contact me</a> or find me on <a href="https://github.com/Spinzi">GitHub</a>.
-            </p>
-        </section>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-        <section class="daily_verse" onclick="window.location.href='daily_verses.html'">
-            <h2>Daily Bible Verses</h2>
-            <p class="bible_info">
-                Philippians 4:6-7 (NIV)
-            </p>
-            <p class="bible_verse">
-                "<sup>6</sup>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.  
-                <sup>7</sup>And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus."
-            </p>
-        </section>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Skip navigation for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-        <section class="content">
-            <h2>Looking for another project of mine?</h2>
-            <p>Check out my biology project!</p>
-            <button onclick="window.location.href='Locomotie/index.html'">Let's go!</button>
-            <p>Or maybe my geography one!</p>
-            <button onclick="window.location.href='geo-website/index.html'">Let's go!</button>
-            <p>Possibly my history one!</p>
-            <button onclick="window.location.href='istorie/index.html'">Let's go!</button>
-            <p>something</p>
-            <button onclick="window.location.href='lastIteration/index.html'">Let's go!</button>
-            <p>Bio-app</p>
-            <button onclick="window.location.href='bio-app/index.html'">Let's go!</button>
-            <p>Strings functions explained</p>
-            <button onclick="window.location.href='strings-by-spinzi/index.html'">Let's go!</button>
-        </section>
+  <!-- Navigation -->
+  <header class="site-header" role="banner">
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <a href="#" class="nav-logo" aria-label="Spinzi — home">
+        <span class="nav-logo-mark" aria-hidden="true">S</span>
+        <span class="nav-logo-text">spinzi</span>
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="#about">about</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#verse">verse</a></li>
+      </ul>
+      <button class="nav-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+    </nav>
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu" hidden>
+      <ul class="mobile-nav-links" role="list">
+        <li><a href="#about">about</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#verse">verse</a></li>
+      </ul>
+    </div>
+  </header>
 
-        <section class="content">
-            <p>My own Vector class:</p>
-            <button onclick="window.location.href='https://github.com/Spinzi/SpinziVec'">Let's go!</button>
-        </section>
+  <main id="main-content">
 
-        <div id="footer-placeholder"></div>
-    </body>
+    <!-- Hero Section -->
+    <section class="hero" id="home" aria-label="Introduction">
+      <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-content">
+        <p class="hero-greeting" aria-hidden="true"></p>
+        <h1 class="hero-name"></h1>
+        <p class="hero-tagline"></p>
+        <p class="hero-subtext"></p>
+        <div class="hero-cta" role="group" aria-label="Call to action buttons"></div>
+      </div>
+      <div class="hero-scroll-hint" aria-hidden="true">
+        <span class="scroll-line"></span>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about section" id="about" aria-labelledby="about-heading">
+      <div class="container">
+        <div class="section-eyebrow" aria-hidden="true">01 · who I am</div>
+        <h2 class="section-heading" id="about-heading">A bit about me</h2>
+        <div class="about-body">
+          <div class="about-text" id="about-paragraphs"></div>
+          <div class="about-sidebar">
+            <div class="tag-cloud" id="about-tags" role="list" aria-label="Skills and interests"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects section" id="projects" aria-labelledby="projects-heading">
+      <div class="container">
+        <div class="section-eyebrow" aria-hidden="true">02 · what I build</div>
+        <h2 class="section-heading" id="projects-heading">Projects</h2>
+        <p class="section-subheading">Things I've made, learned from, and shipped.</p>
+        <div class="projects-grid" id="projects-grid" role="list"></div>
+      </div>
+    </section>
+
+    <!-- Verse Section -->
+    <section class="verse-section section" id="verse" aria-labelledby="verse-heading">
+      <div class="container">
+        <div class="section-eyebrow" aria-hidden="true">03 · what grounds me</div>
+        <h2 class="visually-hidden" id="verse-heading">Daily Bible Verse</h2>
+        <figure class="verse-card" id="verse-card" aria-labelledby="verse-heading">
+          <blockquote class="verse-text" id="verse-text"></blockquote>
+          <figcaption class="verse-ref" id="verse-ref"></figcaption>
+        </figure>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <p class="footer-text" id="footer-text"></p>
+        <nav class="footer-social" aria-label="Social links">
+          <ul class="social-links" id="social-links" role="list"></ul>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Project Modal -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modal-close" aria-label="Close project details">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="modal-content" id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
 </html>

@@ -1,0 +1,85 @@
+:root {
+
+    /* ========= Colors ========= */
+
+    --color-primary: #5865F2;
+    --color-primary-hover: #4752C4;
+
+    --color-secondary: #3BA55D;
+    --color-secondary-hover: #2D7D46;
+
+    --color-accent: #FEE75C;
+
+    --color-background: #F5F7FB;
+    --color-surface: #FFFFFF;
+    --color-surface-secondary: #ECEFF4;
+
+    --color-text: #1F2937;
+    --color-text-light: #6B7280;
+
+    --color-border: #D1D5DB;
+
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+    --color-info: #3B82F6;
+
+    /* ========= Typography ========= */
+
+    --font-family: "Inter", sans-serif;
+
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+    --font-size-3xl: 3rem;
+
+    /* ========= Font Weight ========= */
+
+    --font-light: 300;
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+
+    /* ========= Border Radius ========= */
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-round: 9999px;
+
+    /* ========= Spacing ========= */
+
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+
+    /* ========= Shadows ========= */
+
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, .08);
+    --shadow-md: 0 6px 18px rgba(0, 0, 0, .12);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, .16);
+
+    /* ========= Transitions ========= */
+
+    --transition-fast: .15s ease;
+    --transition-normal: .25s ease;
+    --transition-slow: .4s ease;
+
+    /* ========= Layout ========= */
+
+    --navbar-height: 72px;
+    --sidebar-width: 280px;
+
+    --content-width: 1200px;
+
+}
+

@@ -1,0 +1,69 @@
+@import url("./variables.css");
+
+/* Components */
+/* @import url("./components/button.css");
+@import url("./components/navbar.css");
+@import url("./components/modal.css"); */
+
+/* Pages */
+/* @import url("./pages/home.css");
+@import url("./pages/teacher.css");
+@import url("./pages/play.css"); */
+
+
+/* ========= Reset ========= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    background: var(--color-background);
+    color: var(--color-text);
+    min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+#app {
+    min-height: 100vh;
+}
+
+.txt_err {
+    color: var(--color-danger);
+    font-size: var(--font-size-2xl);
+}

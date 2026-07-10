@@ -55,7 +55,14 @@ export async function initActions(){
                 break;
             
             case "save_q":
+                console.log("Saved quiz");
                 saveQuizz();
+                trigger.textContent = "Saved";
+                trigger.disabled = true;
+                setTimeout(()=>{
+                    trigger.textContent = "Save";
+                    trigger.disabled = false;
+                }, 3000);
                 break;
             
             case "join_quizz":

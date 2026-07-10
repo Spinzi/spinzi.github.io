@@ -1,5 +1,6 @@
 import { appState } from "../../state/appState.js";
 import { loadCSS } from "../../helpers/loadCSS.js";
+import { insertFooter } from "../../helpers/footer.js";
 
 import { quizState } from "../../state/quizState.js";
 
@@ -21,9 +22,14 @@ function render_join(non_existent_code = false){
             }
 
             <div class="join-form">
-                <input type="text" id="quizzCode" placeholder="12A B56" maxlength="6" autocomplete="off">
+                <input type="text" id="quizzCode" placeholder="12A B56" maxlength="6" autocomplete="off" oninput="this.value = this.value.toUpperCase()">
                 <button data-action="join_quizz">Enter</button>
             </div>
+            
+        </div>
+        
+        <div class="terms_section">
+            <p><a href="js/services/terms-of-service.txt">Terms</a> | <a href="js/services/privacy-policy.txt">Privacy</a></p>
         </div>
         `;
 }
@@ -187,7 +193,12 @@ async function renderPage(data){
                 <button id="enter">Enter</button>
             </div>
         </div>
+        <div class="terms_section">
+            <p><a href="js/services/terms-of-service.txt">Terms</a> | <a href="js/services/privacy-policy.txt">Privacy</a></p>
+        </div>
         `;
+
+        
 
         document.getElementById("enter").addEventListener("click", async ()=>{
             const name = document.getElementById("name").value;
@@ -297,11 +308,17 @@ async function renderPage(data){
                 ${rowsHTML}
             </div>
         </div>
+        <div class="terms_section">
+            <p><a href="js/services/terms-of-service.txt">Terms</a> | <a href="js/services/privacy-policy.txt">Privacy</a></p>
+        </div>
     `;
     }else{
         app.innerHTML = `
         <div class="join-screen">
             <p id="feedback">Unknown page ${data.page}</p>
+        </div>
+        <div class="terms_section">
+            <p><a href="js/services/terms-of-service.txt">Terms</a> | <a href="js/services/privacy-policy.txt">Privacy</a></p>
         </div>
         `;
     }

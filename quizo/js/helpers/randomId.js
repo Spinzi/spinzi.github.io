@@ -1,7 +1,7 @@
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { db } from "../config/firebase.js";
 
-const CHARS  = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const CHARS  = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
 const ID_LENGTH = 6;
 
 function randomQuizId() {

@@ -5,6 +5,23 @@ html, body {
     overflow-y: auto;
     scrollbar-width: none;       /* Firefox */
     -ms-overflow-style: none;    /* IE / old Edge */
+
+    background-color: var(--color-background);
+    background-image: 
+        radial-gradient(circle, var(--color-background-20) 0.8px, transparent 0.8px);
+    background-size: 10px 25px;
+
+    animation: scroll-bg 3s linear infinite;
+
+}
+
+@keyframes scroll-bg {
+    from {
+        background-position: 10px 25px;
+    }
+    to {
+        background-position: 50px 25px;
+    }
 }
 
 html::-webkit-scrollbar,
@@ -16,6 +33,9 @@ body::-webkit-scrollbar {
     max-width: var(--content-width);
     margin: 0 auto;
     padding: var(--space-xl);
+    
+    display: flex;
+    flex-direction: column;
 }
 
 /* ========= Header ========= */
@@ -39,25 +59,34 @@ header h1 {
 
 /* ========= Question nav ========= */
 
-header > div {
+.special_card {
     display: flex;
     align-items: center;
     gap: var(--space-md);
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-round);
+    
     padding: var(--space-xs) var(--space-xs) var(--space-xs) var(--space-lg);
     box-shadow: var(--shadow-sm);
 }
 
-header > div#back {
-    padding: var(--space-xs) var(--space-lg) var(--space-xs) var(--space-xs);
+.h_center {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.h_center h1 {
+    margin: auto;
+}
+
+.h_interract{
+    margin: auto;
 }
 
 header button {
     padding: var(--space-sm) var(--space-lg);
     border: none;
-    border-radius: var(--radius-round);
     background: var(--color-primary);
     color: #fff;
     font-size: var(--font-size-sm);

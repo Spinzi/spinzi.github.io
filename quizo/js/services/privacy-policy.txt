@@ -1,0 +1,53 @@
+PRIVACY POLICY FOR QUIZO
+Last Updated: July 2026
+
+Quizo ("the platform") is a quiz creation and gameplay application developed by Spinzi. This Privacy Policy explains how we collect, use, and protect your information based on the platform architecture referenced in bundle.txt.
+
+By using Quizo, you agree to the collection and use of information in accordance with this policy.
+
+
+1. INFORMATION WE COLLECT
+
+We collect minimal information to provide and maintain the quiz hosting services. The data collected depends on how you interact with Quizo:
+
+A. Quiz Creators (Teachers / Hosts)
+To create and manage quizzes, you must log in via Google Authentication. We collect:
+* Your unique Firebase Authentication User ID (UID).
+* Your display name.
+* Your email address.
+* Your Google profile photo URL.
+* Timestamps of your account creation and most recent login.
+
+B. Quiz Participants (Players)
+Players do not create accounts but must provide a nickname to join a lobby. We collect:
+* The nickname you choose (which must be at least 4 characters long).
+* Your active status within the quiz room.
+* Your question responses, points log, and final leaderboard scores.
+
+
+2. HOW YOUR DATA IS USED
+
+Your data is processed strictly to run the core functionalities of the application:
+* To authenticate quiz creators and map saved quizzes back to their specific accounts.
+* To generate unique 6-character quiz codes for player lobbies.
+* To track real-time question responses and calculate points.
+* To render live end-of-game leaderboards for participants.
+
+
+3. THIRD-PARTY SERVICES & INFRASTRUCTURE
+
+Quizo utilizes Google Firebase to handle platform infrastructure securely. The specific sub-processors used include:
+* Firebase Authentication: To manage secure Google sign-ins for creators.
+* Cloud Firestore: To save quiz templates (titles, questions, answers) and player point logs.
+* Firebase Analytics: To monitor general performance metrics and anonymous application engagement.
+
+
+4. DATA RETENTION AND DELETION
+
+* Quiz Data: Quiz creators have full control over their content. When a creator deletes a quiz from their dashboard, its questions, answers, and associated player scoring history are permanently erased from the Cloud Firestore database.
+* User Accounts: Creator profiles persist until an account deletion request is processed.
+
+
+5. CONTACT
+
+For data inquiries or privacy concerns regarding Quizo, please contact the primary developer, Spinzi (alinnicusorgisca@gmail.com). 

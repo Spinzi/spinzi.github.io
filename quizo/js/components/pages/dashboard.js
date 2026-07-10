@@ -7,6 +7,8 @@ import {
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { loadCSS } from "../../helpers/loadCSS.js";
 
+import { insertFooter } from "../../helpers/footer.js";
+
 async function user_check(user){
     const userRef = doc(db, "users", user.uid);
 
@@ -50,21 +52,37 @@ async function get_user_quizzes(uid){
 
 async function render_login(){
     const app = document.getElementById("app");
+    loadCSS("assets/css/pages/dashboard.css");
 
-    app.innerHTML += "<h1>Please log in in order to continue</h1>";
+    app.innerHTML = `
+        <header class="dashboard-header">
+            <h1>Please log in in order to continue</h1>
+        </header>
 
-    app.innerHTML += `<button id="login-btn">Login with Google</button>`;
+        <h3>By logging in with Google, you accept the Terms of Service and Privacy Policy.</h3>
+        
+        <button id="login-btn" class="header_button" style="margin-top:10px">Login with Google</button>
+    `;
 
-    document.getElementById("login-btn").addEventListener("click", async ()=>{
-        const provider = new GoogleAuthProvider();
+    app.innerHTML += insertFooter();
 
-        try{
-            const result = await signInWithPopup(auth, provider);
 
-            console.log(result.user);
-        }catch(err){
-            console.error(err);
+    
+    const btn = document.getElementById("login-btn");
+    btn.addEventListener("click", async ()=>{
+        async function login(){
+            const provider = new GoogleAuthProvider();
+    
+            try{
+                const result = await signInWithPopup(auth, provider);
+    
+                console.log(result.user);
+            }catch(err){
+                console.error(err);
+            }
         }
+        
+        login();
     });
 
 }
@@ -104,6 +122,8 @@ async function render_dashboard(user) {
             ${quizzesHTML}
         </section>
     `;
+
+    app.innerHTML += insertFooter();
 }
 
 export async function renderDashboard(){

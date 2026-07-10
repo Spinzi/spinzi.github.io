@@ -6,13 +6,32 @@ html, body {
 
 body {
     min-height: 100dvh;
-    background: var(--color-primary);
+    background: var(--color-background-20);
 }
 
 #app {
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
+
+    background-color: #E5E5F7;
+    background-image:  
+    radial-gradient(circle 23px at 20px 8px, var(--color-background-20) 23px, transparent 24px), 
+    radial-gradient(circle 23px at 20px 32px, var(--color-background) 23px, transparent 24px), 
+    linear-gradient(var(--color-background) 50%, var(--color-background-20) 50%);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 0, 0 0;
+
+    animation: scroll-bg 3s linear infinite;
+}
+
+@keyframes scroll-bg {
+    from{
+        background-position: 0 0, 20px 0, 0 0;
+    }
+    to{
+        background-position: 40px 0, 60px 0, 40px 0;
+    }
 }
 
 /* ========= Join screen ========= */
@@ -24,7 +43,7 @@ body {
     align-items: center;
     text-align: center;
     background: var(--color-surface);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-sm);
     box-shadow: var(--shadow-lg);
     padding: var(--space-2xl) var(--space-xl);
     margin: auto;
@@ -76,7 +95,7 @@ body {
 }
 
 .join-form input::placeholder {
-    color: var(--color-border);
+    color: var(--color-text-lighter);
     letter-spacing: 4px;
 }
 
@@ -116,7 +135,7 @@ body {
     align-items: center;
     gap: var(--space-sm);
     padding: var(--space-lg) var(--space-lg) calc(var(--space-md) + 6px);
-    background: var(--color-surface);
+    background: var(--color-background);
     box-shadow: var(--shadow-sm);
     flex-shrink: 0;
 }
@@ -125,8 +144,7 @@ body {
     font-size: var(--font-size-2xl);
     font-weight: var(--font-bold);
     letter-spacing: .5px;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    -webkit-background-clip: text;
+    background: var(--color-primary);
     background-clip: text;
     color: transparent;
 }
@@ -238,8 +256,12 @@ body {
     font-weight: var(--font-semibold);
     font-family: var(--font-family);
     cursor: pointer;
-    text-align: left;
+    text-align: justify;
     transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.answer-tile .answer-text{
+    text-align: center;
 }
 
 .answer-tile:hover:not(:disabled) {
@@ -283,7 +305,7 @@ body {
     }
 
     .q_text h3 {
-        font-size: var(--font-size-3xl);
+        font-size: var(--font-size-xl);
     }
 
     .q_answers {
@@ -415,4 +437,11 @@ body {
 .lb-points {
     font-weight: var(--font-semibold);
     color: var(--color-text);
+}
+
+.terms_section{
+    padding: var(--space-xl);
+    font-weight: var(--font-bold);
+    cursor: pointer;
+    text-align: center;
 }

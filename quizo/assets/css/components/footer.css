@@ -1,0 +1,42 @@
+@import url("../variables.css");
+footer{
+    margin-top: auto !important;
+    background-color: var(--color-background);
+    padding: var(--space-md);
+    border: solid var(--border-width-sm) var(--color-border);
+
+    display: flex;
+    flex-direction: row;
+    min-width: 90%;
+}
+
+footer div{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+footer div img{
+    width: 70px;
+    margin: 0 auto;
+    margin-bottom: auto;
+}
+
+footer div:nth-child(1) p{
+    text-align: center;
+}
+
+.f_title{
+    font-weight: var(--font-bold);
+    font-size: var(--font-size-xl);
+    margin-bottom: auto;
+}
+footer p:not(.f_title){
+    margin-bottom: 0 !important;
+    margin-top: 5px;
+}
+
+footer a {
+    color: blue;
+    cursor: pointer;
+}

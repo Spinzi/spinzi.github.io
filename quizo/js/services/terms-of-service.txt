@@ -1,0 +1,49 @@
+TERMS OF SERVICE FOR QUIZO
+Last Updated: July 2026
+
+Welcome to Quizo! These Terms of Service ("Terms") govern your use of the Quizo web application developed by Spinzi. 
+
+By accessing the site, logging in via Google, creating quizzes, or participating in a quiz lobby, you agree to comply with these Terms. If you do not agree, do not use the application.
+
+
+1. ELIGIBILITY AND ACCOUNT REGISTRATION
+
+* Quiz Creators: You must authenticate securely using a valid Google account to access the creator dashboard and use the quiz builder toolkit. You are responsible for all quiz content generated under your authenticated session.
+* Quiz Players: No registration is required to play. Players must enter a valid 6-character room code and supply a unique nickname of at least 4 characters to enter a game room.
+
+
+2. USER-GENERATED CONTENT AND CONDUCT
+
+You retain ownership of the text inputs, questions, and answers you write. However, you are entirely responsible for the content you submit to Quizo. You agree not to use the platform to create or distribute content that:
+* Contains hate speech, explicit language, harassment, or defamatory material.
+* Infringes upon the intellectual property or copyrights of third parties.
+* Exposes personal, private, or sensitive information of any individual without explicit consent.
+
+Spinzi reserves the right to remove quiz data or restrict application access if these content guidelines are violated.
+
+
+3. INTELLECTUAL PROPERTY
+
+The design, custom layout properties, variables, assets, routing systems, and core application code of Quizo are the intellectual property of Spinzi, as outlined in the system architecture files of bundle.txt. You may not copy, modify, distribute, or reverse-engineer the underlying application scripts without express authorization.
+
+
+4. DISCLAIMER OF WARRANTIES ("AS-IS")
+
+Quizo is provided on an "AS-IS" and "AS-AVAILABLE" basis without warranties of any kind, whether express or implied. 
+
+While the system handles data through Google Firebase, Spinzi does not guarantee that the application will be uninterrupted, error-free, entirely secure, or that data logs (such as current quiz scores or custom questionnaires) will never experience accidental database drops or synchronization issues.
+
+
+5. LIMITATION OF LIABILITY
+
+To the maximum extent permitted by applicable law, Spinzi, Quizo, and its infrastructure providers shall not be held liable for any indirect, incidental, special, consequential, or punitive damages. This includes, without limitation, loss of scores, deleted quiz templates, unauthenticated session errors, or disruptions during live classroom or gameplay sessions.
+
+
+6. TERMINATION
+
+We reserve the right to modify, suspend, or terminate the application, dashboard features, or your specific access permissions at any time, for any reason, and without prior notice.
+
+
+7. AMENDMENTS
+
+These Terms may be updated periodically to reflect code changes or shifts in regional database compliance rules. Continued use of Quizo following any modifications constitutes acceptance of the new Terms.

@@ -1,59 +1,70 @@
 :root {
+    /* ========= Colors (80s Retro Cinematic) ========= */
+    --color-primary: #E10600;            /* The iconic Stranger Things glowing neon red */
+    --color-primary-hover: #9B0400;      /* Deep, bruised crimson */
 
-    /* ========= Colors ========= */
+    --color-secondary: #2B4C7E;          /* Hawkins High vintage denim blue */
+    --color-secondary-hover: #1A3052;
 
-    --color-primary: #5865F2;
-    --color-primary-hover: #4752C4;
+    --color-accent: #E5BA73;             /* Starcourt Mall neon gold / Eggo Waffle yellow */
 
-    --color-secondary: #3BA55D;
-    --color-secondary-hover: #2D7D46;
+    --color-background: #F6F3EA;         /* Vintage 1980s paperback novel page (warm cream) */
+    --color-background-10: #EDDFD1;
+    --color-background-20: #E4CCB8;
 
-    --color-accent: #FEE75C;
+    --color-surface: #FFFFFF;            /* Clean crisp sheets */
+    --color-surface-semi-transparent: rgba(255, 255, 255, 0.75);
+    --color-surface-secondary: #EAE3D2;  /* Hawkins Lab institutional grey-beige */
 
-    --color-background: #F5F7FB;
-    --color-surface: #FFFFFF;
-    --color-surface-secondary: #ECEFF4;
+    --color-text: #1C1917;               /* Rich charcoal-brown for high-contrast retro printing */
+    --color-text-light: #78716C;         /* Faded ink */
+    --color-text-lighter: #A8A29E;
 
-    --color-text: #1F2937;
-    --color-text-light: #6B7280;
+    --color-border: #2C2A29;             /* Sharp, comic-book style dark outlines */
 
-    --color-border: #D1D5DB;
+    --color-bg-void-1: #0A0A0B;      /* The Infinite Void (Deep Black/Grey) */
+    --color-bg-void-2: #210303;      /* Dark Cooled Lava (Very Dark Brown-Red) */
+    --color-bg-void-3: #580000;
 
-    --color-success: #22C55E;
-    --color-warning: #F59E0B;
-    --color-danger: #EF4444;
-    --color-info: #3B82F6;
+    /* ========= Retro Border Widths ========= */
+    --border-width-sm: 1px;         /* Fine print, document grids, and inner lines */
+    --border-width-md: 3px;         /* Standard comic-book / Arcade cabinet outlines */
+    --border-width-lg: 6px;         /* Heavy framing, titles, and critical warnings */
 
-    /* ========= Typography ========= */
+    /* Functional alerts adapted to the vintage palette */
+    --color-success: #386641;            /* Muted pine green */
+    --color-warning: #F2A65A;            /* Retro sunset orange */
+    --color-danger: #A61C1C;             /* Pure blood red */
+    --color-info: #457B9D;               /* Government asset blue */
 
-    --font-family: "Inter", sans-serif;
+    /* ========= Typography (Retro Editorial & Sci-Fi) ========= */
+    /* We use an elegant serif for titles (Benguiat style) and a monospace/retro sans for UI */
+    --font-family: "Courier New", Courier, monospace; 
+    --font-family-display: "EB Garamond", serif;
 
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-md: 1rem;
     --font-size-lg: 1.25rem;
     --font-size-xl: 1.5rem;
-    --font-size-2xl: 2rem;
-    --font-size-3xl: 3rem;
+    --font-size-2xl: 2.25rem;
+    --font-size-3xl: 3.5rem;
 
     /* ========= Font Weight ========= */
-
     --font-light: 300;
     --font-normal: 400;
     --font-medium: 500;
-    --font-semibold: 600;
-    --font-bold: 700;
+    --font-semibold: 700;
+    --font-bold: 900;                    /* Extra heavy weight for that classic logo chunkiness */
 
-    /* ========= Border Radius ========= */
-
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
-    --radius-round: 9999px;
+    /* ========= Border Radius (Sharp 80s Edges) ========= */
+    --radius-sm: 0px;                    /* Perfectly square retro corners */
+    --radius-md: 2px;                    /* Very subtle rounding for tech UI */
+    --radius-lg: 4px;
+    --radius-xl: 8px;
+    --radius-round: 9999px;              /* Reserved for badges/avatars */
 
     /* ========= Spacing ========= */
-
     --space-xs: 4px;
     --space-sm: 8px;
     --space-md: 16px;
@@ -62,24 +73,19 @@
     --space-2xl: 48px;
     --space-3xl: 64px;
 
-    /* ========= Shadows ========= */
-
-    --shadow-sm: 0 2px 6px rgba(0, 0, 0, .08);
-    --shadow-md: 0 6px 18px rgba(0, 0, 0, .12);
-    --shadow-lg: 0 12px 32px rgba(0, 0, 0, .16);
+    /* ========= Shadows (Hard Retro Offset) ========= */
+    /* Swapped modern soft blurs for hard-edged 80s pop shadows */
+    --shadow-sm: 2px 2px 0px var(--color-border);
+    --shadow-md: 4px 4px 0px var(--color-border);
+    --shadow-lg: 6px 6px 0px rgba(225, 6, 0, 0.2); 
 
     /* ========= Transitions ========= */
-
-    --transition-fast: .15s ease;
-    --transition-normal: .25s ease;
+    --transition-fast: .1s ease;
+    --transition-normal: .2s ease;
     --transition-slow: .4s ease;
 
     /* ========= Layout ========= */
-
-    --navbar-height: 72px;
-    --sidebar-width: 280px;
-
-    --content-width: 1200px;
-
+    --navbar-height: 80px;
+    --sidebar-width: 260px;
+    --content-width: 1100px;
 }
-

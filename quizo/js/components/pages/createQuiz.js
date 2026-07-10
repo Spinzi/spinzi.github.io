@@ -1,6 +1,7 @@
 import { loadCSS } from "../../helpers/loadCSS.js";
 import { goto } from "../../helpers/goto.js";
 import { appState } from "../../state/appState.js";
+import { insertFooter } from "../../helpers/footer.js";
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -186,29 +187,32 @@ function render_create_q(user){
     
     <header>
 
-    <div id="back">
+        <div class="h_center">
 
-        <button data-action="goto-dashboard">Back</button>
+            <div id="back" class="special_card">
 
-    </div>
+                <button data-action="goto-dashboard">Back</button>
 
-    <h1> Create your quiz, ${user.displayName}</h1>
+            </div>
 
-    <span style="margin-left:auto;"></span>
+            <h1> Create your quiz, ${user.displayName}</h1>
 
-    <div>
 
-        <button id="prevBtn">prev</button>
-        <span id="q_status">.../...</span>
-        <button id="nextBtn">next</button>
+            <div class="special_card">
 
-    </div>
+                <button data-action="save_q">Save</button>
 
-    <div>
+            </div>
 
-        <button data-action="save_q">Save</button>
+        </div>
 
-    </div>
+        <div class="h_interract special_card">
+
+            <button id="prevBtn">prev</button>
+            <span id="q_status">.../...</span>
+            <button id="nextBtn">next</button>
+
+        </div>
 
     </header>
 
@@ -216,6 +220,8 @@ function render_create_q(user){
     </div>
     
     `;
+
+    app.innerHTML += insertFooter();
 
     appState.current_q = 1;
     create_empty_q();

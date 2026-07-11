@@ -25,8 +25,6 @@ export function insertFooter(){
                 <p><a href="https://github.com/Spinzi">Github</a></p>
             </div>
 
-
-
         </footer>
 
     `

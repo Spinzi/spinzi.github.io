@@ -1,379 +1,55 @@
 # QUIZO
 
-A lightweight, real-time quiz platform inspired by Kahoot — built with vanilla JavaScript, Firebase, and no frameworks. Teachers create quizzes from a dashboard, players join with a 6-character code, and everyone answers timed multiple-choice questions with a live leaderboard at the end.
+A simple app hosted with Github. It is live thanks to Firebase, and you can create your own quiz - then take it or other quizzes with the 6 digit code. <br>
+I created it because I really wanted to assign some kaoot quizzes, but unfortunately, it stars from over $20 - money I dont have, but I do have some knowledge in CS so I made it work. 
 
----
+[Git repo](https://github.com/Spinzi/spinzi.github.io/tree/main/quizo)<br>
+[Test it here](https://spinzi.github.io/quizo/)<br>
+[Or test a simple 3 questions quiz ](https://spinzi.github.io/quizo/?page=quiz&id=TA653B)
+<br>You can always contact me through [GitHub](https://github.com/Spinzi) or Slack(@spinzi) or just drop a mail to [me](mailto:alinnicusorgisca@gmail.com)
 
-## Features
+## Limitations
 
-- **Google Sign-In** for teachers via Firebase Authentication
-- **Quiz builder** — multi-question editor with up to 4 answers per question, correct-answer marking, and per-question navigation
-- **Shareable join codes** — auto-generated unique 6-character quiz IDs
-- **Live quiz-taking flow** — name entry, timed questions with a shrinking/color-shifting timer bar, instant answer reveal (green = correct, gray = incorrect)
-- **Results & leaderboard** — final score, correct-answer count, placement, and top-5 leaderboard pulled from Firestore
-- **Responsive design** — 2×2 answer grid on desktop, full-height stacked bars on mobile
-- **No build step** — plain ES modules loaded directly in the browser
+The app is completely functional, but not buttery smooth - it still has limitations, the leaderboard is fetched at the ending of the quiz and doesnt update, you cant upload pictures, you dont have a light or dark mode, and other small things. 
 
----
+## How did I do it
 
-## Tech Stack
-
-| Layer      | Technology                          |
-|------------|--------------------------------------|
-| Frontend   | Vanilla JavaScript (ES Modules), HTML, CSS |
-| Backend    | Firebase Firestore (data), Firebase Auth (Google Sign-In) |
-| Hosting    | Static hosting (any host that serves static files) |
-
-No bundler, no framework, no npm build step — everything runs directly via `<script type="module">`.
-
----
-
-## Project Structure
+Its suprising how great of a job Vanilla HTML CSS and JS can do. <br>
+I began by marking what I want - a welcome menu with buttons for creating a quiz and taking one. Then I thought of what I need, a place to store the quizzes - a database, but live for everyone to see. That was Firebase with Firestore and Auth. Next up are the design choices - the CSS I did later but I needed a complete picture of what I want to create.
 
 ```
-├── index.html
-├── assets/
-│   └── css/
-│       ├── variables.css        # Design tokens (colors, spacing, typography, shadows...)
-│       ├── global.css           # Reset + base styles, imported on every page
-│       └── pages/
-│           ├── home.css
-│           ├── dashboard.css
-│           ├── createQuiz.css
-│           └── quiz.css
-└── js/
-    ├── app.js                   # Entry point
-    ├── renderer.js               # Routes appState.page to the right page renderer
-    ├── router.js                  # Parses ?page= and ?id= from the URL
-    ├── config/
-    │   └── firebase.js            # Firebase project config + SDK initialization
-    ├── state/
-    │   ├── appState.js            # Global page/routing state + quiz builder state
-    │   ├── authState.js           # (reserved for future auth state)
-    │   └── quizState.js           # Runtime state while a player is taking a quiz
-    ├── helpers/
-    │   ├── actions.js             # Global event delegation for [data-action] elements
-    │   ├── goto.js                # Client-side "navigation" via query params
-    │   ├── loadCSS.js             # Lazy-loads a page's stylesheet once
-    │   ├── copyToClipboard.js     # Clipboard helper with fallback
-    │   └── randomId.js            # Generates a unique 6-character quiz ID
-    └── components/
-        └── pages/
-            ├── home.js            # Landing page
-            ├── dashboard.js       # Teacher dashboard (list/create/delete quizzes)
-            ├── createQuiz.js      # Quiz builder
-            └── quiz.js            # Join screen → live quiz-taking → results
+Welcome page - take or create quiz
+   Dashboard(for creating the quiz) - lands you to a login page if not logged
+      Create a quiz
+      Logout
+      Copy links to your quizzes or delete them
+   Quiz taker
+      Enter a quiz code and take it
 ```
 
----
-
-## Routing
-
-There's no client-side router library — navigation is done by setting query parameters and doing a full page reload:
-
-```
-?page=home
-?page=dashboard
-?page=createQuiz
-?page=quiz&id=ABC123
-```
-
-- `js/router.js` reads `page` and `id` from the URL into `appState`.
-- `js/renderer.js` calls the matching page renderer based on `appState.page`.
-- `js/helpers/goto.js` builds/sets the URL and triggers a reload (`window.location.href = ...`).
-
-Each page renderer is responsible for calling `loadCSS()` to lazy-load its own stylesheet.
-
----
-
-## Data Model (Firestore)
-
-```
-quizzes/{quizId}
-  ├─ title: string
-  ├─ owner: string (Firebase Auth UID)
-  ├─ createdAt: timestamp
-  ├─ updatedAt: timestamp
-  ├─ questions: [
-  │     { id, text, answers: [{ text, correct }, ...], answerTime }
-  │   ]
-  └─ players/{playerName}
-        ├─ status: string           ("taking quiz..." | "Finished.")
-        ├─ points: number
-        └─ points_log: [
-              { answer: string, is_correct: boolean }
-            ]
-
-users/{uid}
-  ├─ displayName, email, photoURL
-  ├─ createdAt: timestamp
-  └─ lastLogin: timestamp
-```
-
-Quiz IDs are 6-character alphanumeric codes (`js/helpers/randomId.js`), checked for uniqueness against Firestore before being assigned.
-
----
-
-## Core Flows
-
-### 1. Teacher: Create a Quiz
-1. Sign in with Google from the **Dashboard** (`dashboard.js`).
-2. Click **Create Quiz** → opens the quiz builder (`createQuiz.js`).
-3. Add a title, question text, and 2–4 answers per question; mark the correct one(s).
-4. Navigate between questions with **prev / next** (auto-creates a new blank question when moving past the last one).
-5. Click **Save** to write the quiz to Firestore under a freshly generated ID.
-
-### 2. Player: Join & Take a Quiz
-1. Visit `?page=quiz` (optionally with `&id=CODE` pre-filled) or enter a code on the join screen (`quiz.js`).
-2. Enter a display name (must be unique within that quiz's player list, minimum 4 characters).
-3. Answer each question before the timer runs out:
-   - Selecting a tile immediately reveals correct/incorrect for **all** tiles.
-   - If time runs out with no selection, the correct answer is still revealed.
-   - Each result is shown for 3 seconds before advancing.
-4. On the final question, results are written to Firestore and the **Results** screen shows:
-   - Total points, correct-answer count, and current leaderboard placement
-   - Top 5 leaderboard entries (ranked by points via a Firestore query with `orderBy`)
-
----
-
-## Design System
-
-All visual styling is driven by CSS custom properties defined in `assets/css/variables.css` — colors, typography scale, font weights, border radii, spacing scale, shadows, transitions, and layout constants. Page-level stylesheets (`home.css`, `dashboard.css`, `createQuiz.css`, `quiz.css`) consume these tokens rather than hardcoding values, so the whole app can be re-themed by editing one file.
-
-Answer tiles use a fixed 4-color rotation (danger / info / warning / secondary) to mimic the classic red-blue-yellow-green quiz-game look.
-
----
-
-## Global Actions
-
-Instead of attaching listeners per-render, `js/helpers/actions.js` uses a single delegated `click` listener on `document.body` that reacts to any element with a `data-action` attribute:
-
-- `goto-<page>` — navigate to another page
-- `logout` — sign out via Firebase Auth
-- `save_q` — persist the quiz being built
-- `join_quizz` — join a quiz by code
-- `copy-<id>` / `delete-<id>` — dashboard quiz-card actions (delete requires a confirmation click)
-
-The quiz builder (`createQuiz.js`) uses a separate `data-action-local` attribute with its own scoped listeners, since those inputs are re-rendered per question and tied to local closures rather than global routing.
-
----
-
-## Setup
-
-1. Clone the repository.
-2. Firebase config is already wired in `js/config/firebase.js` (Firestore + Auth). Replace the `firebaseConfig` object with your own Firebase project's credentials if deploying elsewhere.
-3. In the Firebase console, enable:
-   - **Authentication → Google** sign-in provider
-   - **Firestore Database** (in production or test mode, with rules restricting quiz edits to their `owner`)
-4. Serve the project root with any static file server (no build step required), e.g.:
-   ```bash
-   npx serve .
-   ```
-5. Open `index.html` in the browser.
-
-> **Note:** The leaderboard query (`orderBy("points", "desc")` on the `players` subcollection) requires a Firestore index. Firestore will prompt with a direct link to auto-create it the first time the query runs.
-
----
-
-## Known Limitations / Next Steps
-
-- Leaderboard is fetched once on the results screen — it does not update live if other players finish afterward (would require `onSnapshot`).
-- No scoring bonus for answering quickly (all correct answers currently award a flat 1 point).
-- No host/presenter view — currently designed for self-paced, asynchronous play rather than a synchronized live game.
-- No validation preventing a quiz from being saved with empty questions/answers.
-- Firestore security rules are not included in this repo and should be configured before production use.
-
----
-
-## Credits
-
-Developed by **Spinzi**.# QUIZO
-
-A lightweight, real-time quiz platform inspired by Kahoot — built with vanilla JavaScript, Firebase, and no frameworks. Teachers create quizzes from a dashboard, players join with a 6-character code, and everyone answers timed multiple-choice questions with a live leaderboard at the end.
-
----
-
-## Features
-
-- **Google Sign-In** for teachers via Firebase Authentication
-- **Quiz builder** — multi-question editor with up to 4 answers per question, correct-answer marking, and per-question navigation
-- **Shareable join codes** — auto-generated unique 6-character quiz IDs
-- **Live quiz-taking flow** — name entry, timed questions with a shrinking/color-shifting timer bar, instant answer reveal (green = correct, gray = incorrect)
-- **Results & leaderboard** — final score, correct-answer count, placement, and top-5 leaderboard pulled from Firestore
-- **Responsive design** — 2×2 answer grid on desktop, full-height stacked bars on mobile
-- **No build step** — plain ES modules loaded directly in the browser
-
----
-
-## Tech Stack
-
-| Layer      | Technology                          |
-|------------|--------------------------------------|
-| Frontend   | Vanilla JavaScript (ES Modules), HTML, CSS |
-| Backend    | Firebase Firestore (data), Firebase Auth (Google Sign-In) |
-| Hosting    | Static hosting (any host that serves static files) |
-
-No bundler, no framework, no npm build step — everything runs directly via `<script type="module">`.
-
----
-
-## Project Structure
-
-```
-├── index.html
-├── assets/
-│   └── css/
-│       ├── variables.css        # Design tokens (colors, spacing, typography, shadows...)
-│       ├── global.css           # Reset + base styles, imported on every page
-│       └── pages/
-│           ├── home.css
-│           ├── dashboard.css
-│           ├── createQuiz.css
-│           └── quiz.css
-└── js/
-    ├── app.js                   # Entry point
-    ├── renderer.js               # Routes appState.page to the right page renderer
-    ├── router.js                  # Parses ?page= and ?id= from the URL
-    ├── config/
-    │   └── firebase.js            # Firebase project config + SDK initialization
-    ├── state/
-    │   ├── appState.js            # Global page/routing state + quiz builder state
-    │   ├── authState.js           # (reserved for future auth state)
-    │   └── quizState.js           # Runtime state while a player is taking a quiz
-    ├── helpers/
-    │   ├── actions.js             # Global event delegation for [data-action] elements
-    │   ├── goto.js                # Client-side "navigation" via query params
-    │   ├── loadCSS.js             # Lazy-loads a page's stylesheet once
-    │   ├── copyToClipboard.js     # Clipboard helper with fallback
-    │   └── randomId.js            # Generates a unique 6-character quiz ID
-    └── components/
-        └── pages/
-            ├── home.js            # Landing page
-            ├── dashboard.js       # Teacher dashboard (list/create/delete quizzes)
-            ├── createQuiz.js      # Quiz builder
-            └── quiz.js            # Join screen → live quiz-taking → results
-```
-
----
-
-## Routing
-
-There's no client-side router library — navigation is done by setting query parameters and doing a full page reload:
-
-```
-?page=home
-?page=dashboard
-?page=createQuiz
-?page=quiz&id=ABC123
-```
-
-- `js/router.js` reads `page` and `id` from the URL into `appState`.
-- `js/renderer.js` calls the matching page renderer based on `appState.page`.
-- `js/helpers/goto.js` builds/sets the URL and triggers a reload (`window.location.href = ...`).
-
-Each page renderer is responsible for calling `loadCSS()` to lazy-load its own stylesheet.
-
----
-
-## Data Model (Firestore)
-
-```
-quizzes/{quizId}
-  ├─ title: string
-  ├─ owner: string (Firebase Auth UID)
-  ├─ createdAt: timestamp
-  ├─ updatedAt: timestamp
-  ├─ questions: [
-  │     { id, text, answers: [{ text, correct }, ...], answerTime }
-  │   ]
-  └─ players/{playerName}
-        ├─ status: string           ("taking quiz..." | "Finished.")
-        ├─ points: number
-        └─ points_log: [
-              { answer: string, is_correct: boolean }
-            ]
-
-users/{uid}
-  ├─ displayName, email, photoURL
-  ├─ createdAt: timestamp
-  └─ lastLogin: timestamp
-```
-
-Quiz IDs are 6-character alphanumeric codes (`js/helpers/randomId.js`), checked for uniqueness against Firestore before being assigned.
-
----
-
-## Core Flows
-
-### 1. Teacher: Create a Quiz
-1. Sign in with Google from the **Dashboard** (`dashboard.js`).
-2. Click **Create Quiz** → opens the quiz builder (`createQuiz.js`).
-3. Add a title, question text, and 2–4 answers per question; mark the correct one(s).
-4. Navigate between questions with **prev / next** (auto-creates a new blank question when moving past the last one).
-5. Click **Save** to write the quiz to Firestore under a freshly generated ID.
-
-### 2. Player: Join & Take a Quiz
-1. Visit `?page=quiz` (optionally with `&id=CODE` pre-filled) or enter a code on the join screen (`quiz.js`).
-2. Enter a display name (must be unique within that quiz's player list, minimum 4 characters).
-3. Answer each question before the timer runs out:
-   - Selecting a tile immediately reveals correct/incorrect for **all** tiles.
-   - If time runs out with no selection, the correct answer is still revealed.
-   - Each result is shown for 3 seconds before advancing.
-4. On the final question, results are written to Firestore and the **Results** screen shows:
-   - Total points, correct-answer count, and current leaderboard placement
-   - Top 5 leaderboard entries (ranked by points via a Firestore query with `orderBy`)
-
----
-
-## Design System
-
-All visual styling is driven by CSS custom properties defined in `assets/css/variables.css` — colors, typography scale, font weights, border radii, spacing scale, shadows, transitions, and layout constants. Page-level stylesheets (`home.css`, `dashboard.css`, `createQuiz.css`, `quiz.css`) consume these tokens rather than hardcoding values, so the whole app can be re-themed by editing one file.
-
-Answer tiles use a fixed 4-color rotation (danger / info / warning / secondary) to mimic the classic red-blue-yellow-green quiz-game look.
-
----
-
-## Global Actions
-
-Instead of attaching listeners per-render, `js/helpers/actions.js` uses a single delegated `click` listener on `document.body` that reacts to any element with a `data-action` attribute:
-
-- `goto-<page>` — navigate to another page
-- `logout` — sign out via Firebase Auth
-- `save_q` — persist the quiz being built
-- `join_quizz` — join a quiz by code
-- `copy-<id>` / `delete-<id>` — dashboard quiz-card actions (delete requires a confirmation click)
-
-The quiz builder (`createQuiz.js`) uses a separate `data-action-local` attribute with its own scoped listeners, since those inputs are re-rendered per question and tied to local closures rather than global routing.
-
----
-
-## Setup
-
-1. Clone the repository.
-2. Firebase config is already wired in `js/config/firebase.js` (Firestore + Auth). Replace the `firebaseConfig` object with your own Firebase project's credentials if deploying elsewhere.
-3. In the Firebase console, enable:
-   - **Authentication → Google** sign-in provider
-   - **Firestore Database** (in production or test mode, with rules restricting quiz edits to their `owner`)
-4. Serve the project root with any static file server (no build step required), e.g.:
-   ```bash
-   npx serve .
-   ```
-5. Open `index.html` in the browser.
-
-> **Note:** The leaderboard query (`orderBy("points", "desc")` on the `players` subcollection) requires a Firestore index. Firestore will prompt with a direct link to auto-create it the first time the query runs.
-
----
-
-## Known Limitations / Next Steps
-
-- Leaderboard is fetched once on the results screen — it does not update live if other players finish afterward (would require `onSnapshot`).
-- No scoring bonus for answering quickly (all correct answers currently award a flat 1 point).
-- No host/presenter view — currently designed for self-paced, asynchronous play rather than a synchronized live game.
-- No validation preventing a quiz from being saved with empty questions/answers.
-- Firestore security rules are not included in this repo and should be configured before production use.
-
----
-
-## Credits
-
-Developed by **Spinzi**.
+Then I made a structure for the files in the Firestore<br> 
+I decided in having a \users and \quizzes <br>
+In user i stored things like email, name, pfp, etc<br>
+Inside quizzes i stored each quiz, with its folder name being the code for access. 
+![Photo of firestore](https://stardance.hackclub.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTMxNzExLCJwdXIiOiJibG9iX2lkIn19--16d18ad6cd15b7f7bab07349b2f32da2ec2163ca/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJ3ZWJwIiwicmVzaXplX3RvX2xpbWl0IjpbMTYwMCw5MDBdLCJzYXZlciI6eyJzdHJpcCI6dHJ1ZSwicXVhbGl0eSI6NzV9fSwicHVyIjoidmFyaWF0aW9uIn19--3bc8a2c9d65e3b087c0c0b37dcfb642bb247bc73/image.png)
+For utility I stored the timestamp of creation date, the owner, title, and all questions in an array<br><br>
+Then the website itself. For making my life a little easier I followed the design of many folders and files, especially for JS. To make buttons and actions easier to follow, for bigger actions i use [data-action]="name of action". Then I added an event listener to the body element, and get the closest - if the closest element has dataset.action !== null, then I proceed with the code. <br>
+It also helps me to things like goto-12AB67 and if `action.startsWith("goto-")` I can send it to `?page=quiz&id=12AB67` - and no its not a valid quiz so dont test it. This one is tho `TA653B`, so you can try it if you want.
+<br>
+I split pages into their own functions. I barely use raw HTML, most stuff I do in JS, and for proper style management, I used a common variables CSS file, and loaded page specific CSS with a `loadCSS()` function.<br>
+The pages are separated in `js/components/pages`
+- `createQuiz.js`
+- `dashboard.js`
+- `home.js`
+- `quiz.js`
+<br>
+For things like the auth page, i simply added an onAuthCheck separator, if logged render the dashboard, if not render login, and for createQuiz if logged render, if not goto-dashboard -> login
+<br>
+Here is a photo of the layout since I was working
+![img of vscode](https://stardance.hackclub.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTMxMzM2LCJwdXIiOiJibG9iX2lkIn19--2f6a7fbfb21bf28d8427ca56b9388ffc8296932e/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJ3ZWJwIiwicmVzaXplX3RvX2xpbWl0IjpbMTYwMCw5MDBdLCJzYXZlciI6eyJzdHJpcCI6dHJ1ZSwicXVhbGl0eSI6NzV9fSwicHVyIjoidmFyaWF0aW9uIn19--3bc8a2c9d65e3b087c0c0b37dcfb642bb247bc73/image.png)
+Since then I added many more things, but its good as a reference
+<br>
+Also my first CSS didnt look close to as good as now. Because I just wanted to have it working
+![first model](https://stardance.hackclub.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTMzMTIwLCJwdXIiOiJibG9iX2lkIn19--b1421aee6489e643bdc2a7fae632d5d651a4e843/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJ3ZWJwIiwicmVzaXplX3RvX2xpbWl0IjpbMTYwMCw5MDBdLCJzYXZlciI6eyJzdHJpcCI6dHJ1ZSwicXVhbGl0eSI6NzV9fSwicHVyIjoidmFyaWF0aW9uIn19--3bc8a2c9d65e3b087c0c0b37dcfb642bb247bc73/image.png)
+![final model](https://stardance.hackclub.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTM5Nzg1LCJwdXIiOiJibG9iX2lkIn19--9a5d635b206664419023f7eb837d5faa1c1548aa/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJ3ZWJwIiwicmVzaXplX3RvX2xpbWl0IjpbMTYwMCw5MDBdLCJzYXZlciI6eyJzdHJpcCI6dHJ1ZSwicXVhbGl0eSI6NzV9fSwicHVyIjoidmFyaWF0aW9uIn19--3bc8a2c9d65e3b087c0c0b37dcfb642bb247bc73/Screenshot%202026-07-10%20194148.png)
+The background is also animated, I will let you be the judges, but Im happier with this result. It feels more alive, and its inspired from Stranger things, i used this app to give me the background patterns for free and then I changed the colors, set opacity to default and applied the animation. <br>[The website for css bg is this one](https://www.magicpattern.design/tools/css-backgrounds)

@@ -2,6 +2,9 @@ import { appState } from "../../state/appState.js";
 import { loadCSS } from "../../helpers/loadCSS.js";
 import { insertFooter } from "../../helpers/footer.js";
 
+import { validatePlayerName } from "../../helpers/profanity.js";
+
+
 import { quizState } from "../../state/quizState.js";
 
 import { db } from "../../config/firebase.js";
@@ -189,7 +192,7 @@ async function renderPage(data){
             <p id="feedback">Chose a name to take the quiz</p>
 
             <div class="join-form">
-                <input type="text" id="name" placeholder="Name" autocomplete="off">
+                <input type="text" id="name" placeholder="Name"  pattern="[A-Za-z0-9 _.-]{3,20}" autocomplete="off">
                 <button id="enter">Enter</button>
             </div>
         </div>
@@ -205,6 +208,21 @@ async function renderPage(data){
             if(name.length <= 3){
                 const feedback_el = document.getElementById("feedback");
                 feedback_el.innerText = "Name must be at least 4 characters long.";
+                feedback_el.style.color = "#EF4444";
+                return;
+            }
+
+            if(!/^[A-Za-z0-9 _.-]{3,20}$/.test(name)){
+                const feedback_el = document.getElementById("feedback");
+                feedback_el.innerText = "Name can only contain letters, numbers, spaces, and _ . -";
+                feedback_el.style.color = "#EF4444";
+                return;
+            }
+
+            const { valid, reason } = validatePlayerName(name);
+            if(!valid){
+                const feedback_el = document.getElementById("feedback");
+                feedback_el.innerText = reason;
                 feedback_el.style.color = "#EF4444";
                 return;
             }

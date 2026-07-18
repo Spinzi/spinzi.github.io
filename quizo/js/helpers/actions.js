@@ -37,6 +37,35 @@ export async function initActions(){
             return;
         }
 
+        if(action.startsWith("delplayer-")){
+            const rest = action.slice("delplayer-".length); // "{quizId}-{playerName}"
+            const sepIndex = rest.indexOf("-");
+            const quizId = rest.slice(0, sepIndex);
+            const playerName = rest.slice(sepIndex + 1);
+
+            if(trigger.dataset.double_check !== "true"){
+                trigger.innerText = "Are you sure?";
+                trigger.dataset.double_check = true;
+                return;
+            }
+
+            const pth = doc(db, "quizzes", quizId, "players", playerName);
+            await deleteDoc(pth);
+            document.querySelector(`#player_row_${playerName}`).remove();
+            return;
+        }
+
+        if(action.startsWith("view-")){
+            const target = action.slice(5);
+            
+            goto({
+                page: "dashboard",
+                view: target
+            })
+
+            return;
+        }
+
         if(action.startsWith("copy-")){
             const target = action.slice(5);
             if(copyToClipboard(target)){

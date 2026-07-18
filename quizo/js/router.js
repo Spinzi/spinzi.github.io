@@ -5,4 +5,5 @@ export function parse_route(){
 
     appState.page = params.get("page");
     appState.id = params.get("id");
+    appState.view = params.get("view");
 }

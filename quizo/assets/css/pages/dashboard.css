@@ -190,3 +190,81 @@ body{
     box-shadow: none;
     transform: none;
 }
+
+/* ========= Quiz stats / Leaderboard ========= */
+
+.stats-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.stats-header h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-semibold);
+    color: var(--color-text);
+}
+
+.leaderboard {
+    display: flex;
+    flex-direction: column !important;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
+
+.player_row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.player_row:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
+.player_row .rank {
+    font-weight: var(--font-bold);
+    color: var(--color-text-light);
+    min-width: 2.5em;
+}
+
+.player_row .player_name {
+    font-weight: var(--font-semibold);
+    flex: 1;
+}
+
+.player_row .player_points {
+    font-family: monospace;
+    color: var(--color-text-light);
+}
+
+.player_row .player_status {
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-medium);
+    white-space: nowrap;
+}
+
+.player_row .player_status.finished {
+    background: var(--color-secondary);
+    color: #fff;
+}
+
+.player_row .player_status.in-progress {
+    background: var(--color-surface-secondary);
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border);
+}
+
+.player_row .del {
+    margin-left: var(--space-sm);
+}

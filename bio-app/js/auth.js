@@ -72,11 +72,11 @@ function init_show_password_button(){
 
 function process_login_with_email(){
   console.log("Processing login...");
-
-  if (captchaVerified === false){
-    document.getElementById("error-msg").innerText = "Solve captcha first!";
-    return;
-  }
+  
+  ///if (captchaVerified === false
+///{document.getElementById("error-msg").innerText = "Solve captcha first!";
+    ///return;
+  ///}
 
   var email_element = document.getElementById("email");
   var email = email_element.value.trim();

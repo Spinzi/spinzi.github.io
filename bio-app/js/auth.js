@@ -109,10 +109,10 @@ function process_login_with_email(){
 }
 
 function process_create_account(){
-  if(!captchaVerified){
-    document.getElementById("error-msg").innerText = "Solve captcha first!";
-    return;
-  }
+  ///if(!captchaVerified){
+    ///document.getElementById("error-msg").innerText = "Solve captcha first!";
+    ///return;
+  ///}
 
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();

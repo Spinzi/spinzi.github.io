@@ -179,10 +179,10 @@ function init_buttons(){
 
   try{
     continue_with_google.addEventListener("click", async ()=>{
-      if(!captchaVerified){
-        document.getElementById("error-msg").innerText = "Solve captcha first!";
-        return;
-      }
+      ///if(!captchaVerified){
+        ///document.getElementById("error-msg").innerText = "Solve captcha first!";
+        ///return;
+      ///}
       signInWithPopup(auth, googleProvider)
         .then(async (result) => {
           const user = result.user;
